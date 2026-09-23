@@ -117,29 +117,7 @@ Karena game ini dibuat tanpa framework atau build step yang rumit, kamu bisa lan
    node tests/test_mobile_controls.cjs
    ```
 
----
 
-## 🌐 Cara Hosting di GitHub Pages
-
-File proyek sudah dirapikan dengan `index.html` berada tepat di root repository. Ikuti langkah mudah ini untuk mengaktifkan hosting:
-
-1. Pastikan perubahan sudah di-commit dan di-push ke GitHub:
-   ```bash
-   git add .
-   git commit -m "Tidy up project structure for GitHub Pages hosting"
-   git push origin main
-   ```
-2. Buka repository kamu di browser: `https://github.com/Zeeynrs/ARC-SLASH-ARPG`
-3. Klik tab **Settings** (Pengaturan) di bagian atas.
-4. Pada menu samping kiri, klik **Pages**.
-5. Di bagian **Build and deployment** > **Branch**:
-   - Pilih branch: **`main`**
-   - Pilih folder: **`/(root)`**
-6. Klik **Save**.
-7. Tunggu sekitar 1-2 menit hingga proses deploy selesai. Game kamu akan langsung aktif dan bisa dimainkan di URL:
-   👉 **`https://zeeynrs.github.io/ARC-SLASH-ARPG/`**
-
----
 
 ## 📜 Lisensi
 
