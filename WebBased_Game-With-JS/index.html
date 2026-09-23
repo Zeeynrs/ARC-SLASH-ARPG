@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Arc Slash ARPG - Slime Dungeon Labyrinth</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="game-wrapper">
+        <div class="canvas-container">
+            <canvas id="gameCanvas" width="640" height="384"></canvas>
+        </div>
+
+        <!-- Mobile Touch Controller Deck (Adaptive Dual-Mode: Portrait Handheld Deck & Landscape Floating Arcade) -->
+        <div id="mobileControls" class="mobile-controls">
+            <!-- Mobile Top Utility Bar (Fullscreen, Shop, Pause, SFX) -->
+            <div class="mobile-center-bar">
+                <button type="button" class="mobile-util-btn" id="btnMobileFullscreen" aria-label="Layar Penuh">
+                    <span class="util-badge">⛶</span>
+                    <span class="util-label">FULL</span>
+                </button>
+                <button type="button" class="mobile-util-btn" id="btnMobileShop" aria-label="Toko Senjata">
+                    <span class="util-badge">🛒</span>
+                    <span class="util-label">SHOP</span>
+                </button>
+                <button type="button" class="mobile-util-btn" id="btnMobilePause" aria-label="Jeda Game">
+                    <span class="util-badge">⏸</span>
+                    <span class="util-label">PAUSE</span>
+                </button>
+                <button type="button" class="mobile-util-btn" id="btnMobileSound" aria-label="Suara Game">
+                    <span class="util-badge" id="mobileSoundIcon">🔊</span>
+                    <span class="util-label" id="mobileSoundLabel">SFX</span>
+                </button>
+            </div>
+
+            <!-- Controller Pad Row (D-Pad Left, Center Console, Action Cluster Right) -->
+            <div class="mobile-controller-row">
+                <!-- Left: Retro 16-Bit Arcade D-Pad -->
+                <div class="dpad-container" id="dpadContainer">
+                    <div class="dpad-cross">
+                        <button type="button" class="dpad-btn dpad-up" data-dir="up" aria-label="Gerak Atas">
+                            <span class="dpad-arrow">▲</span>
+                        </button>
+                        <button type="button" class="dpad-btn dpad-left" data-dir="left" aria-label="Gerak Kiri">
+                            <span class="dpad-arrow">◄</span>
+                        </button>
+                        <div class="dpad-center" id="dpadCenter">
+                            <span class="dpad-center-gem">◆</span>
+                        </div>
+                        <button type="button" class="dpad-btn dpad-right" data-dir="right" aria-label="Gerak Kanan">
+                            <span class="dpad-arrow">►</span>
+                        </button>
+                        <button type="button" class="dpad-btn dpad-down" data-dir="down" aria-label="Gerak Bawah">
+                            <span class="dpad-arrow">▼</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Center Decorative Deck Emblem (Visible in Portrait Mode) -->
+                <div class="mobile-deck-center">
+                    <span class="deck-brand-title">ARC SLASH</span>
+                    <span class="deck-brand-sub" id="deckStatusRole">KNIGHT</span>
+                </div>
+
+                <!-- Right: Action Cluster (Skills & Character-Specific Attack) -->
+                <div class="action-cluster">
+                    <div class="skill-buttons-row">
+                        <button type="button" class="mobile-skill-btn" id="btnSkill0" data-skill="0" aria-label="Skill 1">
+                            <span class="skill-key">1</span>
+                            <span class="skill-name" id="skillName0">WHIRL</span>
+                            <div class="skill-cooldown-overlay" id="skillCd0"></div>
+                        </button>
+                        <button type="button" class="mobile-skill-btn" id="btnSkill1" data-skill="1" aria-label="Skill 2">
+                            <span class="skill-key">2</span>
+                            <span class="skill-name" id="skillName1">SHIELD</span>
+                            <div class="skill-cooldown-overlay" id="skillCd1"></div>
+                        </button>
+                        <button type="button" class="mobile-skill-btn" id="btnSkill2" data-skill="2" aria-label="Skill 3">
+                            <span class="skill-key">3</span>
+                            <span class="skill-name" id="skillName2">BASH</span>
+                            <div class="skill-cooldown-overlay" id="skillCd2"></div>
+                        </button>
+                    </div>
+
+                    <!-- Primary Role-Adaptive Attack Button -->
+                    <button type="button" class="mobile-attack-btn role-knight" id="btnAttack" aria-label="Attack">
+                        <div class="attack-icon-wrapper" id="attackIconWrapper">
+                            <!-- Populated dynamically based on character role -->
+                        </div>
+                        <span class="attack-text" id="attackBtnText">SLASH</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Desktop Controls Hint Bar -->
+        <div class="controls-hint">
+            <div class="key-group">Move: <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> / <kbd>▲</kbd><kbd>◄</kbd><kbd>▼</kbd><kbd>►</kbd></div>
+            <div class="key-group">Attack: <kbd>J</kbd> / <kbd>Space</kbd></div>
+            <div class="key-group">Skills: <kbd>1</kbd><kbd>2</kbd><kbd>3</kbd></div>
+            <div class="key-group">Shop: <kbd>B</kbd></div>
+            <div class="key-group">Trophy: <kbd>A</kbd></div>
+            <div class="key-group">Restart: <kbd>R</kbd></div>
+            <div class="key-group">Mobile: <kbd>M</kbd> <button type="button" id="btnToggleMobileTest" class="mobile-test-toggle">📱 Tes Tombol HP</button></div>
+        </div>
+    </div>
+
+    <!-- Game Engine Modules -->
+    <script src="js/audio.js"></script>
+    <script src="js/equipment.js"></script>
+    <script src="js/skills.js"></script>
+    <script src="js/stages.js"></script>
+    <script src="js/achievements.js"></script>
+    <script src="js/input.js"></script>
+    <script src="js/player.js"></script>
+    <script src="js/particles.js"></script>
+    <script src="js/mobs.js"></script>
+    <script src="js/combat.js"></script>
+    <script src="js/shop.js"></script>
+    <script src="js/event-room.js"></script>
+    <script src="js/dialogue.js"></script>
+    <script src="js/draw/dungeon.js"></script>
+    <script src="js/draw/mobs-render.js"></script>
+    <script src="js/draw/player-render.js"></script>
+    <script src="js/draw/effects.js"></script>
+    <script src="js/draw/hud.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
