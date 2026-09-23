@@ -1,6 +1,10 @@
 import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import vm from 'vm';
 import assert from 'assert';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // Mock browser
 global.window = global;
@@ -29,7 +33,8 @@ const modules = [
     'js/combat.js'
 ];
 modules.forEach(m => {
-    const code = fs.readFileSync(m, 'utf8');
+    const filePath = path.resolve(__dirname, '..', m);
+    const code = fs.readFileSync(filePath, 'utf8');
     vm.runInThisContext(code);
 });
 

@@ -1,7 +1,11 @@
 // Automated Test Suite for Main Menu Flow & Achievement System
 import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import vm from 'vm';
 import assert from 'assert';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // Mock DOM and browser environment
 const localStorageData = {};
@@ -75,7 +79,8 @@ const modules = [
 ];
 
 modules.forEach(f => {
-    const code = fs.readFileSync(f, 'utf8');
+    const filePath = path.resolve(__dirname, '..', f);
+    const code = fs.readFileSync(filePath, 'utf8');
     vm.runInThisContext(code);
 });
 

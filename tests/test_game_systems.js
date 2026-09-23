@@ -1,7 +1,11 @@
 // Consolidated Game Systems & Mechanics Automated Test Suite
 import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import vm from 'vm';
 import assert from 'assert';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // Mock DOM and browser environment
 global.window = global;
@@ -56,7 +60,8 @@ const coreModules = [
 ];
 
 coreModules.forEach(f => {
-    const code = fs.readFileSync(f, 'utf8');
+    const filePath = path.resolve(__dirname, '..', f);
+    const code = fs.readFileSync(filePath, 'utf8');
     vm.runInThisContext(code);
 });
 
