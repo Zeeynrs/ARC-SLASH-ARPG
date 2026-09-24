@@ -333,13 +333,13 @@ function startBossUltimate(mob, phaseName) {
             addTelegraphCircle({
                 x: px + (Math.random() - 0.5) * 20,
                 y: py + (Math.random() - 0.5) * 20,
-                radius: 38, duration: 85, dmg: 112,
+                radius: 38, duration: 85, dmg: 125,
                 color: '#ec4899', fillColor: 'rgba(236, 72, 153, 0.28)', icon: '☄️', effectType: 'meteor', isBoss: true
             });
             addTelegraphCircle({
                 x: 100 + Math.random() * 440,
                 y: 85 + Math.random() * 220,
-                radius: 42, duration: 90, dmg: 112,
+                radius: 42, duration: 90, dmg: 125,
                 color: '#a855f7', fillColor: 'rgba(168, 85, 247, 0.28)', icon: '☄️', effectType: 'meteor', isBoss: true
             });
 
@@ -379,7 +379,7 @@ function startBossUltimate(mob, phaseName) {
                 addTelegraphCircle({
                     x: Math.max(40, Math.min(600, px + Math.cos(offA) * offD)),
                     y: Math.max(80, Math.min(330, py + Math.sin(offA) * offD)),
-                    radius: 40, duration: 85, dmg: 117,
+                    radius: 40, duration: 85, dmg: 130,
                     color: '#ef4444', fillColor: 'rgba(239, 68, 68, 0.3)', icon: '🔥', effectType: 'magma', isBoss: true
                 });
             }
@@ -417,14 +417,14 @@ function startBossUltimate(mob, phaseName) {
             addTelegraphLine({
                 x1: px - Math.cos(angle1) * d, y1: py - Math.sin(angle1) * d,
                 x2: px + Math.cos(angle1) * d, y2: py + Math.sin(angle1) * d,
-                width: 26, duration: 75, dmg: 103,
+                width: 26, duration: 75, dmg: 116,
                 color: '#dc2626', icon: '🗡️', effectType: 'slash', isBoss: true
             });
             const angle2 = angle1 + Math.PI / 2 + (Math.random() - 0.5) * 0.4;
             addTelegraphLine({
                 x1: px - Math.cos(angle2) * d, y1: py - Math.sin(angle2) * d,
                 x2: px + Math.cos(angle2) * d, y2: py + Math.sin(angle2) * d,
-                width: 26, duration: 75, dmg: 103,
+                width: 26, duration: 75, dmg: 116,
                 color: '#a855f7', icon: '🗡️', effectType: 'slash', isBoss: true
             });
 
@@ -1109,7 +1109,7 @@ function updateCombat() {
                         y: py + (Math.random() - 0.5) * 25,
                         radius: 38,
                         duration: 85,
-                        dmg: 112,
+                        dmg: 125,
                         color: '#ec4899',
                         fillColor: 'rgba(236, 72, 153, 0.28)',
                         icon: '☄️',
@@ -1122,7 +1122,7 @@ function updateCombat() {
                         y: 85 + Math.random() * 220,
                         radius: 42,
                         duration: 90,
-                        dmg: 112,
+                        dmg: 125,
                         color: '#a855f7',
                         fillColor: 'rgba(168, 85, 247, 0.28)',
                         icon: '☄️',
@@ -1168,7 +1168,7 @@ function updateCombat() {
                             y: Math.max(80, Math.min(330, py + Math.sin(offA) * offD)),
                             radius: 40,
                             duration: 85,
-                            dmg: 117,
+                            dmg: 130,
                             color: '#ef4444',
                             fillColor: 'rgba(239, 68, 68, 0.3)',
                             icon: '🔥',
@@ -1184,7 +1184,7 @@ function updateCombat() {
                         y: 190,
                         radius: 125,
                         duration: 95,
-                        dmg: 148,
+                        dmg: 165,
                         color: '#f59e0b',
                         fillColor: 'rgba(245, 158, 11, 0.28)',
                         icon: '💥',
@@ -1237,7 +1237,7 @@ function updateCombat() {
                         y2: py + Math.sin(angle1) * d,
                         width: 26,
                         duration: 75,
-                        dmg: 103,
+                        dmg: 116,
                         color: '#dc2626',
                         icon: '🗡️',
                         effectType: 'slash',
@@ -1254,7 +1254,7 @@ function updateCombat() {
                         y2: randY + Math.sin(angle2) * d,
                         width: 26,
                         duration: 75,
-                        dmg: 103,
+                        dmg: 116,
                         color: '#a855f7',
                         icon: '🗡️',
                         effectType: 'slash',
@@ -1272,7 +1272,7 @@ function updateCombat() {
                     }
                     mob.isInvisible = false;
                     playSound('slash');
-                    damagePlayer(117, '🗡️', true);
+                    damagePlayer(132, '🗡️', true);
                     screenShake = 11;
                     floatingTexts.push({
                         x: mob.x + mob.w / 2, y: mob.y - 20,
@@ -1331,7 +1331,7 @@ function updateCombat() {
                         x2: 600, y2: py,
                         width: 44,
                         duration: 40,
-                        dmg: 121,
+                        dmg: 98,
                         color: '#ea580c',
                         icon: '🔥',
                         effectType: 'flame_line',
@@ -1592,7 +1592,7 @@ function updateCombat() {
                     mob.dragonTimer = 0;
                     const angle = Math.atan2(py - my, px - mx);
                     const speed = 4.6;
-                    const scaledFireDmg = Math.round((mob.type === 'boss' ? 50 : 22) + (currentStage - 1) * (mob.type === 'boss' ? 2.7 : 3.0));
+                    const scaledFireDmg = Math.round((mob.type === 'boss' ? 34 : 20) + (currentStage - 1) * (mob.type === 'boss' ? 1.8 : 2.5));
 
                     [-0.32, -0.16, 0, 0.16, 0.32].forEach(spread => {
                         enemyProjectiles.push({
@@ -1665,7 +1665,7 @@ function updateCombat() {
                     mob.attackDuration = 22;
                     playSound('slash');
 
-                    damagePlayer(110, '⚔️', true);
+                    damagePlayer(125, '⚔️', true);
                     const kAngle = Math.atan2(py - my, px - mx);
                     const kx = player.x + Math.cos(kAngle) * 22;
                     const ky = player.y + Math.sin(kAngle) * 22;
@@ -1696,7 +1696,7 @@ function updateCombat() {
                     addTelegraphLine({
                         x1: mob.x + mob.w / 2, y1: mob.y + mob.h / 2,
                         x2: targetX + mob.w / 2, y2: targetY + mob.h / 2,
-                        width: 32, duration: 45, dmg: 112, isBoss: true,
+                        width: 32, duration: 45, dmg: 126, isBoss: true,
                         color: '#f59e0b', icon: '🛡️', effectType: 'flame_line',
                         onDetonate: () => {
                             if (!checkWallCollision(targetX, mob.y, mob.w, mob.h)) mob.x = targetX;
@@ -1714,7 +1714,7 @@ function updateCombat() {
                     floatingTexts.push({ x: mx, y: my - 24, text: 'DRAGON WHIRLWIND! 🌀🔥', color: '#ef4444', life: 55 });
 
                     addTelegraphCircle({
-                        x: mx, y: my, radius: 95, duration: 60, dmg: 130, isBoss: true,
+                        x: mx, y: my, radius: 95, duration: 60, dmg: 145, isBoss: true,
                         color: '#ef4444', fillColor: 'rgba(239, 68, 68, 0.32)', icon: '🌀', effectType: 'magma'
                     });
                 }
@@ -1743,7 +1743,7 @@ function updateCombat() {
 
                     // Drop a stardust trap mine at old spot (slower timer, high damage)
                     addTelegraphCircle({
-                        x: mx, y: my, radius: 30, duration: 130, dmg: 103, isBoss: true,
+                        x: mx, y: my, radius: 30, duration: 130, dmg: 116, isBoss: true,
                         color: '#c084fc', fillColor: 'rgba(192, 132, 252, 0.3)', icon: '✨', effectType: 'stardust_mine'
                     });
                     mob.x = oppX;
@@ -1769,7 +1769,7 @@ function updateCombat() {
                             vy: Math.sin(angle + spread) * boltSpeed,
                             angle: angle + spread,
                             type: 'cosmic_bolt',
-                            dmg: 108,
+                            dmg: 120,
                             isBoss: true,
                             life: 110,
                             isHoming: true
@@ -1784,7 +1784,7 @@ function updateCombat() {
                     floatingTexts.push({ x: mx, y: my - 24, text: 'COSMIC AURA! 🌌', color: '#ec4899', life: 50 });
 
                     addTelegraphCircle({
-                        x: mx, y: my, radius: 68, duration: 50, dmg: 112, isBoss: true,
+                        x: mx, y: my, radius: 68, duration: 50, dmg: 125, isBoss: true,
                         color: '#ec4899', fillColor: 'rgba(236, 72, 153, 0.3)', icon: '🌌', effectType: 'meteor'
                     });
                 }
@@ -1793,7 +1793,7 @@ function updateCombat() {
                 if (mob.aiTimer >= 260) {
                     mob.aiTimer = 0;
                     addTelegraphCircle({
-                        x: mx, y: my, radius: 30, duration: 140, dmg: 103, isBoss: true,
+                        x: mx, y: my, radius: 30, duration: 140, dmg: 116, isBoss: true,
                         color: '#c084fc', fillColor: 'rgba(192, 132, 252, 0.3)', icon: '✨', effectType: 'stardust_mine'
                     });
                 }
@@ -1812,9 +1812,9 @@ function updateCombat() {
                     mob.attackDuration = 18;
                     playSound('slash');
 
-                    damagePlayer(76, '🗡️', true);
+                    damagePlayer(86, '🗡️', true);
                     setTimeout(() => {
-                        if (player.hp > 0 && gameState === 'PLAYING') damagePlayer(81, '🗡️', true);
+                        if (player.hp > 0 && gameState === 'PLAYING') damagePlayer(92, '🗡️', true);
                     }, 140);
                     screenShake = 8;
                 }
@@ -1860,7 +1860,7 @@ function updateCombat() {
                             vy: Math.sin(baseAngle + off) * daggerSpeed,
                             angle: baseAngle + off,
                             type: 'phantom_dagger',
-                            dmg: 94,
+                            dmg: 106,
                             isBoss: true,
                             life: 95
                         });

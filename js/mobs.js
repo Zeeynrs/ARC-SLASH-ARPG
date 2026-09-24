@@ -269,13 +269,23 @@ function createWardenBoss(stageNum, spawnX = 440, spawnY = 165) {
     };
 }
 
-// --- ALTER EGO BOSS CREATION (TRUE MIRROR OF PLAYER ROLE) ---
-function createAlterEgoBoss(stageNum, spawnX = 450, spawnY = 175, isApex = false) {
+// --- ALTER EGO BOSS CREATION ---
+function createAlterEgoBoss(stageNum, spawnX = 450, spawnY = 175, isApex = false, forcedRole = null) {
     const playerRole = (player && player.characterRole) ? player.characterRole : 'knight';
-    // Alter ego SELALU mencerminkan karakter yang dipilih oleh pemain (True Mirror)
-    const chosenRole = playerRole;
-
     const isStage50 = (stageNum >= 50 || isApex);
+
+    // Stage 50 (Apex Mirror): Alter ego mencerminkan karakter pemain sendiri (True Mirror).
+    // Stage 22 (dan non-Stage 50): Alter ego dipilih acak di antara 2 class lainnya (bukan mirror pemain).
+    let chosenRole = forcedRole;
+    if (!chosenRole) {
+        if (isStage50) {
+            chosenRole = playerRole;
+        } else {
+            const otherRoles = ['knight', 'mage', 'assassin'].filter(r => r !== playerRole);
+            chosenRole = otherRoles[Math.floor(Math.random() * otherRoles.length)];
+        }
+    }
+
     let equippedSet = {};
     let bossTitle = '';
     let bossHp = isStage50 ? 28800 : 8438;
@@ -335,7 +345,7 @@ function createAlterEgoBoss(stageNum, spawnX = 450, spawnY = 175, isApex = false
         shield: bossShield,
         maxShield: bossShield,
         speed: bossSpeed,
-        color: isStage50 ? '#06b6d4' : '#dc2626',
+        color: isStage50 ? '#06b6d4' : (chosenRole === 'mage' ? '#c084fc' : (chosenRole === 'assassin' ? '#10b981' : '#dc2626')),
         type: 'boss',
         species: 'alter_ego',
         alterEgoRole: chosenRole,

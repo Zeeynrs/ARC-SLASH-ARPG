@@ -256,6 +256,32 @@ const assassinMirror = mobs.find(m => m.species === 'alter_ego');
 assert.strictEqual(assassinMirror.alterEgoRole, 'assassin', 'Stage 50 mirrors Assassin');
 console.log('✓ Stage 50 True Mirror alter ego role reflection verified for all 3 classes');
 
+// Stage 22 Alter Ego Cross-Role Matchup (Picks between the other two classes)
+selectCharacter('knight');
+for (let i = 0; i < 15; i++) {
+    loadStage(22);
+    const ae = mobs.find(m => m.species === 'alter_ego');
+    assert.ok(ae.alterEgoRole === 'mage' || ae.alterEgoRole === 'assassin', 'Knight player faces Mage or Assassin Alter Ego');
+    assert.notStrictEqual(ae.alterEgoRole, 'knight', 'Knight player never faces Knight on Stage 22');
+}
+
+selectCharacter('mage');
+for (let i = 0; i < 15; i++) {
+    loadStage(22);
+    const ae = mobs.find(m => m.species === 'alter_ego');
+    assert.ok(ae.alterEgoRole === 'knight' || ae.alterEgoRole === 'assassin', 'Mage player faces Knight or Assassin Alter Ego');
+    assert.notStrictEqual(ae.alterEgoRole, 'mage', 'Mage player never faces Mage on Stage 22');
+}
+
+selectCharacter('assassin');
+for (let i = 0; i < 15; i++) {
+    loadStage(22);
+    const ae = mobs.find(m => m.species === 'alter_ego');
+    assert.ok(ae.alterEgoRole === 'knight' || ae.alterEgoRole === 'mage', 'Assassin player faces Knight or Mage Alter Ego');
+    assert.notStrictEqual(ae.alterEgoRole, 'assassin', 'Assassin player never faces Assassin on Stage 22');
+}
+console.log('✓ Stage 22 Alter Ego cross-role selection verified for all 3 classes');
+
 
 // -----------------------------------------------------------------------------
 // SUITE 5: EVENT ROOM & PROGRESSIVE ROULETTE
