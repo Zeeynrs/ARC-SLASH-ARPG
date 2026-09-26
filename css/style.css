@@ -78,9 +78,9 @@ canvas {
 
 .dpad-cross {
     display: grid;
-    grid-template-columns: 40px 40px 40px;
-    grid-template-rows: 40px 40px 40px;
-    gap: 3px;
+    grid-template-columns: 50px 50px 50px;
+    grid-template-rows: 50px 50px 50px;
+    gap: 4px;
     background: transparent;
     padding: 0;
     border: none;
@@ -88,15 +88,15 @@ canvas {
 }
 
 .dpad-btn {
-    background: rgba(255, 255, 255, 0.07);
-    border: 1.5px solid rgba(255, 255, 255, 0.2);
-    border-radius: 9px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1.5px solid rgba(255, 255, 255, 0.22);
+    border-radius: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
     color: #f8fafc;
     font-family: 'Press Start 2P', monospace;
-    font-size: 14px;
+    font-size: 17px;
     box-shadow: none;
     cursor: pointer;
     touch-action: none;
@@ -106,15 +106,15 @@ canvas {
 }
 
 .dpad-btn:active, .dpad-btn.active {
-    background: rgba(59, 130, 246, 0.4);
-    border-color: rgba(147, 197, 253, 0.9);
+    background: rgba(59, 130, 246, 0.45);
+    border-color: rgba(147, 197, 253, 0.95);
     color: #ffffff;
     transform: scale(0.92);
 }
 
 .dpad-arrow {
-    font-size: 14px;
-    color: rgba(255, 255, 255, 0.85);
+    font-size: 17px;
+    color: rgba(255, 255, 255, 0.9);
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
     pointer-events: none;
 }
@@ -135,16 +135,16 @@ canvas {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(255, 255, 255, 0.03);
-    border: 1.5px solid rgba(255, 255, 255, 0.1);
-    border-radius: 7px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1.5px solid rgba(255, 255, 255, 0.12);
+    border-radius: 9px;
     box-shadow: none;
     pointer-events: none;
 }
 
 .dpad-center-gem {
-    color: rgba(255, 255, 255, 0.3);
-    font-size: 10px;
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 12px;
     pointer-events: none;
 }
 
@@ -239,8 +239,8 @@ canvas {
 /* 3. ERGONOMIC RADIAL THUMB ARC (SKILLS & ATTACK CLUSTER) - ZERO OVERLAP */
 .action-cluster {
     position: relative;
-    width: 146px;
-    height: 146px;
+    width: 160px;
+    height: 160px;
     pointer-events: auto;
     flex-shrink: 0;
 }
@@ -251,16 +251,16 @@ canvas {
 
 .mobile-skill-btn {
     position: absolute;
-    width: 40px;
-    height: 40px;
+    width: 48px;
+    height: 48px;
     background: rgba(18, 24, 36, 0.75);
     border: 1.5px solid rgba(255, 255, 255, 0.18);
-    border-radius: 10px;
+    border-radius: 12px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 1px;
+    gap: 1.5px;
     color: #f8fafc;
     font-family: 'Press Start 2P', monospace;
     cursor: pointer;
@@ -274,18 +274,18 @@ canvas {
 
 /* Ergonomic Thumb Arc Positions around Attack Button - Strict Zero Overlap Guarantee */
 #btnSkill1 {
-    bottom: 84px;
+    bottom: 100px;
     right: 4px;
 }
 
 #btnSkill0 {
-    bottom: 74px;
-    right: 62px;
+    bottom: 90px;
+    right: 74px;
 }
 
 #btnSkill2 {
     bottom: 4px;
-    right: 84px;
+    right: 100px;
 }
 
 .mobile-skill-btn:active, .mobile-skill-btn.active {
@@ -295,12 +295,12 @@ canvas {
 }
 
 .skill-key {
-    font-size: 6px;
+    font-size: 7px;
     color: #94a3b8;
 }
 
 .skill-name {
-    font-size: 6px;
+    font-size: 7px;
     color: #38bdf8;
     text-align: center;
     font-weight: bold;
@@ -314,7 +314,7 @@ canvas {
     align-items: center;
     justify-content: center;
     color: #f59e0b;
-    font-size: 7.5px;
+    font-size: 8.5px;
     font-family: 'Press Start 2P', monospace;
 }
 
@@ -337,9 +337,9 @@ canvas {
     position: absolute;
     bottom: 4px;
     right: 4px;
-    width: 72px;
-    height: 72px;
-    border-radius: 18px;
+    width: 88px;
+    height: 88px;
+    border-radius: 22px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -356,8 +356,8 @@ canvas {
 }
 
 .attack-icon-wrapper {
-    width: 36px;
-    height: 36px;
+    width: 44px;
+    height: 44px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -365,13 +365,13 @@ canvas {
 }
 
 .atk-svg {
-    width: 32px;
-    height: 32px;
+    width: 40px;
+    height: 40px;
     filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.6));
 }
 
 .attack-text {
-    font-size: 7.5px;
+    font-size: 9px;
     letter-spacing: 0.5px;
     pointer-events: none;
     font-weight: bold;
@@ -743,9 +743,9 @@ canvas {
     }
 
     .mobile-center-bar .mobile-util-btn {
-        min-height: 24px;
-        min-width: 38px;
-        padding: 2px 3px;
+        min-height: 27px;
+        min-width: 42px;
+        padding: 2px 4px;
     }
 
     .mobile-controller-row {
@@ -755,7 +755,7 @@ canvas {
         justify-content: space-between;
         align-items: flex-end;
         position: relative;
-        min-height: 180px;
+        min-height: 200px;
         padding: 2px 2px;
     }
 
@@ -883,8 +883,8 @@ canvas {
     .mobile-center-bar .mobile-util-btn {
         background: rgba(22, 30, 46, 0.85);
         border: 1px solid rgba(255, 255, 255, 0.12);
-        min-height: 24px;
-        min-width: 38px;
+        min-height: 27px;
+        min-width: 42px;
         padding: 2px 4px;
         border-radius: 6px;
     }
@@ -914,16 +914,20 @@ canvas {
     }
 
     .dpad-cross {
-        grid-template-columns: 36px 36px 36px;
-        grid-template-rows: 36px 36px 36px;
-        gap: 3px;
+        grid-template-columns: 46px 46px 46px;
+        grid-template-rows: 46px 46px 46px;
+        gap: 3.5px;
     }
 
     .dpad-btn {
-        background: rgba(255, 255, 255, 0.06);
-        border: 1.5px solid rgba(255, 255, 255, 0.16);
-        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.07);
+        border: 1.5px solid rgba(255, 255, 255, 0.18);
+        border-radius: 11px;
         backdrop-filter: blur(4px);
+    }
+
+    .dpad-arrow {
+        font-size: 16px;
     }
 
     /* Floating Glass Action Cluster */
@@ -932,45 +936,54 @@ canvas {
         bottom: calc(env(safe-area-inset-bottom, 8px) + 8px);
         right: calc(env(safe-area-inset-right, 10px) + 8px);
         pointer-events: auto;
-        width: 134px;
-        height: 134px;
+        width: 154px;
+        height: 154px;
         z-index: 101;
     }
 
     .action-cluster .mobile-attack-btn {
-        width: 66px;
-        height: 66px;
-        border-radius: 16px;
+        width: 82px;
+        height: 82px;
+        border-radius: 20px;
         bottom: 4px;
         right: 4px;
         backdrop-filter: blur(6px);
     }
     .action-cluster .mobile-attack-btn .attack-icon-wrapper {
-        width: 32px;
-        height: 32px;
+        width: 40px;
+        height: 40px;
     }
     .action-cluster .mobile-attack-btn .atk-svg {
-        width: 28px;
-        height: 28px;
+        width: 36px;
+        height: 36px;
+    }
+    .action-cluster .mobile-attack-btn .attack-text {
+        font-size: 8.5px;
     }
 
     .action-cluster .mobile-skill-btn {
-        width: 36px;
-        height: 36px;
-        border-radius: 9px;
+        width: 44px;
+        height: 44px;
+        border-radius: 11px;
         backdrop-filter: blur(4px);
     }
     .action-cluster #btnSkill1 {
-        bottom: 76px;
+        bottom: 94px;
         right: 4px;
     }
     .action-cluster #btnSkill0 {
-        bottom: 68px;
-        right: 56px;
+        bottom: 84px;
+        right: 70px;
     }
     .action-cluster #btnSkill2 {
         bottom: 4px;
-        right: 76px;
+        right: 94px;
+    }
+    .action-cluster .mobile-skill-btn .skill-key {
+        font-size: 6.5px;
+    }
+    .action-cluster .mobile-skill-btn .skill-name {
+        font-size: 6.5px;
     }
 }
 

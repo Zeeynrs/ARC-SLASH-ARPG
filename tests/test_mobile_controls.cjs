@@ -50,6 +50,10 @@ global.document = {
     getElementById(id) {
         if (!domElements[id]) {
             domElements[id] = createMockElement(id);
+            if (id === 'gameCanvas') {
+                domElements[id].width = 640;
+                domElements[id].height = 384;
+            }
         }
         return domElements[id];
     },
@@ -248,5 +252,16 @@ if (!restartBtn || !trophyBtn) {
     throw new Error('Missing restart or trophy mobile buttons');
 }
 console.log('✓ Vertical Column Utility Buttons verified: Pause, Fullscreen, Restart, Shop, Trophy, SFX');
+
+// Test 10: Canvas Pause Menu Achievements Button Click Validation
+global.gameState = 'PAUSED';
+setMouseCoordinates(320, 230); // Center of canvas within Button 3: Achievements (y: 218, h: 35)
+let achievementsOpenedWith = null;
+global.openAchievementsScreen = (state) => { achievementsOpenedWith = state; };
+handleCanvasClick();
+if (achievementsOpenedWith !== 'PAUSED') {
+    throw new Error('Failed to open achievements from pause canvas tap: got ' + achievementsOpenedWith);
+}
+console.log('✓ Canvas Pause Menu Achievements tap verified: opens achievements with returnState=PAUSED');
 
 console.log('\n🎉 ALL MOBILE CONTROLLER TESTS PASSED SUCCESSFULLY!');

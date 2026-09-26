@@ -257,13 +257,19 @@ function initInput() {
                 touchMoved = true;
             }
         } else {
-            if (Math.hypot(mouseX - touchStartX, mouseY - touchStartY) > 12) {
+            if (Math.hypot(mouseX - touchStartX, mouseY - touchStartY) > 24) {
                 touchMoved = true;
             }
         }
     }, { passive: true });
 
-    canvas.addEventListener('touchend', () => {
+    canvas.addEventListener('touchend', (e) => {
+        if (e && e.changedTouches && e.changedTouches.length > 0) {
+            const t = e.changedTouches[0];
+            const rect = canvas.getBoundingClientRect();
+            mouseX = (t.clientX - rect.left) * (canvas.width / rect.width);
+            mouseY = (t.clientY - rect.top) * (canvas.height / rect.height);
+        }
         if (!touchMoved) {
             mouseClicked = true;
             handleCanvasClick();
@@ -282,6 +288,15 @@ function initInput() {
 
 function isHovering(x, y, w, h, pad = 0) {
     return mouseX >= (x - pad) && mouseX <= (x + w + pad) && mouseY >= (y - pad) && mouseY <= (y + h + pad);
+}
+
+function setMouseCoordinates(x, y) {
+    mouseX = x;
+    mouseY = y;
+}
+
+if (typeof window !== 'undefined') {
+    window.setMouseCoordinates = setMouseCoordinates;
 }
 
 function handleMainMenuClick() {
@@ -385,24 +400,26 @@ function handleCanvasClick() {
         const btnH = 35;
         const btnX = (canvas.width - btnW) / 2;
 
-        // Button 1: Resume
-        if (isHovering(btnX, 132, btnW, btnH, 6) || isHovering(canvas.width / 2 - 110, 180, 220, 42, 8)) {
+        // Button 1: Resume (y: 132, h: 35)
+        if (isHovering(btnX, 132, btnW, btnH, 8)) {
             gameState = (typeof eventRoom !== 'undefined' && eventRoom.isActive) ? 'EVENT_ROOM' : 'PLAYING';
+            if (typeof playSound === 'function') playSound('slash');
             return;
         }
-        // Button 2: Restart Stage
-        if (isHovering(btnX, 175, btnW, btnH, 6) || isHovering(canvas.width / 2 - 110, 236, 220, 42, 8)) {
+        // Button 2: Restart Stage (y: 175, h: 35)
+        if (isHovering(btnX, 175, btnW, btnH, 8)) {
             resetGame(currentStage);
             return;
         }
-        // Button 3: Achievements
-        if (isHovering(btnX, 218, btnW, btnH, 6)) {
+        // Button 3: Achievements / Trophy (y: 218, h: 35)
+        if (isHovering(btnX, 218, btnW, btnH, 8)) {
             if (typeof openAchievementsScreen === 'function') openAchievementsScreen('PAUSED');
             return;
         }
-        // Button 4: Exit to Main Menu
-        if (isHovering(btnX, 261, btnW, btnH, 6) || isHovering(canvas.width / 2 - 110, 292, 220, 42, 8)) {
+        // Button 4: Exit to Main Menu (y: 261, h: 35)
+        if (isHovering(btnX, 261, btnW, btnH, 8)) {
             gameState = 'MAIN_MENU';
+            if (typeof playSound === 'function') playSound('slash');
             return;
         }
     }
