@@ -213,7 +213,13 @@ function initInput() {
         mouseY = (e.clientY - rect.top) * (canvas.height / rect.height);
     });
 
+    let lastTouchEndTime = 0;
+
     canvas.addEventListener('mousedown', (e) => {
+        // Prevent double-firing from synthetic mouse events emitted by mobile browsers after touch
+        if (Date.now() - lastTouchEndTime < 500) {
+            return;
+        }
         initAudio();
         const rect = canvas.getBoundingClientRect();
         mouseX = (e.clientX - rect.left) * (canvas.width / rect.width);
@@ -264,6 +270,7 @@ function initInput() {
     }, { passive: true });
 
     canvas.addEventListener('touchend', (e) => {
+        lastTouchEndTime = Date.now();
         if (e && e.changedTouches && e.changedTouches.length > 0) {
             const t = e.changedTouches[0];
             const rect = canvas.getBoundingClientRect();

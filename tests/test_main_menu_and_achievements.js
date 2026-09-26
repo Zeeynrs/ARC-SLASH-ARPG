@@ -48,6 +48,12 @@ global.document = {
 global.keys = {};
 global.gameState = 'MAIN_MENU';
 global.currentStage = 1;
+global.mouseX = 0;
+global.mouseY = 0;
+global.isHovering = (x, y, w, h, pad = 0) => (
+    global.mouseX >= x - pad && global.mouseX <= x + w + pad &&
+    global.mouseY >= y - pad && global.mouseY <= y + h + pad
+);
 global.score = 0;
 global.screenShake = 0;
 global.particles = [];
@@ -213,11 +219,32 @@ assert.ok(currentToast !== null, 'Current active toast must be loaded');
 openAchievementsScreen('MAIN_MENU');
 assert.strictEqual(gameState, 'ACHIEVEMENTS', 'State transitions to ACHIEVEMENTS');
 assert.strictEqual(achievementsReturnState, 'MAIN_MENU', 'Return state recorded as MAIN_MENU');
-assert.strictEqual(achievementsPage, 0, 'Initial achievements page is 0');
+assert.strictEqual(achievementsPage, 0, 'Initial achievements page is 0 (Page 1)');
+
+// Verify step-by-step pagination navigation (never skips Page 2)
+global.mouseX = 320 + 70 + 20;
+global.mouseY = 258 + 10;
+handleAchievementsClick();
+assert.strictEqual(achievementsPage, 1, 'Page 1 advances exactly to Page 2 (not skipping to 3)');
+
+lastAchievementNavTime = 0;
+handleAchievementsClick();
+assert.strictEqual(achievementsPage, 2, 'Page 2 advances to Page 3');
+
+// Navigate back one page at a time
+lastAchievementNavTime = 0;
+global.mouseX = 320 - 170 + 20;
+global.mouseY = 258 + 10;
+handleAchievementsClick();
+assert.strictEqual(achievementsPage, 1, 'Page 3 returns exactly to Page 2 (not skipping to 1)');
+
+lastAchievementNavTime = 0;
+handleAchievementsClick();
+assert.strictEqual(achievementsPage, 0, 'Page 2 returns to Page 1');
 
 closeAchievementsScreen();
 assert.strictEqual(gameState, 'MAIN_MENU', 'State correctly returns to MAIN_MENU');
-console.log('✓ Toast notifications and achievements overlay modal verified');
+console.log('✓ Toast notifications, achievements overlay modal, and single-step pagination verified');
 
 console.log('\n====================================================');
 console.log('🎉 ALL MAIN MENU & ACHIEVEMENT TESTS PASSED!');

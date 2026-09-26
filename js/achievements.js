@@ -612,6 +612,8 @@ function drawAchievementsOverlay(ctx, canvas) {
     ctx.textAlign = 'left';
 }
 
+let lastAchievementNavTime = 0;
+
 function handleAchievementsClick() {
     const canvas = document.getElementById('gameCanvas');
     if (!canvas) return;
@@ -621,7 +623,9 @@ function handleAchievementsClick() {
 
     // Prev Button
     const prevX = canvas.width / 2 - 170;
-    if (isHovering(prevX, navY, 100, 28, 6)) {
+    if (isHovering(prevX, navY, 100, 28, 8)) {
+        if (Date.now() - lastAchievementNavTime < 220) return;
+        lastAchievementNavTime = Date.now();
         if (achievementsPage > 0) {
             achievementsPage--;
             if (typeof playSound === 'function') playSound('slash');
@@ -631,7 +635,9 @@ function handleAchievementsClick() {
 
     // Next Button
     const nextX = canvas.width / 2 + 70;
-    if (isHovering(nextX, navY, 100, 28, 6)) {
+    if (isHovering(nextX, navY, 100, 28, 8)) {
+        if (Date.now() - lastAchievementNavTime < 220) return;
+        lastAchievementNavTime = Date.now();
         if (achievementsPage < totalPages - 1) {
             achievementsPage++;
             if (typeof playSound === 'function') playSound('slash');
@@ -643,6 +649,8 @@ function handleAchievementsClick() {
     const backX = canvas.width / 2 - 100;
     const backY = 296;
     if (isHovering(backX, backY, 200, 34, 8)) {
+        if (Date.now() - lastAchievementNavTime < 220) return;
+        lastAchievementNavTime = Date.now();
         closeAchievementsScreen();
         return;
     }
