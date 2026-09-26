@@ -23,6 +23,25 @@ const DEFAULT_KEYBINDS = {
 let currentKeybinds = null;
 let rebindActiveAction = null;
 let keybindReturnState = 'PAUSED';
+let settingsReturnState = 'PAUSED';
+
+function formatKeyDisplayName(rawKey) {
+    if (!rawKey) return 'NONE';
+    const k = rawKey.toLowerCase();
+    if (k === ' ') return 'SPACE';
+    if (k === 'arrowup') return '▲ UP';
+    if (k === 'arrowdown') return '▼ DOWN';
+    if (k === 'arrowleft') return '◄ LEFT';
+    if (k === 'arrowright') return '► RIGHT';
+    if (k === 'escape' || k === 'esc') return 'ESC';
+    if (k === 'enter') return 'ENTER';
+    if (k === 'shift') return 'SHIFT';
+    if (k === 'control' || k === 'ctrl') return 'CTRL';
+    if (k === 'alt') return 'ALT';
+    if (k === 'tab') return 'TAB';
+    if (k === 'backspace') return 'BKSP';
+    return rawKey.toUpperCase();
+}
 
 function loadCustomKeybinds() {
     try {
@@ -34,12 +53,14 @@ function loadCustomKeybinds() {
                     currentKeybinds[act] = JSON.parse(JSON.stringify(DEFAULT_KEYBINDS[act]));
                 }
             }
+            if (typeof window !== 'undefined') window.currentKeybinds = currentKeybinds;
             return currentKeybinds;
         }
     } catch (e) {
         console.warn('Failed to load keybinds:', e);
     }
     currentKeybinds = JSON.parse(JSON.stringify(DEFAULT_KEYBINDS));
+    if (typeof window !== 'undefined') window.currentKeybinds = currentKeybinds;
     return currentKeybinds;
 }
 
@@ -51,43 +72,77 @@ function saveCustomKeybinds() {
     } catch (e) {
         console.warn('Failed to save keybinds:', e);
     }
+    if (typeof window !== 'undefined') window.currentKeybinds = currentKeybinds;
 }
 
 function resetCustomKeybinds() {
     currentKeybinds = JSON.parse(JSON.stringify(DEFAULT_KEYBINDS));
     saveCustomKeybinds();
+    if (typeof window !== 'undefined') window.currentKeybinds = currentKeybinds;
     if (typeof playSound === 'function') playSound('buy');
 }
 
 function isActionActive(actionName) {
     if (!currentKeybinds) loadCustomKeybinds();
     const binding = currentKeybinds[actionName];
-    if (!binding || !binding.keys) return false;
-    for (let i = 0; i < binding.keys.length; i++) {
-        if (keys[binding.keys[i].toLowerCase()]) return true;
+    if (binding && binding.keys) {
+        for (let i = 0; i < binding.keys.length; i++) {
+            if (keys[binding.keys[i].toLowerCase()]) return true;
+        }
     }
+    if (keys['virtual_' + actionName]) return true;
     return false;
+}
+
+function isKeyForAction(actionName, rawKey) {
+    if (!currentKeybinds) loadCustomKeybinds();
+    const binding = currentKeybinds[actionName];
+    if (!binding || !binding.keys) return false;
+    const cleanKey = (rawKey === ' ' ? ' ' : rawKey.toLowerCase());
+    return binding.keys.some(k => k.toLowerCase() === cleanKey);
 }
 
 function bindActionKey(actionName, rawKey) {
     if (!currentKeybinds) loadCustomKeybinds();
     if (!currentKeybinds[actionName]) return;
-    const cleanKey = rawKey.toLowerCase();
+    const cleanKey = (rawKey === ' ' ? ' ' : rawKey.toLowerCase());
     currentKeybinds[actionName].keys = [cleanKey];
-    currentKeybinds[actionName].defaultKey = (cleanKey === ' ') ? 'Space' : cleanKey.toUpperCase();
+    currentKeybinds[actionName].defaultKey = formatKeyDisplayName(rawKey);
     saveCustomKeybinds();
+    if (typeof window !== 'undefined') window.currentKeybinds = currentKeybinds;
 }
 
 function openKeybindsScreen(returnState = 'PAUSED') {
     keybindReturnState = returnState;
     rebindActiveAction = null;
     gameState = 'KEYBINDS';
+    if (typeof window !== 'undefined') {
+        window.keybindReturnState = keybindReturnState;
+        window.rebindActiveAction = null;
+    }
     if (typeof playSound === 'function') playSound('slash');
 }
 
 function closeKeybindsScreen() {
     rebindActiveAction = null;
     gameState = keybindReturnState || 'PAUSED';
+    if (typeof window !== 'undefined') {
+        window.rebindActiveAction = null;
+    }
+    if (typeof playSound === 'function') playSound('slash');
+}
+
+function openSettingsScreen(returnState = 'PAUSED') {
+    settingsReturnState = returnState;
+    gameState = 'SETTINGS';
+    if (typeof window !== 'undefined') {
+        window.settingsReturnState = settingsReturnState;
+    }
+    if (typeof playSound === 'function') playSound('slash');
+}
+
+function closeSettingsScreen() {
+    gameState = settingsReturnState || 'PAUSED';
     if (typeof playSound === 'function') playSound('slash');
 }
 
@@ -99,15 +154,51 @@ function initInput() {
         const k = e.key.toLowerCase();
         keys[k] = true;
 
+        // Handling saat dalam menu Settings
+        if (gameState === 'SETTINGS') {
+            if (k === 'escape' || k === 'esc' || k === 'q') {
+                closeSettingsScreen();
+                e.preventDefault();
+                return;
+            }
+            if (k === 's') {
+                soundEnabled = !soundEnabled;
+                if (typeof updateMobileSoundBtn === 'function') updateMobileSoundBtn();
+                if (typeof playSound === 'function') playSound(soundEnabled ? 'buy' : 'hit');
+                return;
+            }
+            if (k === '-' || k === '_') {
+                if (typeof adjustMasterVolume === 'function') adjustMasterVolume(-0.1);
+                if (typeof playSound === 'function') playSound('coin');
+                return;
+            }
+            if (k === '+' || k === '=') {
+                if (typeof adjustMasterVolume === 'function') adjustMasterVolume(0.1);
+                if (typeof playSound === 'function') playSound('coin');
+                return;
+            }
+            if (k === 'k' || k === 'c') {
+                openKeybindsScreen('SETTINGS');
+                return;
+            }
+            if (k === 't') {
+                if (typeof cycleTickRate === 'function') cycleTickRate();
+                return;
+            }
+            return;
+        }
+
         // Handling saat dalam menu Re-Keybinding
         if (gameState === 'KEYBINDS') {
             if (rebindActiveAction) {
                 if (k === 'escape' || k === 'esc') {
                     rebindActiveAction = null;
+                    if (typeof window !== 'undefined') window.rebindActiveAction = null;
                     if (typeof playSound === 'function') playSound('shield');
                 } else {
                     bindActionKey(rebindActiveAction, k);
                     rebindActiveAction = null;
+                    if (typeof window !== 'undefined') window.rebindActiveAction = null;
                     if (typeof playSound === 'function') playSound('buy');
                 }
                 e.preventDefault();
@@ -126,13 +217,16 @@ function initInput() {
             }
         }
 
-        if (k === 'escape' || k === 'esc' || k === 'p') {
+        if (k === 'escape' || k === 'esc' || isKeyForAction('pause', k)) {
             if (gameState === 'PLAYING' || gameState === 'EVENT_ROOM') {
                 gameState = 'PAUSED';
+                return;
             } else if (gameState === 'PAUSED') {
                 gameState = (typeof eventRoom !== 'undefined' && eventRoom.isActive) ? 'EVENT_ROOM' : 'PLAYING';
+                return;
             } else if (gameState === 'SHOP') {
                 gameState = (typeof eventRoom !== 'undefined' && eventRoom.isActive) ? 'EVENT_ROOM' : 'PLAYING';
+                return;
             }
         }
 
@@ -149,11 +243,27 @@ function initInput() {
         }
 
         if (gameState === 'PAUSED') {
-            if (k === 'q') gameState = 'MAIN_MENU';
-            if (k === 'a' && typeof openAchievementsScreen === 'function') openAchievementsScreen('PAUSED');
-            if (k === 'k' || k === 'c') openKeybindsScreen('PAUSED');
-            if (k === 'o' && typeof toggleArtStyle === 'function') toggleArtStyle();
-            if (k === 't' && typeof cycleTickRate === 'function') cycleTickRate();
+            if (k === 'q') {
+                gameState = 'MAIN_MENU';
+                return;
+            }
+            if (k === 'a' && typeof openAchievementsScreen === 'function') {
+                openAchievementsScreen('PAUSED');
+                return;
+            }
+            if (k === 's') {
+                openSettingsScreen('PAUSED');
+                return;
+            }
+            if (k === 'k' || k === 'c') {
+                openKeybindsScreen('PAUSED');
+                return;
+            }
+            if (k === 'r') {
+                resetGame(currentStage);
+                return;
+            }
+            return;
         }
 
         if (gameState === 'GAMEOVER') {
@@ -202,8 +312,8 @@ function initInput() {
             return;
         }
 
-        if (k === 'r') {
-            if (gameState === 'GAMEOVER' || gameState === 'PLAYING') {
+        if (k === 'r' || isKeyForAction('restart', k)) {
+            if (gameState === 'GAMEOVER') {
                 resetGame(1);
             } else if (gameState === 'PAUSED') {
                 resetGame(currentStage);
@@ -231,8 +341,8 @@ function initInput() {
                 if (typeof playSound === 'function') playSound('slash');
                 return;
             }
-            if (k === '4' || k === 'k' || k === 'c') {
-                openKeybindsScreen('MAIN_MENU');
+            if (k === '4') {
+                openSettingsScreen('MAIN_MENU');
                 return;
             }
         }
@@ -297,7 +407,7 @@ function initInput() {
         }
 
         // Shop toggle
-        if (k === 'b') {
+        if (k === 'b' || isKeyForAction('shop', k)) {
             if ((gameState === 'PLAYING' && dungeonGate.open) || gameState === 'EVENT_ROOM') {
                 gameState = 'SHOP';
                 shopScrollOffset = 0;
@@ -308,14 +418,13 @@ function initInput() {
 
         // Skill & Action hotkeys
         if (gameState === 'PLAYING' || gameState === 'EVENT_ROOM') {
-            if (isActionActive('dodge') || k === 'shift' || k === 'k') {
+            if (isKeyForAction('dodge', k)) {
                 if (typeof startPlayerDodge === 'function') startPlayerDodge();
             }
-            if (k === 'o' && typeof toggleArtStyle === 'function') toggleArtStyle();
             if (k === 't' && typeof cycleTickRate === 'function') cycleTickRate();
-            if (isActionActive('skill1') || k === '1') activateSkill(0);
-            if (isActionActive('skill2') || k === '2') activateSkill(1);
-            if (isActionActive('skill3') || k === '3') activateSkill(2);
+            if (isKeyForAction('skill1', k)) activateSkill(0);
+            if (isKeyForAction('skill2', k)) activateSkill(1);
+            if (isKeyForAction('skill3', k)) activateSkill(2);
         }
 
         // Event Room Roulette spin hotkey (E, or Space/Enter when near table)
@@ -323,7 +432,7 @@ function initInput() {
             const tx = (typeof eventRoom !== 'undefined' && eventRoom.table) ? eventRoom.table.x : 320;
             const ty = (typeof eventRoom !== 'undefined' && eventRoom.table) ? eventRoom.table.y : 165;
             const distToTable = Math.hypot((player.x + player.w / 2) - tx, (player.y + player.h / 2) - ty);
-            if (k === 'e' || ((k === ' ' || k === 'enter') && distToTable < 115)) {
+            if (isKeyForAction('interact', k) || k === 'e' || ((k === ' ' || k === 'enter') && distToTable < 115)) {
                 if (typeof spinRoulette === 'function') spinRoulette();
             }
         }
@@ -467,10 +576,76 @@ function handleMainMenuClick() {
         return;
     }
 
-    // Button 4: Keyboard Controls / Keybinds
+    // Button 4: Settings / Pengaturan
     const btn4Y = 203;
     if (isHovering(btnX, btn4Y, btnW, btnH, 4)) {
-        openKeybindsScreen('MAIN_MENU');
+        openSettingsScreen('MAIN_MENU');
+        return;
+    }
+}
+
+function handleSettingsClick() {
+    const canvas = document.getElementById('gameCanvas');
+    if (!canvas) return;
+
+    const btnW = 260;
+    const btnX = (canvas.width - btnW) / 2;
+
+    // 1. Audio Mute / Sound FX Toggle (y: 70, h: 34)
+    if (isHovering(btnX, 70, btnW, 34)) {
+        soundEnabled = !soundEnabled;
+        if (typeof updateMobileSoundBtn === 'function') updateMobileSoundBtn();
+        if (typeof playSound === 'function') playSound(soundEnabled ? 'buy' : 'hit');
+        return;
+    }
+
+    // 2. Master Volume Adjustment
+    const volY = 116;
+    const volH = 32;
+    const minusW = 38;
+    const plusW = 38;
+    const barW = btnW - minusW - plusW - 16;
+    const minusX = btnX;
+    const barX = minusX + minusW + 8;
+    const plusX = barX + barW + 8;
+
+    // Minus Button
+    if (isHovering(minusX, volY, minusW, volH)) {
+        if (typeof adjustMasterVolume === 'function') adjustMasterVolume(-0.1);
+        if (typeof playSound === 'function') playSound('coin');
+        return;
+    }
+
+    // Volume Bar direct click
+    if (isHovering(barX, volY, barW, volH)) {
+        const ratio = Math.max(0, Math.min(1, (mouseX - barX) / barW));
+        if (typeof setMasterVolume === 'function') setMasterVolume(ratio);
+        if (typeof playSound === 'function') playSound('coin');
+        return;
+    }
+
+    // Plus Button
+    if (isHovering(plusX, volY, plusW, volH)) {
+        if (typeof adjustMasterVolume === 'function') adjustMasterVolume(0.1);
+        if (typeof playSound === 'function') playSound('coin');
+        return;
+    }
+
+    // 3. Re-Keybinding Button (y: 160, h: 34)
+    if (isHovering(btnX, 160, btnW, 34)) {
+        openKeybindsScreen('SETTINGS');
+        return;
+    }
+
+    // 4. Tick Rate Button (y: 206, h: 34)
+    if (isHovering(btnX, 206, btnW, 34)) {
+        if (typeof cycleTickRate === 'function') cycleTickRate();
+        return;
+    }
+
+    // 5. Back Button (y: 270, h: 38)
+    if (isHovering(btnX, 270, btnW, 38)) {
+        closeSettingsScreen();
         return;
     }
 }
@@ -495,6 +670,7 @@ function handleKeybindsClick() {
         const ry = startY + idx * (rowH + gap);
         if (isHovering(rx, ry, 260, rowH)) {
             rebindActiveAction = act;
+            if (typeof window !== 'undefined') window.rebindActiveAction = act;
             if (typeof playSound === 'function') playSound('slash');
         }
     });
@@ -505,6 +681,7 @@ function handleKeybindsClick() {
         const ry = startY + idx * (rowH + gap);
         if (isHovering(rx, ry, 260, rowH)) {
             rebindActiveAction = act;
+            if (typeof window !== 'undefined') window.rebindActiveAction = act;
             if (typeof playSound === 'function') playSound('slash');
         }
     });
@@ -527,6 +704,11 @@ function handleCanvasClick() {
     // Prioritas 1: Mode overlay layar penuh/modal harus diproses terlebih dahulu
     if (gameState === 'SHOP') {
         handleShopClick();
+        return;
+    }
+
+    if (gameState === 'SETTINGS') {
+        handleSettingsClick();
         return;
     }
 
@@ -589,44 +771,31 @@ function handleCanvasClick() {
 
     if (gameState === 'PAUSED') {
         const btnW = 240;
-        const btnH = 32;
         const btnX = (canvas.width - btnW) / 2;
 
-        // Button 1: Resume (y: 86, h: 32)
-        if (isHovering(btnX, 86, btnW, btnH, 4)) {
+        // Button 1: Resume (y: 96, h: 36)
+        if (isHovering(btnX, 96, btnW, 36, 4)) {
             gameState = (typeof eventRoom !== 'undefined' && eventRoom.isActive) ? 'EVENT_ROOM' : 'PLAYING';
             if (typeof playSound === 'function') playSound('slash');
             return;
         }
-        // Button 2: Restart Stage (y: 128, h: 32)
-        if (isHovering(btnX, 128, btnW, btnH, 4)) {
+        // Button 2: Restart Stage (y: 144, h: 36)
+        if (isHovering(btnX, 144, btnW, 36, 4)) {
             resetGame(currentStage);
             return;
         }
-        // Button 3: Keybinds / Controls (y: 171, h: 32)
-        if (isHovering(btnX, 171, btnW, btnH, 4)) {
-            openKeybindsScreen('PAUSED');
-            return;
-        }
-        // Button 4: Achievements / Trophy (y: 214..248, touches y=230)
+        // Button 3: Achievements / Trophy (y: 214..248, touches y=230)
         if (isHovering(btnX, 214, btnW, 34, 4)) {
             if (typeof openAchievementsScreen === 'function') openAchievementsScreen('PAUSED');
             return;
         }
-        // Settings Row: Art Style (Left) & Tick Rate (Right) (y: 258, h: 30)
-        const halfW = 117;
-        const artBtnX = btnX;
-        const tpsBtnX = btnX + halfW + 6;
-        if (isHovering(artBtnX, 258, halfW, 30, 4)) {
-            if (typeof toggleArtStyle === 'function') toggleArtStyle();
+        // Button 4: Settings / Pengaturan (y: 258, h: 34)
+        if (isHovering(btnX, 258, btnW, 34, 4)) {
+            openSettingsScreen('PAUSED');
             return;
         }
-        if (isHovering(tpsBtnX, 258, halfW, 30, 4)) {
-            if (typeof cycleTickRate === 'function') cycleTickRate();
-            return;
-        }
-        // Button 6: Exit to Main Menu (y: 296, h: 30)
-        if (isHovering(btnX, 296, btnW, 30, 4)) {
+        // Button 5: Exit to Main Menu (y: 302, h: 34)
+        if (isHovering(btnX, 302, btnW, 34, 4)) {
             gameState = 'MAIN_MENU';
             if (typeof playSound === 'function') playSound('slash');
             return;
@@ -645,12 +814,6 @@ function handleCanvasClick() {
     if (isHovering(576, 8, 26, 31, 4)) {
         if (gameState === 'PLAYING' || gameState === 'EVENT_ROOM') gameState = 'PAUSED';
         else if (gameState === 'PAUSED') gameState = (typeof eventRoom !== 'undefined' && eventRoom.isActive) ? 'EVENT_ROOM' : 'PLAYING';
-        return;
-    }
-
-    // Art Style Toggle on HUD (x: 528, y: 8, w: 44, h: 31)
-    if (isHovering(528, 8, 44, 31, 4)) {
-        if (typeof toggleArtStyle === 'function') toggleArtStyle();
         return;
     }
 
@@ -971,17 +1134,21 @@ function initMobileControls() {
         // Support 8-way diagonal moving in gameplay
         const threshold = 12;
         if (dy < -threshold) {
+            keys['virtual_moveUp'] = true;
             keys['w'] = true;
             if (dpadBtns.up) dpadBtns.up.classList.add('active');
         } else if (dy > threshold) {
+            keys['virtual_moveDown'] = true;
             keys['s'] = true;
             if (dpadBtns.down) dpadBtns.down.classList.add('active');
         }
 
         if (dx < -threshold) {
+            keys['virtual_moveLeft'] = true;
             keys['a'] = true;
             if (dpadBtns.left) dpadBtns.left.classList.add('active');
         } else if (dx > threshold) {
+            keys['virtual_moveRight'] = true;
             keys['d'] = true;
             if (dpadBtns.right) dpadBtns.right.classList.add('active');
         }
@@ -990,6 +1157,10 @@ function initMobileControls() {
     function clearDpad() {
         dpadTouchId = null;
         dpadLastMenuDir = 0;
+        keys['virtual_moveUp'] = false;
+        keys['virtual_moveDown'] = false;
+        keys['virtual_moveLeft'] = false;
+        keys['virtual_moveRight'] = false;
         keys['w'] = false;
         keys['s'] = false;
         keys['a'] = false;
@@ -1103,12 +1274,14 @@ function initMobileControls() {
                 }
             }
 
+            keys['virtual_attack'] = true;
             keys['j'] = true;
         };
 
         const stopAttack = (e) => {
             if (e) e.preventDefault();
             btnAttack.classList.remove('active');
+            keys['virtual_attack'] = false;
             keys['j'] = false;
         };
 
@@ -1466,6 +1639,21 @@ function updateMobileControlsState() {
 }
 
 if (typeof window !== 'undefined') {
+    window.keys = keys;
+    window.DEFAULT_KEYBINDS = DEFAULT_KEYBINDS;
+    window.currentKeybinds = currentKeybinds;
+    window.loadCustomKeybinds = loadCustomKeybinds;
+    window.saveCustomKeybinds = saveCustomKeybinds;
+    window.resetCustomKeybinds = resetCustomKeybinds;
+    window.isActionActive = isActionActive;
+    window.isKeyForAction = isKeyForAction;
+    window.bindActionKey = bindActionKey;
+    window.openKeybindsScreen = openKeybindsScreen;
+    window.closeKeybindsScreen = closeKeybindsScreen;
+    window.openSettingsScreen = openSettingsScreen;
+    window.closeSettingsScreen = closeSettingsScreen;
+    window.formatKeyDisplayName = formatKeyDisplayName;
+    window.handleCanvasClick = handleCanvasClick;
     window.updateMobileControlsState = updateMobileControlsState;
 }
 

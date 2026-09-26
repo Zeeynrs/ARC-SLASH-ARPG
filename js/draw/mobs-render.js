@@ -1153,19 +1153,7 @@ function drawAllMobs(ctx) {
         const rx = (mob.w / 2) * scaleX;
         const ry = (mob.h / 2) * scaleY;
 
-        // Enhanced Art Style: Boss Aura & Special Status Vfx
-        const isEnhanced = (typeof currentArtStyle !== 'undefined' && currentArtStyle === 'enhanced');
-        if (mob.type === 'boss' && isEnhanced) {
-            ctx.save();
-            const auraPulse = Math.sin(Date.now() * 0.005 + mob.id) * 0.15 + 0.28;
-            let auraColor = 'rgba(245, 158, 11, ';
-            if (mob.species === 'warden' || mob.species === 'alter_ego') auraColor = 'rgba(6, 182, 212, ';
-            ctx.fillStyle = `${auraColor}${auraPulse})`;
-            ctx.beginPath();
-            ctx.ellipse(cx, groundY - 2, mob.w * 0.72, 8, 0, 0, Math.PI * 2);
-            ctx.fill();
-            ctx.restore();
-        }
+
 
         if (mob.isParrying) {
             // Alter Ego Parry Barrier

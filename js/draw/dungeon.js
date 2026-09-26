@@ -1,31 +1,5 @@
-// --- DUNGEON DRAWING WITH ART STYLE TOGGLE & ENHANCED LIGHTING ---
-let currentArtStyle = 'enhanced'; // 'enhanced' or 'classic'
-try {
-    const saved = localStorage.getItem('arc_slash_art_style');
-    if (saved === 'classic' || saved === 'enhanced') currentArtStyle = saved;
-} catch (e) {}
+// --- DUNGEON DRAWING (CLASSIC RETRO 16-BIT STYLE) ---
 
-function toggleArtStyle() {
-    currentArtStyle = (currentArtStyle === 'enhanced') ? 'classic' : 'enhanced';
-    try {
-        localStorage.setItem('arc_slash_art_style', currentArtStyle);
-    } catch (e) {}
-    if (typeof floatingTexts !== 'undefined' && typeof player !== 'undefined' && player.x) {
-        floatingTexts.push({
-            x: player.x + player.w / 2,
-            y: player.y - 18,
-            text: currentArtStyle === 'enhanced' ? '🎨 ART: ENHANCED ✨' : '🎨 ART: CLASSIC 🕹️',
-            color: currentArtStyle === 'enhanced' ? '#fbbf24' : '#94a3b8',
-            life: 55
-        });
-    }
-    if (typeof playSound === 'function') playSound('buy');
-}
-
-if (typeof window !== 'undefined') {
-    window.toggleArtStyle = toggleArtStyle;
-    window.getArtStyle = () => currentArtStyle;
-}
 
 function drawSlimePuddles(ctx) {
     if (typeof slimePuddles === 'undefined' || slimePuddles.length === 0) return;
@@ -157,9 +131,9 @@ function drawDungeonFloor() {
 
     // Internal Walls (Reinforced Deepslate in Deep Dark)
     walls.forEach(w => {
-        // Drop shadow beneath wall (richer ambient occlusion in Enhanced art style)
-        ctx.fillStyle = (currentArtStyle === 'enhanced') ? 'rgba(0, 0, 0, 0.65)' : 'rgba(0, 0, 0, 0.45)';
-        ctx.fillRect(w.x + 4, w.y + w.h, w.w - 4, (currentArtStyle === 'enhanced') ? 8 : 6);
+        // Drop shadow beneath wall
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.45)';
+        ctx.fillRect(w.x + 4, w.y + w.h, w.w - 4, 6);
 
         ctx.fillStyle = isDeepDark ? '#070f1c' : '#1c2536';
         ctx.fillRect(w.x, w.y, w.w, w.h);
@@ -170,12 +144,6 @@ function drawDungeonFloor() {
 
         ctx.fillStyle = isDeepDark ? '#06b6d4' : '#4c618a';
         ctx.fillRect(w.x, w.y, w.w, 2);
-
-        // Enhanced Art Style: subtle 3D highlight bevel on walls
-        if (currentArtStyle === 'enhanced') {
-            ctx.fillStyle = isDeepDark ? 'rgba(34, 211, 238, 0.4)' : 'rgba(148, 163, 184, 0.35)';
-            ctx.fillRect(w.x + 1, w.y, w.w - 2, 1);
-        }
 
         ctx.fillStyle = isDeepDark ? '#030812' : '#111724';
         ctx.fillRect(w.x, w.y + capH, w.w, 2);
@@ -201,7 +169,7 @@ function drawDungeonFloor() {
         }
     });
 
-    // Deep Dark Atmospheric Darkness Vignette & Enhanced Ambient Lighting
+    // Deep Dark Atmospheric Darkness Vignette
     if (isDeepDark) {
         const darkVignette = ctx.createRadialGradient(
             canvas.width / 2, canvas.height / 2, 120,
@@ -213,17 +181,6 @@ function drawDungeonFloor() {
         darkVignette.addColorStop(1, `rgba(2, 6, 23, ${0.52 + pulse})`);
         ctx.fillStyle = darkVignette;
         ctx.fillRect(0, 0, canvas.width, canvas.height);
-    } else if (currentArtStyle === 'enhanced') {
-        // Soft atmospheric ambient vignette for regular dungeon
-        const ambientVignette = ctx.createRadialGradient(
-            canvas.width / 2, canvas.height / 2, 160,
-            canvas.width / 2, canvas.height / 2, 360
-        );
-        ambientVignette.addColorStop(0, 'rgba(0, 0, 0, 0)');
-        ambientVignette.addColorStop(0.8, 'rgba(3, 7, 18, 0.22)');
-        ambientVignette.addColorStop(1, 'rgba(3, 7, 18, 0.45)');
-        ctx.fillStyle = ambientVignette;
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
     }
 }
 
@@ -234,18 +191,17 @@ function drawTorchesAndSmoke() {
 
     torches.forEach(t => {
         ctx.save();
-        const flicker = (currentArtStyle === 'enhanced') ? Math.sin(Date.now() * 0.007 + t.x * 2) * 4 : 0;
-        const glowRadius = (isDeepDark ? 62 : 55) + flicker;
+        const glowRadius = isDeepDark ? 62 : 55;
         const glowGrad = ctx.createRadialGradient(t.x, t.y, 2, t.x, t.y, glowRadius);
         if (isDeepDark) {
             // Ethereal Soul Light
-            glowGrad.addColorStop(0, (currentArtStyle === 'enhanced') ? 'rgba(34, 211, 238, 0.38)' : 'rgba(6, 182, 212, 0.28)');
-            glowGrad.addColorStop(0.5, (currentArtStyle === 'enhanced') ? 'rgba(8, 145, 178, 0.16)' : 'rgba(8, 145, 178, 0.10)');
+            glowGrad.addColorStop(0, 'rgba(6, 182, 212, 0.28)');
+            glowGrad.addColorStop(0.5, 'rgba(8, 145, 178, 0.10)');
             glowGrad.addColorStop(1, 'rgba(0, 0, 0, 0)');
         } else {
             // Warm Torch Light
-            glowGrad.addColorStop(0, (currentArtStyle === 'enhanced') ? 'rgba(255, 140, 0, 0.32)' : 'rgba(255, 120, 0, 0.22)');
-            glowGrad.addColorStop(0.5, (currentArtStyle === 'enhanced') ? 'rgba(255, 90, 0, 0.13)' : 'rgba(255, 80, 0, 0.08)');
+            glowGrad.addColorStop(0, 'rgba(255, 120, 0, 0.22)');
+            glowGrad.addColorStop(0.5, 'rgba(255, 80, 0, 0.08)');
             glowGrad.addColorStop(1, 'rgba(0, 0, 0, 0)');
         }
         ctx.fillStyle = glowGrad;

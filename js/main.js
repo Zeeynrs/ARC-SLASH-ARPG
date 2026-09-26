@@ -299,10 +299,10 @@ function update() {
     if (!player.isDashing) {
         let moveDx = 0;
         let moveDy = 0;
-        const upActive = (typeof isActionActive === 'function') ? (isActionActive('moveUp') || keys['w'] || keys['arrowup']) : (keys['w'] || keys['arrowup']);
-        const downActive = (typeof isActionActive === 'function') ? (isActionActive('moveDown') || keys['s'] || keys['arrowdown']) : (keys['s'] || keys['arrowdown']);
-        const leftActive = (typeof isActionActive === 'function') ? (isActionActive('moveLeft') || keys['a'] || keys['arrowleft']) : (keys['a'] || keys['arrowleft']);
-        const rightActive = (typeof isActionActive === 'function') ? (isActionActive('moveRight') || keys['d'] || keys['arrowright']) : (keys['d'] || keys['arrowright']);
+        const upActive = (typeof isActionActive === 'function') ? isActionActive('moveUp') : (keys['w'] || keys['arrowup']);
+        const downActive = (typeof isActionActive === 'function') ? isActionActive('moveDown') : (keys['s'] || keys['arrowdown']);
+        const leftActive = (typeof isActionActive === 'function') ? isActionActive('moveLeft') : (keys['a'] || keys['arrowleft']);
+        const rightActive = (typeof isActionActive === 'function') ? isActionActive('moveRight') : (keys['d'] || keys['arrowright']);
 
         if (upActive) { moveDy -= 1; player.facing = 'up'; }
         if (downActive) { moveDy += 1; player.facing = 'down'; }
@@ -679,8 +679,10 @@ function draw() {
         else drawMenuOverlay();
     } else if (gameState === 'MENU' || gameState === 'CHAR_SELECT') {
         drawMenuOverlay();
+    } else if (gameState === 'SETTINGS') {
+        if (typeof drawSettingsOverlay === 'function') drawSettingsOverlay(ctx, canvas);
     } else if (gameState === 'KEYBINDS') {
-        if (typeof drawKeybindsOverlay === 'function') drawKeybindsOverlay();
+        if (typeof drawKeybindsOverlay === 'function') drawKeybindsOverlay(ctx, canvas);
     } else if (gameState === 'ACHIEVEMENTS') {
         if (typeof drawAchievementsOverlay === 'function') drawAchievementsOverlay(ctx, canvas);
     } else if (gameState === 'HOW_TO_PLAY') {

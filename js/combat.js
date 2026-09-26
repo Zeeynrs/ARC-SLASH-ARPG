@@ -478,13 +478,13 @@ function startBossUltimate(mob, phaseName) {
         addTelegraphCircle({
             x: px + (Math.random() - 0.5) * 35,
             y: py + (Math.random() - 0.5) * 35,
-            radius: 44, duration: 44, dmg: 108,
+            radius: 44, duration: 44, dmg: 58,
             color: '#ea580c', fillColor: 'rgba(234, 88, 12, 0.32)', icon: '☄️', effectType: 'dragon_boulder', isBoss: true
         });
         addTelegraphCircle({
             x: 120 + Math.random() * 400,
             y: 90 + Math.random() * 200,
-            radius: 44, duration: 44, dmg: 108,
+            radius: 44, duration: 44, dmg: 58,
             color: '#dc2626', fillColor: 'rgba(220, 38, 38, 0.32)', icon: '☄️', effectType: 'dragon_boulder', isBoss: true
         });
     } else if (mob.species === 'warden') {
@@ -685,7 +685,7 @@ function updateCombat() {
 
     // Start Basic Attack (support isActionActive('attack'))
     const isAttackingKey = (typeof isActionActive === 'function')
-        ? (isActionActive('attack') || keys['j'] || keys[' '])
+        ? isActionActive('attack')
         : (keys['j'] || keys[' ']);
 
     if (isAttackingKey && player.attackCooldown === 0 && !player.isAttacking && !player.isDashing) {
@@ -1379,7 +1379,7 @@ function updateCombat() {
                         y: py + (Math.random() - 0.5) * 35,
                         radius: 44,
                         duration: 44,
-                        dmg: 108,
+                        dmg: 58,
                         color: '#ea580c',
                         fillColor: 'rgba(234, 88, 12, 0.32)',
                         icon: '☄️',
@@ -1391,7 +1391,7 @@ function updateCombat() {
                         y: 90 + Math.random() * 200,
                         radius: 44,
                         duration: 44,
-                        dmg: 108,
+                        dmg: 58,
                         color: '#dc2626',
                         fillColor: 'rgba(220, 38, 38, 0.32)',
                         icon: '☄️',
@@ -1406,7 +1406,7 @@ function updateCombat() {
                         x2: 600, y2: py,
                         width: 44,
                         duration: 40,
-                        dmg: 98,
+                        dmg: 52,
                         color: '#ea580c',
                         icon: '🔥',
                         effectType: 'flame_line',
@@ -1870,7 +1870,7 @@ function updateCombat() {
                     mob.tailWhipCooldown = 130;
                     playSound('slash');
                     screenShake = 9;
-                    damagePlayer(86, '🐉', true);
+                    damagePlayer(48, '🐉', true);
                     floatingTexts.push({ x: mx, y: my - 22, text: 'TAIL WHIP!', color: '#f59e0b', life: 35 });
                     const whipA = Math.atan2(py - my, px - mx);
                     const wkX = player.x + Math.cos(whipA) * 35;
@@ -1886,7 +1886,7 @@ function updateCombat() {
                     mob.dragonTimer = 0;
                     const angle = Math.atan2(py - my, px - mx);
                     const speed = 4.6;
-                    const scaledFireDmg = Math.round((mob.type === 'boss' ? 34 : 20) + (currentStage - 1) * (mob.type === 'boss' ? 1.8 : 2.5));
+                    const scaledFireDmg = Math.round((mob.type === 'boss' ? 18 : 14) + (currentStage - 1) * (mob.type === 'boss' ? 1.1 : 1.5));
 
                     [-0.32, -0.16, 0, 0.16, 0.32].forEach(spread => {
                         enemyProjectiles.push({
@@ -1906,7 +1906,7 @@ function updateCombat() {
                 if (mob.dragonTimer >= 38) {
                     mob.dragonTimer = 0;
                     mob.clawTimer = 18;
-                    damagePlayer(Math.round(54 + currentStage * 3.15), '🐾', true);
+                    damagePlayer(Math.round(30 + currentStage * 1.6), '🐾', true);
                     screenShake = 11;
                 }
             }

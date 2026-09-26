@@ -1,4 +1,4 @@
-// --- TEST SUITE FOR NEW FEATURES: SAFE SPAWN, IFRAMES, TICK RATE, KEYBINDS, AI PATTERNS, ART STYLE ---
+// --- TEST SUITE FOR NEW FEATURES: SAFE SPAWN, IFRAMES, TICK RATE, KEYBINDS, AI PATTERNS, SETTINGS & AUDIO ---
 import assert from 'node:assert';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -75,6 +75,7 @@ global.playSound = (s) => global.soundsPlayed.push(s);
 
 // Load code files into shared context
 const coreModules = [
+    'js/audio.js',
     'js/particles.js',
     'js/stages.js',
     'js/equipment.js',
@@ -285,18 +286,43 @@ assert.strictEqual(testAlterEgo.hp, 500, 'Mob takes 0 damage during active parry
 assert.strictEqual(testAlterEgo.isParrying, false, 'Parry stance ends upon triggering riposte');
 console.log('✓ Alter Ego parry stance blocks hit and dispatches riposte');
 
-// --- [TEST 6] ART STYLE TOGGLE (ENHANCED HD <-> CLASSIC RETRO) ---
-console.log('\n--- [TEST 6] ART STYLE DUAL-MODE TOGGLE ---');
-assert.strictEqual(typeof toggleArtStyle, 'function', 'toggleArtStyle must be defined');
-assert.strictEqual(typeof getArtStyle, 'function', 'getArtStyle must be defined');
+// --- [TEST 6] SETTINGS SCREEN & MASTER VOLUME ENGINE ---
+console.log('\n--- [TEST 6] SETTINGS SCREEN & MASTER VOLUME ENGINE ---');
+assert.strictEqual(typeof getMasterVolume, 'function', 'getMasterVolume must be defined');
+assert.strictEqual(typeof setMasterVolume, 'function', 'setMasterVolume must be defined');
+assert.strictEqual(typeof adjustMasterVolume, 'function', 'adjustMasterVolume must be defined');
+assert.strictEqual(typeof openSettingsScreen, 'function', 'openSettingsScreen must be defined');
+assert.strictEqual(typeof closeSettingsScreen, 'function', 'closeSettingsScreen must be defined');
 
-const initialStyle = getArtStyle();
-toggleArtStyle();
-const toggledStyle = getArtStyle();
-assert.notStrictEqual(initialStyle, toggledStyle, 'toggleArtStyle must flip between enhanced and classic');
-toggleArtStyle();
-assert.strictEqual(getArtStyle(), initialStyle, 'Second toggle restores original style');
-console.log('✓ Art style toggle flips between Enhanced HD and Classic Retro and persists');
+setMasterVolume(0.5);
+assert.strictEqual(getMasterVolume(), 0.5, 'Volume should be set to 0.5');
+assert.strictEqual(localStorage.getItem('arc_slash_master_volume'), '0.5', 'Master volume persists in localStorage');
+
+adjustMasterVolume(0.1);
+assert.strictEqual(Math.round(getMasterVolume() * 10) / 10, 0.6, 'adjustMasterVolume(0.1) increases volume to 0.6');
+adjustMasterVolume(-0.2);
+assert.strictEqual(Math.round(getMasterVolume() * 10) / 10, 0.4, 'adjustMasterVolume(-0.2) decreases volume to 0.4');
+
+// Clamp volume between 0 and 1
+setMasterVolume(1.5);
+assert.strictEqual(getMasterVolume(), 1.0, 'Volume should clamp at 1.0 max');
+setMasterVolume(-0.5);
+assert.strictEqual(getMasterVolume(), 0.0, 'Volume should clamp at 0.0 min');
+
+// Test Settings Screen navigation from Pause and Main Menu
+global.gameState = 'PAUSED';
+openSettingsScreen('PAUSED');
+assert.strictEqual(global.gameState, 'SETTINGS', 'openSettingsScreen sets gameState to SETTINGS');
+closeSettingsScreen();
+assert.strictEqual(global.gameState, 'PAUSED', 'closeSettingsScreen restores previousState PAUSED');
+
+global.gameState = 'MAIN_MENU';
+openSettingsScreen('MAIN_MENU');
+assert.strictEqual(global.gameState, 'SETTINGS', 'openSettingsScreen from MAIN_MENU sets gameState to SETTINGS');
+closeSettingsScreen();
+assert.strictEqual(global.gameState, 'MAIN_MENU', 'closeSettingsScreen restores MAIN_MENU');
+
+console.log('✓ Settings screen navigation, master volume controls, and persistence verified');
 
 console.log('\n====================================================');
 console.log('🎉 ALL NEW FEATURE TESTS PASSED PERFECTLY!');

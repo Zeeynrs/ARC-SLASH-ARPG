@@ -136,28 +136,6 @@ function drawTopHUD() {
     ctx.fillText(rateText, tpsX + tpsW / 2, tpsY + 24);
     ctx.textAlign = 'left';
 
-    // 8. ART STYLE BADGE (Desktop: Click to toggle; Press O)
-    const artX = 528;
-    const artY = 8;
-    const artW = 44;
-    const artH = 31;
-    const isArtHover = isHovering(artX, artY, artW, artH);
-    ctx.fillStyle = isArtHover ? '#1e293b' : '#111622';
-    ctx.fillRect(artX, artY, artW, artH);
-    ctx.strokeStyle = isArtHover ? '#fbbf24' : '#2d3b52';
-    ctx.lineWidth = 1.5;
-    ctx.strokeRect(artX, artY, artW, artH);
-
-    ctx.textAlign = 'center';
-    ctx.fillStyle = '#94a3b8';
-    ctx.font = '5.5px "Press Start 2P", monospace';
-    ctx.fillText('ART', artX + artW / 2, artY + 11);
-    const isEnhanced = (typeof currentArtStyle !== 'undefined' && currentArtStyle === 'enhanced');
-    ctx.fillStyle = isEnhanced ? '#fbbf24' : '#94a3b8';
-    ctx.font = '7px "Press Start 2P", monospace';
-    ctx.fillText(isEnhanced ? 'HD' : 'RET', artX + artW / 2, artY + 24);
-    ctx.textAlign = 'left';
-
     // 9. PAUSE BUTTON & 10. AUDIO BUTTON (Desktop only; mobile uses dedicated bar)
     const isMobileHUD = (typeof isMobileControlsActive === 'function' && isMobileControlsActive());
     if (!isMobileHUD) {
@@ -500,7 +478,7 @@ function drawMainMenuOverlay() {
     ctx.font = '8.5px "Press Start 2P", monospace';
     ctx.fillText('📖 CARA MAIN [3]', canvas.width / 2, btn3Y + 21);
 
-    // Button 4: ATUR TOMBOL / KEYBINDS
+    // Button 4: PENGATURAN / SETTINGS
     const btn4Y = 203;
     const h4 = isHovering(btnX, btn4Y, btnW, btnH);
     ctx.fillStyle = h4 ? '#475569' : '#334155';
@@ -511,7 +489,7 @@ function drawMainMenuOverlay() {
 
     ctx.fillStyle = '#ffffff';
     ctx.font = '8.5px "Press Start 2P", monospace';
-    ctx.fillText('⌨️ ATUR TOMBOL [4]', canvas.width / 2, btn4Y + 21);
+    ctx.fillText('⚙️ PENGATURAN [4]', canvas.width / 2, btn4Y + 21);
 
     // Summary Stat Banner
     const statBoxY = 244;
@@ -533,13 +511,6 @@ function drawMainMenuOverlay() {
     ctx.fillStyle = '#fbbf24';
     ctx.font = '7px "Press Start 2P", monospace';
     ctx.fillText(`FLOOR: ${bestFloor}  |  KILLS: ${kills}  |  GOLD: ${gold} 🪙`, canvas.width / 2, statBoxY + 33);
-
-    // Bottom Navigation Hint
-    ctx.fillStyle = '#64748b';
-    ctx.font = '6.5px "Press Start 2P", monospace';
-    ctx.fillText('Pilih: Klik tombol atau tekan [1] / [2] / [3] / [4] / [ENTER]', canvas.width / 2, 308);
-    ctx.fillText('Gaya Visual: [O] | Tick Rate: [T] | Info: Retro 16-Bit', canvas.width / 2, 324);
-    ctx.fillText('Move: WASD | Attack: J / Space | Dash: Shift/K | Shop: B', canvas.width / 2, 340);
 
     ctx.textAlign = 'left';
 }
@@ -761,110 +732,213 @@ function drawPauseOverlay() {
     ctx.fillText(`STAGE ${currentStage} IN PROGRESS`, canvas.width / 2, 70);
 
     const btnW = 240;
-    const btnH = 32;
     const btnX = (canvas.width - btnW) / 2;
 
     // Button 1: Resume
-    const btn1Y = 86;
-    const h1 = isHovering(btnX, btn1Y, btnW, btnH);
+    const btn1Y = 96;
+    const btn1H = 36;
+    const h1 = isHovering(btnX, btn1Y, btnW, btn1H);
     ctx.fillStyle = h1 ? '#16a34a' : '#15803d';
-    ctx.fillRect(btnX, btn1Y, btnW, btnH);
+    ctx.fillRect(btnX, btn1Y, btnW, btn1H);
     ctx.strokeStyle = h1 ? '#86efac' : '#22c55e';
     ctx.lineWidth = 1.5;
-    ctx.strokeRect(btnX, btn1Y, btnW, btnH);
+    ctx.strokeRect(btnX, btn1Y, btnW, btn1H);
     ctx.fillStyle = '#ffffff';
     ctx.font = '8.5px "Press Start 2P", monospace';
-    ctx.fillText('RESUME [ESC]', canvas.width / 2, btn1Y + 21);
+    ctx.fillText('RESUME [ESC]', canvas.width / 2, btn1Y + 23);
 
     // Button 2: Restart Stage
-    const btn2Y = 128;
-    const h2 = isHovering(btnX, btn2Y, btnW, btnH);
+    const btn2Y = 144;
+    const btn2H = 36;
+    const h2 = isHovering(btnX, btn2Y, btnW, btn2H);
     ctx.fillStyle = h2 ? '#d97706' : '#b45309';
-    ctx.fillRect(btnX, btn2Y, btnW, btnH);
+    ctx.fillRect(btnX, btn2Y, btnW, btn2H);
     ctx.strokeStyle = h2 ? '#fde047' : '#f59e0b';
     ctx.lineWidth = 1.5;
-    ctx.strokeRect(btnX, btn2Y, btnW, btnH);
+    ctx.strokeRect(btnX, btn2Y, btnW, btn2H);
     ctx.fillStyle = '#ffffff';
     ctx.font = '8.5px "Press Start 2P", monospace';
-    ctx.fillText('RESTART STAGE [R]', canvas.width / 2, btn2Y + 21);
+    ctx.fillText('RESTART STAGE [R]', canvas.width / 2, btn2Y + 23);
 
-    // Button 3: Keybinds / Controls
-    const btn3Y = 171;
-    const h3 = isHovering(btnX, btn3Y, btnW, btnH);
-    ctx.fillStyle = h3 ? '#475569' : '#334155';
-    ctx.fillRect(btnX, btn3Y, btnW, btnH);
-    ctx.strokeStyle = h3 ? '#cbd5e1' : '#64748b';
+    // Button 3: Achievements (y: 214..248, touches y=230 directly)
+    const btn3Y = 214;
+    const btn3H = 34;
+    const h3 = isHovering(btnX, btn3Y, btnW, btn3H);
+    ctx.fillStyle = h3 ? '#2563eb' : '#1e40af';
+    ctx.fillRect(btnX, btn3Y, btnW, btn3H);
+    ctx.strokeStyle = h3 ? '#93c5fd' : '#3b82f6';
     ctx.lineWidth = 1.5;
-    ctx.strokeRect(btnX, btn3Y, btnW, btnH);
+    ctx.strokeRect(btnX, btn3Y, btnW, btn3H);
     ctx.fillStyle = '#ffffff';
     ctx.font = '8.5px "Press Start 2P", monospace';
-    ctx.fillText('ATUR TOMBOL [K]', canvas.width / 2, btn3Y + 21);
+    ctx.fillText('PENCAPAIAN [A]', canvas.width / 2, btn3Y + 22);
 
-    // Button 4: Achievements (y: 214..248, touches y=230 directly)
-    const btn4Y = 214;
+    // Button 4: Settings / Pengaturan
+    const btn4Y = 258;
     const btn4H = 34;
     const h4 = isHovering(btnX, btn4Y, btnW, btn4H);
-    ctx.fillStyle = h4 ? '#2563eb' : '#1e40af';
+    ctx.fillStyle = h4 ? '#475569' : '#334155';
     ctx.fillRect(btnX, btn4Y, btnW, btn4H);
-    ctx.strokeStyle = h4 ? '#93c5fd' : '#3b82f6';
+    ctx.strokeStyle = h4 ? '#cbd5e1' : '#64748b';
     ctx.lineWidth = 1.5;
     ctx.strokeRect(btnX, btn4Y, btnW, btn4H);
     ctx.fillStyle = '#ffffff';
     ctx.font = '8.5px "Press Start 2P", monospace';
-    ctx.fillText('PENCAPAIAN [A]', canvas.width / 2, btn4Y + 22);
+    ctx.fillText('⚙️ PENGATURAN [S]', canvas.width / 2, btn4Y + 22);
 
-    // Settings Row: Art Style & Tick Rate (y: 258, h: 30)
-    const halfW = 117;
-    const artBtnX = btnX;
-    const tpsBtnX = btnX + halfW + 6;
-    const setY = 258;
-    const setH = 30;
-
-    // Art Style Toggle
-    const isArtHov = isHovering(artBtnX, setY, halfW, setH);
-    const isEnhanced = (typeof currentArtStyle !== 'undefined' && currentArtStyle === 'enhanced');
-    ctx.fillStyle = isArtHov ? '#7c2d12' : '#451a03';
-    ctx.fillRect(artBtnX, setY, halfW, setH);
-    ctx.strokeStyle = isArtHov ? '#fbbf24' : '#b45309';
+    // Button 5: Exit to Main Menu
+    const btn5Y = 302;
+    const btn5H = 34;
+    const h5 = isHovering(btnX, btn5Y, btnW, btn5H);
+    ctx.fillStyle = h5 ? '#dc2626' : '#b91c1c';
+    ctx.fillRect(btnX, btn5Y, btnW, btn5H);
+    ctx.strokeStyle = h5 ? '#fca5a5' : '#ef4444';
     ctx.lineWidth = 1.5;
-    ctx.strokeRect(artBtnX, setY, halfW, setH);
-    ctx.fillStyle = '#ffffff';
-    ctx.font = '7px "Press Start 2P", monospace';
-    ctx.fillText(`ART:${isEnhanced ? 'HD✨' : 'RET🕹️'} [O]`, artBtnX + halfW / 2, setY + 19);
-
-    // Tick Rate Toggle
-    const isTpsHov = isHovering(tpsBtnX, setY, halfW, setH);
-    const tpsVal = (typeof targetTickRate !== 'undefined') ? targetTickRate : 60;
-    ctx.fillStyle = isTpsHov ? '#065f46' : '#064e3b';
-    ctx.fillRect(tpsBtnX, setY, halfW, setH);
-    ctx.strokeStyle = isTpsHov ? '#34d399' : '#059669';
-    ctx.lineWidth = 1.5;
-    ctx.strokeRect(tpsBtnX, setY, halfW, setH);
-    ctx.fillStyle = '#ffffff';
-    ctx.font = '7px "Press Start 2P", monospace';
-    ctx.fillText(`RATE:${tpsVal}T [T]`, tpsBtnX + halfW / 2, setY + 19);
-
-    // Button 6: Exit to Main Menu
-    const btn6Y = 296;
-    const h6 = isHovering(btnX, btn6Y, btnW, 30);
-    ctx.fillStyle = h6 ? '#dc2626' : '#b91c1c';
-    ctx.fillRect(btnX, btn6Y, btnW, 30);
-    ctx.strokeStyle = h6 ? '#fca5a5' : '#ef4444';
-    ctx.lineWidth = 1.5;
-    ctx.strokeRect(btnX, btn6Y, btnW, 30);
+    ctx.strokeRect(btnX, btn5Y, btnW, btn5H);
     ctx.fillStyle = '#ffffff';
     ctx.font = '8.5px "Press Start 2P", monospace';
-    ctx.fillText('EXIT TO MENU [Q]', canvas.width / 2, btn6Y + 20);
+    ctx.fillText('EXIT TO MENU [Q]', canvas.width / 2, btn5Y + 22);
 
     ctx.fillStyle = '#64748b';
     ctx.font = '6.5px "Press Start 2P", monospace';
-    ctx.fillText('Klik tombol atau tekan shortcut keyboard yang tertera', canvas.width / 2, 346);
+    ctx.fillText('Klik tombol atau tekan shortcut keyboard yang tertera', canvas.width / 2, 350);
+
+    ctx.textAlign = 'left';
+}
+
+// --- SETTINGS OVERLAY ---
+function drawSettingsOverlay(ctx, canvas) {
+    if (!canvas) canvas = document.getElementById('gameCanvas');
+    if (!ctx && canvas) ctx = canvas.getContext('2d');
+    if (!ctx || !canvas) return;
+
+    ctx.fillStyle = 'rgba(8, 10, 15, 0.96)';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    ctx.strokeStyle = '#27354a';
+    ctx.lineWidth = 2;
+    ctx.strokeRect(8, 8, canvas.width - 16, canvas.height - 16);
+
+    ctx.textAlign = 'center';
+    ctx.fillStyle = '#f59e0b';
+    ctx.font = '14px "Press Start 2P", monospace';
+    ctx.fillText('PENGATURAN / SETTINGS', canvas.width / 2, 42);
+
+    const btnW = 260;
+    const btnX = (canvas.width - btnW) / 2;
+
+    // 1. Audio Mute / Sound FX Toggle
+    const soundY = 70;
+    const soundH = 34;
+    const isSoundHover = isHovering(btnX, soundY, btnW, soundH);
+    ctx.fillStyle = isSoundHover ? (soundEnabled ? '#15803d' : '#991b1b') : (soundEnabled ? '#166534' : '#7f1d1d');
+    ctx.fillRect(btnX, soundY, btnW, soundH);
+    ctx.strokeStyle = isSoundHover ? '#86efac' : (soundEnabled ? '#22c55e' : '#ef4444');
+    ctx.lineWidth = 1.5;
+    ctx.strokeRect(btnX, soundY, btnW, soundH);
+    ctx.fillStyle = '#ffffff';
+    ctx.font = '8px "Press Start 2P", monospace';
+    ctx.fillText(soundEnabled ? 'SUARA: AKTIF 🔊 [S]' : 'SUARA: BISU 🔇 [S]', canvas.width / 2, soundY + 22);
+
+    // 2. Master Volume Adjustment
+    const volY = 116;
+    const volH = 32;
+    const minusW = 38;
+    const plusW = 38;
+    const barW = btnW - minusW - plusW - 16;
+    const minusX = btnX;
+    const barX = minusX + minusW + 8;
+    const plusX = barX + barW + 8;
+
+    // Minus Button
+    const isMinusHover = isHovering(minusX, volY, minusW, volH);
+    ctx.fillStyle = isMinusHover ? '#374151' : '#1f2937';
+    ctx.fillRect(minusX, volY, minusW, volH);
+    ctx.strokeStyle = isMinusHover ? '#9ca3af' : '#4b5563';
+    ctx.lineWidth = 1.5;
+    ctx.strokeRect(minusX, volY, minusW, volH);
+    ctx.fillStyle = '#ffffff';
+    ctx.font = '10px "Press Start 2P", monospace';
+    ctx.fillText('[-]', minusX + minusW / 2, volY + 21);
+
+    // Volume Bar
+    const currentVol = (typeof getMasterVolume === 'function') ? getMasterVolume() : (typeof masterVolume !== 'undefined' ? masterVolume : 0.8);
+    const volPercent = Math.round(currentVol * 100);
+    ctx.fillStyle = '#111827';
+    ctx.fillRect(barX, volY, barW, volH);
+    ctx.fillStyle = soundEnabled ? '#2563eb' : '#4b5563';
+    ctx.fillRect(barX + 2, volY + 2, Math.max(0, (barW - 4) * currentVol), volH - 4);
+    ctx.strokeStyle = '#374151';
+    ctx.lineWidth = 1.5;
+    ctx.strokeRect(barX, volY, barW, volH);
+    ctx.fillStyle = '#ffffff';
+    ctx.font = '7.5px "Press Start 2P", monospace';
+    ctx.fillText(`VOL: ${volPercent}%`, barX + barW / 2, volY + 21);
+
+    // Plus Button
+    const isPlusHover = isHovering(plusX, volY, plusW, volH);
+    ctx.fillStyle = isPlusHover ? '#374151' : '#1f2937';
+    ctx.fillRect(plusX, volY, plusW, volH);
+    ctx.strokeStyle = isPlusHover ? '#9ca3af' : '#4b5563';
+    ctx.lineWidth = 1.5;
+    ctx.strokeRect(plusX, volY, plusW, volH);
+    ctx.fillStyle = '#ffffff';
+    ctx.font = '10px "Press Start 2P", monospace';
+    ctx.fillText('[+]', plusX + plusW / 2, volY + 21);
+
+    // 3. Re-Keybinding Button
+    const keyY = 160;
+    const keyH = 34;
+    const isKeyHover = isHovering(btnX, keyY, btnW, keyH);
+    ctx.fillStyle = isKeyHover ? '#475569' : '#334155';
+    ctx.fillRect(btnX, keyY, btnW, keyH);
+    ctx.strokeStyle = isKeyHover ? '#cbd5e1' : '#64748b';
+    ctx.lineWidth = 1.5;
+    ctx.strokeRect(btnX, keyY, btnW, keyH);
+    ctx.fillStyle = '#ffffff';
+    ctx.font = '8px "Press Start 2P", monospace';
+    ctx.fillText('⌨️ ATUR TOMBOL / KEYBINDS [K]', canvas.width / 2, keyY + 22);
+
+    // 4. Tick Rate Button
+    const tpsY = 206;
+    const tpsH = 34;
+    const isTpsHover = isHovering(btnX, tpsY, btnW, tpsH);
+    const tpsVal = (typeof targetTickRate !== 'undefined') ? targetTickRate : 60;
+    ctx.fillStyle = isTpsHover ? '#065f46' : '#064e3b';
+    ctx.fillRect(btnX, tpsY, btnW, tpsH);
+    ctx.strokeStyle = isTpsHover ? '#34d399' : '#059669';
+    ctx.lineWidth = 1.5;
+    ctx.strokeRect(btnX, tpsY, btnW, tpsH);
+    ctx.fillStyle = '#ffffff';
+    ctx.font = '8px "Press Start 2P", monospace';
+    ctx.fillText(`⏱️ TICK RATE: ${tpsVal} TPS [T]`, canvas.width / 2, tpsY + 22);
+
+    // 5. Back Button
+    const backY = 270;
+    const backH = 38;
+    const isBackHover = isHovering(btnX, backY, btnW, backH);
+    ctx.fillStyle = isBackHover ? '#2563eb' : '#1e40af';
+    ctx.fillRect(btnX, backY, btnW, backH);
+    ctx.strokeStyle = isBackHover ? '#93c5fd' : '#3b82f6';
+    ctx.lineWidth = 1.5;
+    ctx.strokeRect(btnX, backY, btnW, backH);
+    ctx.fillStyle = '#ffffff';
+    ctx.font = '9px "Press Start 2P", monospace';
+    ctx.fillText('◄ KEMBALI [ESC]', canvas.width / 2, backY + 24);
+
+    ctx.fillStyle = '#64748b';
+    ctx.font = '6px "Press Start 2P", monospace';
+    ctx.fillText('Pengaturan otomatis tersimpan di browser', canvas.width / 2, 335);
 
     ctx.textAlign = 'left';
 }
 
 // --- KEYBOARD RE-BINDING OVERLAY ---
 function drawKeybindsOverlay(ctx, canvas) {
+    if (!canvas) canvas = document.getElementById('gameCanvas');
+    if (!ctx && canvas) ctx = canvas.getContext('2d');
+    if (!ctx || !canvas) return;
+
     ctx.fillStyle = 'rgba(8, 10, 15, 0.96)';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
@@ -975,8 +1049,12 @@ function drawKeybindRow(ctx, act, x, y, w, h) {
     ctx.font = '6px "Press Start 2P", monospace';
     let keyText = bind.defaultKey || 'NONE';
     if (bind.keys && bind.keys.length > 0) {
-        const raw = bind.keys[0];
-        keyText = (raw === ' ') ? 'Space' : raw.toUpperCase();
+        if (typeof formatKeyDisplayName === 'function') {
+            keyText = formatKeyDisplayName(bind.keys[0]);
+        } else {
+            const raw = bind.keys[0];
+            keyText = (raw === ' ') ? 'SPACE' : raw.toUpperCase();
+        }
     }
     if (isRecording) keyText = 'PRESS...';
     ctx.fillText(keyText, pillX + pillW / 2, pillY + 12, pillW - 6);
@@ -1253,5 +1331,6 @@ function drawVictoryOverlay() {
 if (typeof window !== 'undefined') {
     window.drawTopHUD = drawTopHUD;
     window.drawPauseOverlay = drawPauseOverlay;
+    window.drawSettingsOverlay = drawSettingsOverlay;
     window.drawKeybindsOverlay = drawKeybindsOverlay;
 }

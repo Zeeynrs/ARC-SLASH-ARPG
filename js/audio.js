@@ -1,6 +1,56 @@
 // --- WEB AUDIO API SYNTHESIZER ---
 let audioCtx = null;
 let soundEnabled = true;
+let masterVolume = 0.8;
+
+try {
+    const savedVol = (typeof localStorage !== 'undefined') ? localStorage.getItem('arc_slash_master_volume') : null;
+    if (savedVol !== null) {
+        const parsed = parseFloat(savedVol);
+        if (!isNaN(parsed) && parsed >= 0 && parsed <= 1) masterVolume = parsed;
+    }
+} catch (e) {}
+
+let masterGainNode = null;
+
+function getMasterGain() {
+    if (!audioCtx) return null;
+    if (!masterGainNode) {
+        try {
+            masterGainNode = audioCtx.createGain();
+            masterGainNode.connect(audioCtx.destination);
+        } catch (e) {
+            return null;
+        }
+    }
+    try {
+        masterGainNode.gain.setValueAtTime(soundEnabled ? masterVolume : 0, audioCtx.currentTime);
+    } catch (e) {}
+    return masterGainNode;
+}
+
+function getMasterVolume() {
+    return masterVolume;
+}
+
+function setMasterVolume(vol) {
+    masterVolume = Math.max(0, Math.min(1, Math.round(vol * 100) / 100));
+    try {
+        if (typeof localStorage !== 'undefined') {
+            localStorage.setItem('arc_slash_master_volume', String(masterVolume));
+        }
+    } catch (e) {}
+    if (audioCtx && masterGainNode) {
+        try {
+            masterGainNode.gain.setValueAtTime(soundEnabled ? masterVolume : 0, audioCtx.currentTime);
+        } catch (e) {}
+    }
+    return masterVolume;
+}
+
+function adjustMasterVolume(delta) {
+    return setMasterVolume(masterVolume + delta);
+}
 
 function initAudio() {
     if (!audioCtx) {
@@ -10,6 +60,7 @@ function initAudio() {
     if (audioCtx && audioCtx.state === 'suspended') {
         audioCtx.resume();
     }
+    getMasterGain();
 }
 
 function playSound(type) {
@@ -24,7 +75,7 @@ function playSound(type) {
             osc.frequency.exponentialRampToValueAtTime(80, now + 0.12);
             gain.gain.setValueAtTime(0.2, now);
             gain.gain.exponentialRampToValueAtTime(0.01, now + 0.12);
-            osc.connect(gain); gain.connect(audioCtx.destination);
+            osc.connect(gain); gain.connect(getMasterGain() || audioCtx.destination);
             osc.start(now); osc.stop(now + 0.12);
         } else if (type === 'hit') {
             const osc = audioCtx.createOscillator();
@@ -34,7 +85,7 @@ function playSound(type) {
             osc.frequency.exponentialRampToValueAtTime(40, now + 0.1);
             gain.gain.setValueAtTime(0.3, now);
             gain.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
-            osc.connect(gain); gain.connect(audioCtx.destination);
+            osc.connect(gain); gain.connect(getMasterGain() || audioCtx.destination);
             osc.start(now); osc.stop(now + 0.1);
         } else if (type === 'explode') {
             const bufferSize = audioCtx.sampleRate * 0.25;
@@ -50,7 +101,7 @@ function playSound(type) {
             const gain = audioCtx.createGain();
             gain.gain.setValueAtTime(0.35, now);
             gain.gain.exponentialRampToValueAtTime(0.01, now + 0.25);
-            noise.connect(filter); filter.connect(gain); gain.connect(audioCtx.destination);
+            noise.connect(filter); filter.connect(gain); gain.connect(getMasterGain() || audioCtx.destination);
             noise.start(now);
         } else if (type === 'coin') {
             const osc = audioCtx.createOscillator();
@@ -60,7 +111,7 @@ function playSound(type) {
             osc.frequency.setValueAtTime(1318.51, now + 0.06);
             gain.gain.setValueAtTime(0.25, now);
             gain.gain.exponentialRampToValueAtTime(0.01, now + 0.18);
-            osc.connect(gain); gain.connect(audioCtx.destination);
+            osc.connect(gain); gain.connect(getMasterGain() || audioCtx.destination);
             osc.start(now); osc.stop(now + 0.18);
         } else if (type === 'heal') {
             const osc = audioCtx.createOscillator();
@@ -70,7 +121,7 @@ function playSound(type) {
             osc.frequency.exponentialRampToValueAtTime(880, now + 0.22);
             gain.gain.setValueAtTime(0.25, now);
             gain.gain.exponentialRampToValueAtTime(0.01, now + 0.22);
-            osc.connect(gain); gain.connect(audioCtx.destination);
+            osc.connect(gain); gain.connect(getMasterGain() || audioCtx.destination);
             osc.start(now); osc.stop(now + 0.22);
         } else if (type === 'shield') {
             const osc = audioCtx.createOscillator();
@@ -80,7 +131,7 @@ function playSound(type) {
             osc.frequency.linearRampToValueAtTime(1200, now + 0.18);
             gain.gain.setValueAtTime(0.25, now);
             gain.gain.exponentialRampToValueAtTime(0.01, now + 0.2);
-            osc.connect(gain); gain.connect(audioCtx.destination);
+            osc.connect(gain); gain.connect(getMasterGain() || audioCtx.destination);
             osc.start(now); osc.stop(now + 0.2);
         } else if (type === 'teleport') {
             const osc = audioCtx.createOscillator();
@@ -90,7 +141,7 @@ function playSound(type) {
             osc.frequency.exponentialRampToValueAtTime(1400, now + 0.3);
             gain.gain.setValueAtTime(0.3, now);
             gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
-            osc.connect(gain); gain.connect(audioCtx.destination);
+            osc.connect(gain); gain.connect(getMasterGain() || audioCtx.destination);
             osc.start(now); osc.stop(now + 0.3);
         } else if (type === 'victory') {
             const notes = [523.25, 659.25, 783.99, 1046.50];
@@ -101,7 +152,7 @@ function playSound(type) {
                 osc.frequency.setValueAtTime(freq, now + idx * 0.08);
                 gain.gain.setValueAtTime(0.2, now + idx * 0.08);
                 gain.gain.exponentialRampToValueAtTime(0.01, now + idx * 0.08 + 0.25);
-                osc.connect(gain); gain.connect(audioCtx.destination);
+                osc.connect(gain); gain.connect(getMasterGain() || audioCtx.destination);
                 osc.start(now + idx * 0.08); osc.stop(now + idx * 0.08 + 0.25);
             });
         } else if (type === 'skill') {
@@ -113,7 +164,7 @@ function playSound(type) {
             osc.frequency.exponentialRampToValueAtTime(1320, now + 0.15);
             gain.gain.setValueAtTime(0.3, now);
             gain.gain.exponentialRampToValueAtTime(0.01, now + 0.2);
-            osc.connect(gain); gain.connect(audioCtx.destination);
+            osc.connect(gain); gain.connect(getMasterGain() || audioCtx.destination);
             osc.start(now); osc.stop(now + 0.2);
             // Second harmonic
             const osc2 = audioCtx.createOscillator();
@@ -135,7 +186,7 @@ function playSound(type) {
             osc.frequency.setValueAtTime(783.99, now + 0.16);
             gain.gain.setValueAtTime(0.25, now);
             gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
-            osc.connect(gain); gain.connect(audioCtx.destination);
+            osc.connect(gain); gain.connect(getMasterGain() || audioCtx.destination);
             osc.start(now); osc.stop(now + 0.3);
         } else if (type === 'achievement') {
             const notes = [523.25, 659.25, 783.99, 1046.50, 1318.51];
@@ -146,7 +197,7 @@ function playSound(type) {
                 osc.frequency.setValueAtTime(freq, now + idx * 0.06);
                 gain.gain.setValueAtTime(0.25, now + idx * 0.06);
                 gain.gain.exponentialRampToValueAtTime(0.01, now + idx * 0.06 + 0.28);
-                osc.connect(gain); gain.connect(audioCtx.destination);
+                osc.connect(gain); gain.connect(getMasterGain() || audioCtx.destination);
                 osc.start(now + idx * 0.06); osc.stop(now + idx * 0.06 + 0.28);
             });
         } else if (type === 'error') {
@@ -157,10 +208,18 @@ function playSound(type) {
             osc.frequency.setValueAtTime(150, now + 0.1);
             gain.gain.setValueAtTime(0.2, now);
             gain.gain.exponentialRampToValueAtTime(0.01, now + 0.2);
-            osc.connect(gain); gain.connect(audioCtx.destination);
+            osc.connect(gain); gain.connect(getMasterGain() || audioCtx.destination);
             osc.start(now); osc.stop(now + 0.2);
         }
     } catch (e) {
         console.error(e);
     }
+}
+
+if (typeof window !== 'undefined') {
+    window.masterVolume = masterVolume;
+    window.getMasterVolume = getMasterVolume;
+    window.setMasterVolume = setMasterVolume;
+    window.adjustMasterVolume = adjustMasterVolume;
+    window.soundEnabled = soundEnabled;
 }

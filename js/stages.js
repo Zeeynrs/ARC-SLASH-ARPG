@@ -383,7 +383,7 @@ const STAGE_CONFIGS = [
     {
         name: "ANCIENT DRAGON'S LAIR", subName: 'Stage 21 (ANCIENT DRAGON BOSS)',
         mobs: [
-            { x: 440, y: 170, hp: 1350, speed: 0.85, species: 'dragon', type: 'boss', w: 72, h: 72 },
+            { x: 440, y: 170, hp: 2200, speed: 0.85, species: 'dragon', type: 'boss', w: 72, h: 72 },
             { x: 300, y: 90, hp: 180, speed: 0.85, species: 'zombie' },
             { x: 300, y: 290, hp: 180, speed: 0.85, species: 'zombie' },
             { x: 220, y: 120, hp: 160, speed: 1.25, species: 'skeleton' },

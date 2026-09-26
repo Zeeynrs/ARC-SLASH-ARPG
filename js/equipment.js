@@ -120,7 +120,7 @@ const EQUIPMENT_DB = [
         name: 'Dragon Slayer',
         category: 'weapon',
         tier: 4,
-        price: 2600,
+        price: 1800,
         stats: { atkBonus: 75, maxHpBonus: 30 },
         description: 'A legendary greatsword forged to fell dragon kings.',
         sprite: {
@@ -141,7 +141,7 @@ const EQUIPMENT_DB = [
         name: 'Xmas Tree Broadsword',
         category: 'weapon',
         tier: 4,
-        price: 3200,
+        price: 2000,
         isExclusive: true,
         stats: { atkBonus: 88, maxHpBonus: 45, defBonus: 10 },
         description: 'An exclusive Christmas pine blade with a shining gold star. Roulette exclusive!',
@@ -165,7 +165,7 @@ const EQUIPMENT_DB = [
         tier: 5,
         minStage: 23,
         biomeName: 'DEEP DARK',
-        price: 4200,
+        price: 3800,
         stats: { atkBonus: 135, maxHpBonus: 60, defBonus: 12 },
         description: 'A colossal blade carved from hardened deepslate infused with living sculk veins and warden souls.',
         sprite: {
@@ -188,7 +188,7 @@ const EQUIPMENT_DB = [
         tier: 4,
         minStage: 23,
         biomeName: 'DEEP DARK',
-        price: 1900,
+        price: 2700,
         stats: { atkBonus: 125, maxHpBonus: 65, defBonus: 12 },
         description: 'A massive serrated broadsword forged from meteoric core, engineered to shatter boss armor.',
         sprite: {
@@ -212,7 +212,7 @@ const EQUIPMENT_DB = [
         minStage: 23,
         biomeName: 'DEEP DARK',
         isGodTier: true,
-        price: 3600,
+        price: 5200,
         stats: { atkBonus: 195, maxHpBonus: 130, defBonus: 24 },
         description: 'The sacred blade of champions, radiating blinding solar brilliance that slays immortal behemoths.',
         sprite: {
@@ -311,7 +311,7 @@ const EQUIPMENT_DB = [
         name: 'Elder Dragonscale Armor',
         category: 'armor',
         tier: 4,
-        price: 3000,
+        price: 1900,
         stats: { defBonus: 26, maxHpBonus: 90 },
         description: 'Forged from ancient dragon scales impervious to magma.',
         sprite: {
@@ -332,7 +332,7 @@ const EQUIPMENT_DB = [
         tier: 5,
         minStage: 23,
         biomeName: 'DEEP DARK',
-        price: 3900,
+        price: 3700,
         stats: { defBonus: 38, maxHpBonus: 120, maxShieldBonus: 70 },
         description: 'Impenetrable reinforced abyssal plate forged from ancient warden ribs and pulsing sculk catalyst.',
         sprite: {
@@ -353,7 +353,7 @@ const EQUIPMENT_DB = [
         tier: 4,
         minStage: 23,
         biomeName: 'DEEP DARK',
-        price: 2100,
+        price: 2800,
         stats: { defBonus: 42, maxHpBonus: 160, maxShieldBonus: 40 },
         description: 'Reinforced plate armor that shrugs off catastrophic boss impacts.',
         sprite: {
@@ -375,7 +375,7 @@ const EQUIPMENT_DB = [
         minStage: 23,
         biomeName: 'DEEP DARK',
         isGodTier: true,
-        price: 3800,
+        price: 5000,
         stats: { defBonus: 62, maxHpBonus: 250, maxShieldBonus: 85 },
         description: 'Impenetrable star-forged armor blessed by seraphim to grant immortal vitality.',
         sprite: {
@@ -453,7 +453,7 @@ const EQUIPMENT_DB = [
         name: 'Blazing Dragon Visor',
         category: 'helmet',
         tier: 4,
-        price: 2200,
+        price: 1500,
         stats: { defBonus: 18, atkBonus: 10 },
         description: 'Carved in the visage of a dragon with glowing golden eyes.',
         sprite: {
@@ -474,7 +474,7 @@ const EQUIPMENT_DB = [
         tier: 5,
         minStage: 23,
         biomeName: 'DEEP DARK',
-        price: 3200,
+        price: 3000,
         stats: { defBonus: 18, maxHpBonus: 65, maxShieldBonus: 40, atkBonus: 10 },
         description: 'A faceless dread helm adorned with vibrating sonic sensors that detect vibrations in the pitch dark.',
         sprite: {
@@ -495,7 +495,7 @@ const EQUIPMENT_DB = [
         tier: 4,
         minStage: 23,
         biomeName: 'DEEP DARK',
-        price: 1600,
+        price: 2200,
         stats: { defBonus: 25, maxHpBonus: 80, atkBonus: 20 },
         description: 'Crown of ancient titan conquerors, inspiring relentless martial wrath.',
         sprite: {
@@ -517,7 +517,7 @@ const EQUIPMENT_DB = [
         minStage: 23,
         biomeName: 'DEEP DARK',
         isGodTier: true,
-        price: 3000,
+        price: 4200,
         stats: { defBonus: 38, maxHpBonus: 140, atkBonus: 32, maxShieldBonus: 50 },
         description: 'A radiant golden winged helm forged for champions who face god-level threats.',
         sprite: {
@@ -589,7 +589,7 @@ const EQUIPMENT_DB = [
         name: 'Dragonbone Aegis',
         category: 'shield',
         tier: 4,
-        price: 2400,
+        price: 1600,
         stats: { maxShieldBonus: 85, defBonus: 15 },
         description: 'A legendary shield set with an unblinking dragon eye.',
         sprite: {
@@ -608,7 +608,7 @@ const EQUIPMENT_DB = [
         tier: 5,
         minStage: 23,
         biomeName: 'DEEP DARK',
-        price: 3500,
+        price: 3300,
         stats: { maxShieldBonus: 130, defBonus: 25, maxHpBonus: 45 },
         description: 'A towering barrier carved of bedded sculk shrieker core, dampening incoming physical shockwaves.',
         sprite: {
@@ -627,7 +627,7 @@ const EQUIPMENT_DB = [
         tier: 4,
         minStage: 23,
         biomeName: 'DEEP DARK',
-        price: 1800,
+        price: 2400,
         stats: { maxShieldBonus: 175, defBonus: 22, atkBonus: 18 },
         description: 'A massive tower shield built to absorb devastating boss shockwaves.',
         sprite: {
@@ -647,7 +647,7 @@ const EQUIPMENT_DB = [
         minStage: 23,
         biomeName: 'DEEP DARK',
         isGodTier: true,
-        price: 3400,
+        price: 4600,
         stats: { maxShieldBonus: 270, defBonus: 38, atkBonus: 30, maxHpBonus: 70 },
         description: 'Legendary divine buckler that turns aside even god-shattering impacts.',
         sprite: {
@@ -714,7 +714,7 @@ const EQUIPMENT_DB = [
         name: 'Dragon Knight Treads',
         category: 'boots',
         tier: 4,
-        price: 1800,
+        price: 1400,
         stats: { speedBonus: 1.2, atkBonus: 15 },
         description: 'Dragon-claw boots granting powerful thrust and speed.',
         sprite: {
@@ -750,7 +750,7 @@ const EQUIPMENT_DB = [
         tier: 4,
         minStage: 23,
         biomeName: 'DEEP DARK',
-        price: 1400,
+        price: 2000,
         stats: { speedBonus: 0.8, defBonus: 18, maxHpBonus: 60, maxShieldBonus: 45 },
         description: 'Heavy plated sabatons with pneumatic pistons to maintain high combat mobility.',
         sprite: {
@@ -769,7 +769,7 @@ const EQUIPMENT_DB = [
         minStage: 23,
         biomeName: 'DEEP DARK',
         isGodTier: true,
-        price: 2600,
+        price: 3800,
         stats: { speedBonus: 1.1, defBonus: 28, maxHpBonus: 110, maxShieldBonus: 80, atkBonus: 20 },
         description: 'Golden crusade boots that allow the knight to dance around boss telegraphs.',
         sprite: {
@@ -819,7 +819,7 @@ const EQUIPMENT_DB = [
         name: 'Dragon Wing Mantle',
         category: 'cape',
         tier: 4,
-        price: 2200,
+        price: 1500,
         stats: { atkBonus: 25, defBonus: 10, speedBonus: 0.3 },
         description: 'A flaming dragon-wing cape shedding ember particles.',
         sprite: {
@@ -855,7 +855,7 @@ const EQUIPMENT_DB = [
         tier: 4,
         minStage: 23,
         biomeName: 'DEEP DARK',
-        price: 1600,
+        price: 2100,
         stats: { atkBonus: 35, defBonus: 18, maxHpBonus: 90 },
         description: 'A majestic heraldic war-banner cloak worn by kings who conquered ancient dragons.',
         sprite: {
@@ -874,7 +874,7 @@ const EQUIPMENT_DB = [
         minStage: 23,
         biomeName: 'DEEP DARK',
         isGodTier: true,
-        price: 2900,
+        price: 4200,
         stats: { atkBonus: 55, defBonus: 30, maxHpBonus: 140, maxShieldBonus: 70, speedBonus: 0.3 },
         description: 'Golden radiant wings woven of pure stellar energy, warding off death itself.',
         sprite: {
@@ -981,7 +981,7 @@ const EQUIPMENT_DB = [
         name: 'Cosmic Archstaff',
         category: 'weapon',
         tier: 4,
-        price: 2700,
+        price: 1800,
         stats: { atkBonus: 80, maxHpBonus: 25 },
         description: 'A mythical weapon wielded by Archmages of time and space.',
         sprite: {
@@ -1002,7 +1002,7 @@ const EQUIPMENT_DB = [
         name: 'Eternal Snow Staff',
         category: 'weapon',
         tier: 4,
-        price: 3200,
+        price: 2000,
         isExclusive: true,
         stats: { atkBonus: 92, maxShieldBonus: 45, speedBonus: 0.3 },
         description: 'Permafrost crystal staff that fires piercing frost snowballs! Roulette exclusive!',
@@ -1026,7 +1026,7 @@ const EQUIPMENT_DB = [
         tier: 5,
         minStage: 23,
         biomeName: 'DEEP DARK',
-        price: 4200,
+        price: 3800,
         stats: { atkBonus: 145, maxShieldBonus: 85, maxHpBonus: 40 },
         description: 'Mounted with a pulsating Shrieker core, firing lethal concentrated sonic soul-bursts.',
         sprite: {
@@ -1049,7 +1049,7 @@ const EQUIPMENT_DB = [
         tier: 4,
         minStage: 23,
         biomeName: 'DEEP DARK',
-        price: 2000,
+        price: 2700,
         stats: { atkBonus: 135, maxShieldBonus: 55, defBonus: 12 },
         description: 'Channels thermonuclear solar flares that burn straight through boss defenses.',
         sprite: {
@@ -1073,7 +1073,7 @@ const EQUIPMENT_DB = [
         minStage: 23,
         biomeName: 'DEEP DARK',
         isGodTier: true,
-        price: 3700,
+        price: 5400,
         stats: { atkBonus: 205, maxShieldBonus: 110, defBonus: 22, maxHpBonus: 60 },
         description: 'Houses a miniature black hole singularity at its crown, crushing boss matter into oblivion.',
         sprite: {
@@ -1153,7 +1153,7 @@ const EQUIPMENT_DB = [
         name: 'Eternal Archmage Vestments',
         category: 'armor',
         tier: 4,
-        price: 2900,
+        price: 1900,
         stats: { defBonus: 22, maxHpBonus: 70, maxShieldBonus: 50 },
         description: 'Legendary vestments retrieved from the highest spire.',
         sprite: {
@@ -1174,7 +1174,7 @@ const EQUIPMENT_DB = [
         tier: 5,
         minStage: 23,
         biomeName: 'DEEP DARK',
-        price: 3900,
+        price: 3700,
         stats: { defBonus: 28, maxShieldBonus: 140, maxHpBonus: 80 },
         description: 'Silken abyssal fabric entwined with living sculk veins that absorb hostile arcane impacts.',
         sprite: {
@@ -1195,7 +1195,7 @@ const EQUIPMENT_DB = [
         tier: 4,
         minStage: 23,
         biomeName: 'DEEP DARK',
-        price: 2200,
+        price: 2800,
         stats: { defBonus: 36, maxHpBonus: 130, maxShieldBonus: 110, atkBonus: 26 },
         description: 'Woven from compressed nebula dust to form an impenetrable arcane barrier.',
         sprite: {
@@ -1217,7 +1217,7 @@ const EQUIPMENT_DB = [
         minStage: 23,
         biomeName: 'DEEP DARK',
         isGodTier: true,
-        price: 3900,
+        price: 5200,
         stats: { defBonus: 54, maxHpBonus: 210, maxShieldBonus: 180, atkBonus: 48 },
         description: 'Manipulates time dilation around the wearer, softening incoming boss strikes to a whisper.',
         sprite: {
@@ -1276,7 +1276,7 @@ const EQUIPMENT_DB = [
         name: 'Astral Star Tiara',
         category: 'helmet',
         tier: 4,
-        price: 2100,
+        price: 1500,
         stats: { defBonus: 15, atkBonus: 28 },
         description: 'A floating tiara crowned with brilliant diamonds.',
         sprite: {
@@ -1297,7 +1297,7 @@ const EQUIPMENT_DB = [
         tier: 5,
         minStage: 23,
         biomeName: 'DEEP DARK',
-        price: 3200,
+        price: 3000,
         stats: { atkBonus: 48, maxShieldBonus: 80, defBonus: 12 },
         description: 'A circlet of twitching tendril sensors that magnifies spell resonance across infinite dark caverns.',
         sprite: {
@@ -1318,7 +1318,7 @@ const EQUIPMENT_DB = [
         tier: 4,
         minStage: 23,
         biomeName: 'DEEP DARK',
-        price: 1600,
+        price: 2200,
         stats: { defBonus: 22, maxShieldBonus: 75, atkBonus: 26, maxHpBonus: 40 },
         description: 'A fiery crown radiating high-temperature plasma to shield the caster mind.',
         sprite: {
@@ -1340,7 +1340,7 @@ const EQUIPMENT_DB = [
         minStage: 23,
         biomeName: 'DEEP DARK',
         isGodTier: true,
-        price: 3100,
+        price: 4300,
         stats: { defBonus: 36, maxShieldBonus: 135, atkBonus: 42, maxHpBonus: 80 },
         description: 'A cosmic diadem surging with the destructive energy of an exploding supernova.',
         sprite: {
@@ -1395,7 +1395,7 @@ const EQUIPMENT_DB = [
         name: 'Cosmic Nova Relic',
         category: 'shield',
         tier: 4,
-        price: 2300,
+        price: 1600,
         stats: { maxShieldBonus: 80, atkBonus: 14, defBonus: 8 },
         description: 'A miniature singularity relic swallowing incoming attacks.',
         sprite: {
@@ -1414,7 +1414,7 @@ const EQUIPMENT_DB = [
         tier: 5,
         minStage: 23,
         biomeName: 'DEEP DARK',
-        price: 3500,
+        price: 3300,
         stats: { maxShieldBonus: 160, defBonus: 20, atkBonus: 14 },
         description: 'An echoing sphere of trapped souls spinning in harmonic balance, generating impenetrable barriers.',
         sprite: {
@@ -1433,7 +1433,7 @@ const EQUIPMENT_DB = [
         tier: 4,
         minStage: 23,
         biomeName: 'DEEP DARK',
-        price: 1900,
+        price: 2400,
         stats: { maxShieldBonus: 190, defBonus: 20, atkBonus: 25 },
         description: 'An orbiting miniature star that absorbs massive boss spells and unleashes shockwave ripples.',
         sprite: {
@@ -1453,7 +1453,7 @@ const EQUIPMENT_DB = [
         minStage: 23,
         biomeName: 'DEEP DARK',
         isGodTier: true,
-        price: 3500,
+        price: 4700,
         stats: { maxShieldBonus: 285, defBonus: 34, atkBonus: 45, maxHpBonus: 60 },
         description: 'An ancient artifact that creates a dimensional singularity barrier around the mage.',
         sprite: {
@@ -1524,7 +1524,7 @@ const EQUIPMENT_DB = [
         tier: 4,
         minStage: 23,
         biomeName: 'DEEP DARK',
-        price: 1400,
+        price: 2000,
         stats: { speedBonus: 1.1, maxShieldBonus: 65, defBonus: 15, atkBonus: 16 },
         description: 'Enables frictionless floating across hazardous boss arenas and telegraph zones.',
         sprite: {
@@ -1543,7 +1543,7 @@ const EQUIPMENT_DB = [
         minStage: 23,
         biomeName: 'DEEP DARK',
         isGodTier: true,
-        price: 2600,
+        price: 3900,
         stats: { speedBonus: 1.45, maxShieldBonus: 120, defBonus: 26, atkBonus: 30, maxHpBonus: 60 },
         description: 'Phase-shifts the mage across space, making boss telegraph avoidance effortless.',
         sprite: {
@@ -1577,7 +1577,7 @@ const EQUIPMENT_DB = [
         name: 'Eternal Nebula Shawl',
         category: 'cape',
         tier: 4,
-        price: 2100,
+        price: 1500,
         stats: { defBonus: 10, atkBonus: 28, maxShieldBonus: 40 },
         description: 'Glows with the swirling starlight of falling nebulae.',
         sprite: {
@@ -1613,7 +1613,7 @@ const EQUIPMENT_DB = [
         tier: 4,
         minStage: 23,
         biomeName: 'DEEP DARK',
-        price: 1600,
+        price: 2100,
         stats: { atkBonus: 38, defBonus: 18, maxShieldBonus: 85, maxHpBonus: 45 },
         description: 'A flowing cape of prismatic astral lights that reflects enemy projectiles.',
         sprite: {
@@ -1632,7 +1632,7 @@ const EQUIPMENT_DB = [
         minStage: 23,
         biomeName: 'DEEP DARK',
         isGodTier: true,
-        price: 2900,
+        price: 4400,
         stats: { atkBonus: 62, defBonus: 30, maxShieldBonus: 150, maxHpBonus: 85, speedBonus: 0.3 },
         description: 'A mantle woven of raw event horizon ribbons, amplifying all spell destructive potency.',
         sprite: {
@@ -1739,7 +1739,7 @@ const EQUIPMENT_DB = [
         name: 'Phantom Deathblades',
         category: 'weapon',
         tier: 4,
-        price: 2600,
+        price: 1800,
         stats: { atkBonus: 78, speedBonus: 0.8 },
         description: 'Executioner blades forged in the deepest abyss.',
         sprite: {
@@ -1760,7 +1760,7 @@ const EQUIPMENT_DB = [
         name: 'Candy Cane Daggers',
         category: 'weapon',
         tier: 4,
-        price: 3200,
+        price: 2000,
         isExclusive: true,
         stats: { atkBonus: 90, speedBonus: 0.9, defBonus: 6 },
         description: 'Pointed red-and-white striped festive daggers with sweet lethal sparks! Roulette exclusive!',
@@ -1784,7 +1784,7 @@ const EQUIPMENT_DB = [
         tier: 5,
         minStage: 23,
         biomeName: 'DEEP DARK',
-        price: 4200,
+        price: 3800,
         stats: { atkBonus: 140, speedBonus: 0.95, defBonus: 10 },
         description: 'Double daggers made from petrified deepslate dipped in sculk venom, striking with absolute silence.',
         sprite: {
@@ -1807,7 +1807,7 @@ const EQUIPMENT_DB = [
         tier: 4,
         minStage: 23,
         biomeName: 'DEEP DARK',
-        price: 2000,
+        price: 2700,
         stats: { atkBonus: 130, speedBonus: 0.95, defBonus: 14, maxHpBonus: 45 },
         description: 'Curved crescent blades bathed in eclipse shadow that bypass tough boss carapaces.',
         sprite: {
@@ -1831,7 +1831,7 @@ const EQUIPMENT_DB = [
         minStage: 23,
         biomeName: 'DEEP DARK',
         isGodTier: true,
-        price: 3700,
+        price: 5300,
         stats: { atkBonus: 200, speedBonus: 1.35, defBonus: 22, maxHpBonus: 85 },
         description: 'Twin daggers forged from primordial venom glands capable of felling colossal deities in seconds.',
         sprite: {
@@ -1892,7 +1892,7 @@ const EQUIPMENT_DB = [
         name: 'Phantom Shadowsuit',
         category: 'armor',
         tier: 4,
-        price: 2800,
+        price: 1900,
         stats: { defBonus: 18, atkBonus: 28, speedBonus: 0.6, maxHpBonus: 60 },
         description: 'Conceals the heartbeat and physical silhouette of its wearer.',
         sprite: {
@@ -1913,7 +1913,7 @@ const EQUIPMENT_DB = [
         tier: 5,
         minStage: 23,
         biomeName: 'DEEP DARK',
-        price: 3900,
+        price: 3700,
         stats: { defBonus: 28, speedBonus: 0.8, maxHpBonus: 90, maxShieldBonus: 55 },
         description: 'Lightweight chitinous armor that dampens all auditory and visual footprint in pitch darkness.',
         sprite: {
@@ -1934,7 +1934,7 @@ const EQUIPMENT_DB = [
         tier: 4,
         minStage: 23,
         biomeName: 'DEEP DARK',
-        price: 2200,
+        price: 2800,
         stats: { defBonus: 38, maxHpBonus: 150, maxShieldBonus: 65, atkBonus: 32, speedBonus: 0.6 },
         description: 'Flexible shadowweave weave that absorbs crushing blows and converts them into kinetic speed.',
         sprite: {
@@ -1956,7 +1956,7 @@ const EQUIPMENT_DB = [
         minStage: 23,
         biomeName: 'DEEP DARK',
         isGodTier: true,
-        price: 3900,
+        price: 5100,
         stats: { defBonus: 56, maxHpBonus: 230, maxShieldBonus: 120, atkBonus: 55, speedBonus: 0.9 },
         description: 'Biomechanical chitin of the void reaper that provides unmatched defense without slowing movement.',
         sprite: {
@@ -2015,7 +2015,7 @@ const EQUIPMENT_DB = [
         name: 'Grim Reaper Mask',
         category: 'helmet',
         tier: 4,
-        price: 2100,
+        price: 1500,
         stats: { defBonus: 14, atkBonus: 24, speedBonus: 0.4 },
         description: 'A blood-etched skull mask radiating sheer dread.',
         sprite: {
@@ -2036,7 +2036,7 @@ const EQUIPMENT_DB = [
         tier: 5,
         minStage: 23,
         biomeName: 'DEEP DARK',
-        price: 3200,
+        price: 3000,
         stats: { atkBonus: 50, speedBonus: 0.5, defBonus: 14 },
         description: 'Replaces normal sight with sculk-echolocation, pinpointing enemy weaknesses instantly in combat.',
         sprite: {
@@ -2057,7 +2057,7 @@ const EQUIPMENT_DB = [
         tier: 4,
         minStage: 23,
         biomeName: 'DEEP DARK',
-        price: 1600,
+        price: 2200,
         stats: { defBonus: 24, maxHpBonus: 75, atkBonus: 30, speedBonus: 0.4 },
         description: 'Cowl inscribed with assassination marks, revealing boss weak points.',
         sprite: {
@@ -2079,7 +2079,7 @@ const EQUIPMENT_DB = [
         minStage: 23,
         biomeName: 'DEEP DARK',
         isGodTier: true,
-        price: 3100,
+        price: 4300,
         stats: { defBonus: 38, maxHpBonus: 125, atkBonus: 52, speedBonus: 0.6, maxShieldBonus: 45 },
         description: 'Spiked obsidian mask that grants true supernatural executioner instincts.',
         sprite: {
@@ -2134,7 +2134,7 @@ const EQUIPMENT_DB = [
         name: 'Phantom Claw Aegis',
         category: 'shield',
         tier: 4,
-        price: 2300,
+        price: 1600,
         stats: { maxShieldBonus: 75, atkBonus: 12, defBonus: 8 },
         description: 'Armguard fitted with curved razor claws for high deflection.',
         sprite: {
@@ -2153,7 +2153,7 @@ const EQUIPMENT_DB = [
         tier: 5,
         minStage: 23,
         biomeName: 'DEEP DARK',
-        price: 3500,
+        price: 3300,
         stats: { maxShieldBonus: 95, defBonus: 22, speedBonus: 0.45, atkBonus: 14 },
         description: 'Armguard equipped with vibrating sculk blades capable of parrying strikes and discharging sonic bursts.',
         sprite: {
@@ -2172,7 +2172,7 @@ const EQUIPMENT_DB = [
         tier: 4,
         minStage: 23,
         biomeName: 'DEEP DARK',
-        price: 1900,
+        price: 2400,
         stats: { maxShieldBonus: 180, defBonus: 22, atkBonus: 30, speedBonus: 0.4 },
         description: 'A razor-edged parrying buckler designed to counter heavy boss swings.',
         sprite: {
@@ -2192,7 +2192,7 @@ const EQUIPMENT_DB = [
         minStage: 23,
         biomeName: 'DEEP DARK',
         isGodTier: true,
-        price: 3500,
+        price: 4700,
         stats: { maxShieldBonus: 260, defBonus: 36, atkBonus: 50, speedBonus: 0.7, maxHpBonus: 55 },
         description: 'Floating array of nanoblade deflectors that completely dissipates boss shockwaves.',
         sprite: {
@@ -2263,7 +2263,7 @@ const EQUIPMENT_DB = [
         tier: 4,
         minStage: 23,
         biomeName: 'DEEP DARK',
-        price: 1400,
+        price: 2000,
         stats: { speedBonus: 1.45, defBonus: 16, maxHpBonus: 55, maxShieldBonus: 40, atkBonus: 20 },
         description: 'Lightweight shadow boots allowing instantaneous dodging of boss attack telegraphs.',
         sprite: {
@@ -2282,7 +2282,7 @@ const EQUIPMENT_DB = [
         minStage: 23,
         biomeName: 'DEEP DARK',
         isGodTier: true,
-        price: 2600,
+        price: 3900,
         stats: { speedBonus: 1.85, defBonus: 26, maxHpBonus: 90, maxShieldBonus: 75, atkBonus: 38 },
         description: 'Treads that step through folded shadows, granting unmatched agility in boss encounters.',
         sprite: {
@@ -2316,7 +2316,7 @@ const EQUIPMENT_DB = [
         name: 'Blood Specter Cloak',
         category: 'cape',
         tier: 4,
-        price: 2200,
+        price: 1500,
         stats: { defBonus: 8, atkBonus: 26, speedBonus: 0.6 },
         description: 'A ragged cloak drenched in crimson phantom mist.',
         sprite: {
@@ -2352,7 +2352,7 @@ const EQUIPMENT_DB = [
         tier: 4,
         minStage: 23,
         biomeName: 'DEEP DARK',
-        price: 1600,
+        price: 2100,
         stats: { atkBonus: 42, defBonus: 18, maxHpBonus: 75, speedBonus: 0.5 },
         description: 'A ragged cloak that dissipates into dark smoke, confounding enemy boss targeting.',
         sprite: {
@@ -2371,7 +2371,7 @@ const EQUIPMENT_DB = [
         minStage: 23,
         biomeName: 'DEEP DARK',
         isGodTier: true,
-        price: 2900,
+        price: 4300,
         stats: { atkBonus: 68, defBonus: 30, maxHpBonus: 130, maxShieldBonus: 65, speedBonus: 0.8 },
         description: 'A flowing shroud infused with the spirits of assassinated demigods, granting lethality to every strike.',
         sprite: {
