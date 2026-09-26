@@ -506,6 +506,125 @@ function handleVictoryClick() {
 
 // --- MOBILE TOUCH CONTROLS & ROLE-ADAPTIVE ATTACK BUTTON SYSTEM ---
 
+const PIXEL_ICONS = {
+    pause: `<svg class="pixel-art-icon" viewBox="0 0 16 16" width="16" height="16" fill="none" shape-rendering="crispEdges">
+        <rect x="3" y="2" width="4" height="12" fill="#0c4a6e"/>
+        <rect x="3" y="2" width="3" height="11" fill="#0284c7"/>
+        <rect x="3" y="2" width="2" height="10" fill="#38bdf8"/>
+        <rect x="3" y="2" width="1" height="9" fill="#f0f9ff"/>
+        <rect x="9" y="2" width="4" height="12" fill="#0c4a6e"/>
+        <rect x="9" y="2" width="3" height="11" fill="#0284c7"/>
+        <rect x="9" y="2" width="2" height="10" fill="#38bdf8"/>
+        <rect x="9" y="2" width="1" height="9" fill="#f0f9ff"/>
+    </svg>`,
+
+    play: `<svg class="pixel-art-icon" viewBox="0 0 16 16" width="16" height="16" fill="none" shape-rendering="crispEdges">
+        <rect x="3" y="2" width="2" height="12" fill="#15803d"/>
+        <rect x="5" y="3" width="2" height="10" fill="#16a34a"/>
+        <rect x="7" y="4" width="2" height="8" fill="#22c55e"/>
+        <rect x="9" y="5" width="2" height="6" fill="#4ade80"/>
+        <rect x="11" y="6" width="2" height="4" fill="#86efac"/>
+        <rect x="13" y="7" width="1" height="2" fill="#f0fdf4"/>
+    </svg>`,
+
+    fullscreen: `<svg class="pixel-art-icon" viewBox="0 0 16 16" width="16" height="16" fill="none" shape-rendering="crispEdges">
+        <rect x="1" y="1" width="5" height="2" fill="#38bdf8"/>
+        <rect x="1" y="1" width="2" height="5" fill="#38bdf8"/>
+        <rect x="2" y="2" width="3" height="1" fill="#e0f2fe"/>
+        <rect x="10" y="1" width="5" height="2" fill="#38bdf8"/>
+        <rect x="13" y="1" width="2" height="5" fill="#38bdf8"/>
+        <rect x="11" y="2" width="3" height="1" fill="#e0f2fe"/>
+        <rect x="1" y="13" width="5" height="2" fill="#0284c7"/>
+        <rect x="1" y="10" width="2" height="5" fill="#0284c7"/>
+        <rect x="2" y="13" width="3" height="1" fill="#38bdf8"/>
+        <rect x="10" y="13" width="5" height="2" fill="#0284c7"/>
+        <rect x="13" y="10" width="2" height="5" fill="#0284c7"/>
+        <rect x="11" y="13" width="3" height="1" fill="#38bdf8"/>
+        <rect x="7" y="6" width="2" height="4" fill="#f59e0b"/>
+        <rect x="6" y="7" width="4" height="2" fill="#f59e0b"/>
+        <rect x="7" y="7" width="2" height="2" fill="#fef08a"/>
+    </svg>`,
+
+    restart: `<svg class="pixel-art-icon" viewBox="0 0 16 16" width="16" height="16" fill="none" shape-rendering="crispEdges">
+        <rect x="1" y="1" width="5" height="2" fill="#f87171"/>
+        <rect x="1" y="3" width="3" height="2" fill="#ef4444"/>
+        <rect x="1" y="5" width="2" height="1" fill="#dc2626"/>
+        <rect x="6" y="2" width="5" height="2" fill="#f87171"/>
+        <rect x="11" y="3" width="2" height="2" fill="#f87171"/>
+        <rect x="12" y="5" width="2" height="5" fill="#ef4444"/>
+        <rect x="11" y="10" width="2" height="2" fill="#dc2626"/>
+        <rect x="5" y="12" width="6" height="2" fill="#dc2626"/>
+        <rect x="3" y="10" width="2" height="2" fill="#b91c1c"/>
+        <rect x="2" y="7" width="2" height="3" fill="#b91c1c"/>
+        <rect x="7" y="3" width="3" height="1" fill="#fef2f2"/>
+    </svg>`,
+
+    shop: `<svg class="pixel-art-icon" viewBox="0 0 16 16" width="16" height="16" fill="none" shape-rendering="crispEdges">
+        <rect x="2" y="3" width="12" height="3" fill="#92400e"/>
+        <rect x="3" y="3" width="10" height="2" fill="#b45309"/>
+        <rect x="4" y="3" width="8" height="1" fill="#d97706"/>
+        <rect x="4" y="3" width="2" height="3" fill="#94a3b8"/>
+        <rect x="10" y="3" width="2" height="3" fill="#94a3b8"/>
+        <rect x="2" y="6" width="12" height="8" fill="#78350f"/>
+        <rect x="3" y="7" width="10" height="6" fill="#92400e"/>
+        <rect x="4" y="6" width="2" height="8" fill="#64748b"/>
+        <rect x="10" y="6" width="2" height="8" fill="#64748b"/>
+        <rect x="7" y="5" width="2" height="4" fill="#facc15"/>
+        <rect x="7" y="6" width="2" height="1" fill="#fef08a"/>
+        <rect x="7" y="7" width="2" height="1" fill="#854d0e"/>
+    </svg>`,
+
+    trophy: `<svg class="pixel-art-icon" viewBox="0 0 16 16" width="16" height="16" fill="none" shape-rendering="crispEdges">
+        <rect x="4" y="2" width="8" height="2" fill="#fef08a"/>
+        <rect x="4" y="4" width="8" height="3" fill="#facc15"/>
+        <rect x="5" y="7" width="6" height="2" fill="#eab308"/>
+        <rect x="6" y="9" width="4" height="2" fill="#ca8a04"/>
+        <rect x="7" y="11" width="2" height="2" fill="#a16207"/>
+        <rect x="2" y="3" width="2" height="3" fill="#facc15"/>
+        <rect x="2" y="5" width="2" height="2" fill="#ca8a04"/>
+        <rect x="12" y="3" width="2" height="3" fill="#facc15"/>
+        <rect x="12" y="5" width="2" height="2" fill="#ca8a04"/>
+        <rect x="4" y="13" width="8" height="2" fill="#78350f"/>
+        <rect x="5" y="13" width="6" height="1" fill="#b45309"/>
+        <rect x="6" y="13" width="4" height="1" fill="#fde047"/>
+    </svg>`,
+
+    soundOn: `<svg class="pixel-art-icon" viewBox="0 0 16 16" width="16" height="16" fill="none" shape-rendering="crispEdges">
+        <rect x="1" y="5" width="3" height="6" fill="#475569"/>
+        <rect x="2" y="6" width="2" height="4" fill="#94a3b8"/>
+        <rect x="4" y="4" width="2" height="8" fill="#64748b"/>
+        <rect x="6" y="3" width="2" height="10" fill="#94a3b8"/>
+        <rect x="8" y="2" width="1" height="12" fill="#cbd5e1"/>
+        <rect x="10" y="5" width="1" height="2" fill="#38bdf8"/>
+        <rect x="11" y="7" width="1" height="2" fill="#38bdf8"/>
+        <rect x="10" y="9" width="1" height="2" fill="#38bdf8"/>
+        <rect x="13" y="3" width="1" height="2" fill="#7dd3fc"/>
+        <rect x="14" y="5" width="1" height="6" fill="#7dd3fc"/>
+        <rect x="13" y="11" width="1" height="2" fill="#7dd3fc"/>
+    </svg>`,
+
+    soundMuted: `<svg class="pixel-art-icon" viewBox="0 0 16 16" width="16" height="16" fill="none" shape-rendering="crispEdges">
+        <rect x="1" y="5" width="3" height="6" fill="#334155"/>
+        <rect x="2" y="6" width="2" height="4" fill="#475569"/>
+        <rect x="4" y="4" width="2" height="8" fill="#475569"/>
+        <rect x="6" y="3" width="2" height="10" fill="#64748b"/>
+        <rect x="8" y="2" width="1" height="12" fill="#94a3b8"/>
+        <rect x="10" y="4" width="2" height="2" fill="#ef4444"/>
+        <rect x="14" y="4" width="2" height="2" fill="#ef4444"/>
+        <rect x="11" y="6" width="2" height="2" fill="#f87171"/>
+        <rect x="13" y="6" width="2" height="2" fill="#f87171"/>
+        <rect x="12" y="7" width="2" height="2" fill="#fca5a5"/>
+        <rect x="11" y="8" width="2" height="2" fill="#f87171"/>
+        <rect x="13" y="8" width="2" height="2" fill="#f87171"/>
+        <rect x="10" y="10" width="2" height="2" fill="#ef4444"/>
+        <rect x="14" y="10" width="2" height="2" fill="#ef4444"/>
+    </svg>`
+};
+
+if (typeof window !== 'undefined') {
+    window.PIXEL_ICONS = PIXEL_ICONS;
+}
+
 const MOBILE_ROLE_CONFIG = {
     knight: {
         attackText: 'SLASH',
@@ -848,6 +967,40 @@ function initMobileControls() {
         btnMobileFullscreen.addEventListener('click', handleFullscreenClick);
     }
 
+    // --- RESTART BUTTON ---
+    const btnMobileRestart = document.getElementById('btnMobileRestart');
+    if (btnMobileRestart) {
+        const handleRestart = (e) => {
+            if (e) e.preventDefault();
+            initAudio();
+            if (typeof resetGame === 'function') {
+                if (gameState === 'PAUSED') {
+                    resetGame(currentStage);
+                } else if (gameState === 'PLAYING' || gameState === 'GAMEOVER' || gameState === 'VICTORY') {
+                    resetGame(1);
+                }
+            }
+        };
+        btnMobileRestart.addEventListener('touchstart', handleRestart, { passive: false });
+        btnMobileRestart.addEventListener('click', handleRestart);
+    }
+
+    // --- TROPHY / ACHIEVEMENTS BUTTON ---
+    const btnMobileTrophy = document.getElementById('btnMobileTrophy');
+    if (btnMobileTrophy) {
+        const handleTrophy = (e) => {
+            if (e) e.preventDefault();
+            initAudio();
+            if (gameState === 'ACHIEVEMENTS') {
+                if (typeof closeAchievementsScreen === 'function') closeAchievementsScreen();
+            } else if (typeof openAchievementsScreen === 'function') {
+                openAchievementsScreen(gameState === 'SHOP' ? 'PLAYING' : gameState);
+            }
+        };
+        btnMobileTrophy.addEventListener('touchstart', handleTrophy, { passive: false });
+        btnMobileTrophy.addEventListener('click', handleTrophy);
+    }
+
     // --- DESKTOP TESTING TOGGLE BUTTON ---
     const btnToggleMobileTest = document.getElementById('btnToggleMobileTest');
     if (btnToggleMobileTest) {
@@ -864,7 +1017,9 @@ function updateMobileSoundBtn() {
     const soundIcon = document.getElementById('mobileSoundIcon');
     const soundLabel = document.getElementById('mobileSoundLabel');
     const soundBtn = document.getElementById('btnMobileSound');
-    if (soundIcon) soundIcon.textContent = soundEnabled ? '🔊' : '🔇';
+    if (soundIcon && typeof PIXEL_ICONS !== 'undefined') {
+        soundIcon.innerHTML = soundEnabled ? PIXEL_ICONS.soundOn : PIXEL_ICONS.soundMuted;
+    }
     if (soundLabel) soundLabel.textContent = soundEnabled ? 'SFX' : 'MUT';
     if (soundBtn) soundBtn.classList.toggle('active', !soundEnabled);
 }
@@ -1004,11 +1159,21 @@ function updateMobileControlsState() {
         shopBtn.classList.toggle('active', gameState === 'SHOP');
     }
 
-    // Update Pause button label
+    // Update Pause button label & pixel art icon
     if (pauseBtn) {
         const label = pauseBtn.querySelector('.util-label');
+        const icon = pauseBtn.querySelector('.util-badge');
         if (label) label.textContent = (gameState === 'PAUSED') ? 'RESUME' : 'PAUSE';
+        if (icon && typeof PIXEL_ICONS !== 'undefined') {
+            icon.innerHTML = (gameState === 'PAUSED') ? PIXEL_ICONS.play : PIXEL_ICONS.pause;
+        }
         pauseBtn.classList.toggle('active', gameState === 'PAUSED');
+    }
+
+    // Update Trophy button active state
+    const trophyBtn = document.getElementById('btnMobileTrophy');
+    if (trophyBtn) {
+        trophyBtn.classList.toggle('active', gameState === 'ACHIEVEMENTS');
     }
 
     // Update Portrait Deck Status Role Tag

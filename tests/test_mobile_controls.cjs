@@ -8,6 +8,7 @@ console.log('Testing Mobile Touch & Role-Adaptive Controller Integration...');
 const domElements = {};
 function createMockElement(id, className = '') {
     const attrs = {};
+    const children = {};
     return {
         id,
         className,
@@ -38,7 +39,8 @@ function createMockElement(id, className = '') {
         getAttribute(k) { return attrs[k]; },
         removeAttribute(k) { delete attrs[k]; },
         querySelector(sel) {
-            return createMockElement('sub_' + sel, sel.replace('.', ''));
+            if (!children[sel]) children[sel] = createMockElement('sub_' + sel, sel.replace('.', ''));
+            return children[sel];
         },
         addEventListener() {}
     };
@@ -200,19 +202,51 @@ if (!mobileControlsEl.classList.contains('state-shop')) {
 }
 console.log('✓ SHOP state verified: container gets .state-shop modal dimming class');
 
-// Test 6: Sound Toggle Button
+// Test 6: Sound Toggle Button with Pixel Art SVGs
 global.soundEnabled = false;
 updateMobileSoundBtn();
 const soundIcon = document.getElementById('mobileSoundIcon');
 const soundLabel = document.getElementById('mobileSoundLabel');
-if (soundIcon.textContent !== '🔇' || soundLabel.textContent !== 'MUT') {
-    throw new Error('Muted sound btn mismatch: ' + soundIcon.textContent + ' ' + soundLabel.textContent);
+if (!soundIcon.innerHTML.includes('<svg') || !soundIcon.innerHTML.includes('pixel-art-icon') || soundLabel.textContent !== 'MUT') {
+    throw new Error('Muted sound btn mismatch: ' + soundIcon.innerHTML + ' ' + soundLabel.textContent);
 }
 global.soundEnabled = true;
 updateMobileSoundBtn();
-if (soundIcon.textContent !== '🔊' || soundLabel.textContent !== 'SFX') {
-    throw new Error('Unmuted sound btn mismatch: ' + soundIcon.textContent + ' ' + soundLabel.textContent);
+if (!soundIcon.innerHTML.includes('<svg') || !soundIcon.innerHTML.includes('pixel-art-icon') || soundLabel.textContent !== 'SFX') {
+    throw new Error('Unmuted sound btn mismatch: ' + soundIcon.innerHTML + ' ' + soundLabel.textContent);
 }
-console.log('✓ Mobile SFX Sound Toggle verified: 🔊 SFX <-> 🔇 MUT');
+console.log('✓ Mobile SFX Sound Toggle verified: Pixel Art SFX <-> Pixel Art MUT');
+
+// Test 7: Pixel Art Icons Registry & Utility System
+const requiredIcons = ['pause', 'play', 'fullscreen', 'restart', 'shop', 'trophy', 'soundOn', 'soundMuted'];
+for (const iconKey of requiredIcons) {
+    if (!PIXEL_ICONS[iconKey] || !PIXEL_ICONS[iconKey].includes('shape-rendering="crispEdges"')) {
+        throw new Error('Missing or invalid pixel-art icon: ' + iconKey);
+    }
+}
+console.log('✓ PIXEL_ICONS verified: All 8 retro 16-bit pixel art SVG icons present');
+
+// Test 8: Pause Button Reactive Pixel Icon Toggle
+const pauseIconEl = pauseBtnEl.querySelector('.util-badge');
+const pauseLabelEl = pauseBtnEl.querySelector('.util-label');
+global.gameState = 'PLAYING';
+updateMobileControlsState();
+if (pauseLabelEl.textContent !== 'PAUSE' || !pauseIconEl.innerHTML.includes('0c4a6e')) {
+    throw new Error('Pause playing state mismatch: ' + pauseLabelEl.textContent);
+}
+global.gameState = 'PAUSED';
+updateMobileControlsState();
+if (pauseLabelEl.textContent !== 'RESUME' || !pauseIconEl.innerHTML.includes('15803d')) {
+    throw new Error('Pause paused state mismatch: ' + pauseLabelEl.textContent);
+}
+console.log('✓ Pause / Resume button reactive pixel art toggle verified (Pause bars <-> Play arrow)');
+
+// Test 9: Restart and Trophy Utility Buttons
+const restartBtn = document.getElementById('btnMobileRestart');
+const trophyBtn = document.getElementById('btnMobileTrophy');
+if (!restartBtn || !trophyBtn) {
+    throw new Error('Missing restart or trophy mobile buttons');
+}
+console.log('✓ Vertical Column Utility Buttons verified: Pause, Fullscreen, Restart, Shop, Trophy, SFX');
 
 console.log('\n🎉 ALL MOBILE CONTROLLER TESTS PASSED SUCCESSFULLY!');
