@@ -1123,6 +1123,49 @@ function updateCombat() {
                     life: 120
                 });
                 screenShake = 18;
+            } else if (mob.species === 'dragon' && (mob.type === 'boss' || currentStage === 21)) {
+                score += 4000;
+                createSlimeExplosion(mob.x + mob.w / 2, mob.y + mob.h / 2, '#ef4444', true, 'dragon');
+                floatingTexts.push({
+                    x: mob.x + mob.w / 2,
+                    y: mob.y - 20,
+                    text: 'ANCIENT DRAGON SLAIN! 🐉🔥',
+                    color: '#f59e0b',
+                    life: 120
+                });
+                // Full HP & Armor Regeneration upon defeating dragon boss in Stage 21
+                if (typeof player !== 'undefined') {
+                    player.hp = player.maxHp;
+                    player.shield = player.maxShield;
+                    if (typeof playSound === 'function') {
+                        playSound('heal');
+                    }
+                    if (typeof floatingTexts !== 'undefined') {
+                        floatingTexts.push({
+                            x: player.x + (player.w || 20) / 2,
+                            y: player.y - 30,
+                            text: 'FULL HP & ARMOR RESTORED! 💖🛡️',
+                            color: '#10b981',
+                            life: 120
+                        });
+                    }
+                    if (typeof particles !== 'undefined') {
+                        for (let k = 0; k < 28; k++) {
+                            const angle = Math.random() * Math.PI * 2;
+                            const speed = 1.2 + Math.random() * 2.8;
+                            particles.push({
+                                x: player.x + (player.w || 20) / 2,
+                                y: player.y + (player.h || 20) / 2,
+                                vx: Math.cos(angle) * speed,
+                                vy: Math.sin(angle) * speed - 1.2,
+                                size: 3 + Math.random() * 3,
+                                color: (k % 2 === 0) ? '#10b981' : '#38bdf8',
+                                life: 35 + Math.floor(Math.random() * 20)
+                            });
+                        }
+                    }
+                }
+                screenShake = 18;
             } else {
                 createSlimeExplosion(mob.x + mob.w / 2, mob.y + mob.h / 2, mob.color, mob.type === 'boss', mob.species);
                 score += (mob.type === 'boss' ? 500 : 100);

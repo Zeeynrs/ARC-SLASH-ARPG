@@ -114,6 +114,12 @@ function nextStage() {
         return;
     }
 
+    // Transitioning from Stage 21 (Ancient Dragon) to Stage 22: fully restore HP & armor
+    if (currentStage === 21) {
+        player.hp = player.maxHp;
+        player.shield = player.maxShield;
+    }
+
     loadStage(currentStage + 1);
     if (gameState !== 'BOSS_DIALOGUE') {
         gameState = 'PLAYING';
@@ -348,6 +354,8 @@ function update() {
             dungeonGate.open = true;
             playSound('victory');
             if (isDragonStage) {
+                player.hp = player.maxHp;
+                player.shield = player.maxShield;
                 floatingTexts.push({
                     x: dungeonGate.x - 30,
                     y: dungeonGate.y - 14,

@@ -324,6 +324,34 @@ assert.strictEqual(global.gameState, 'MAIN_MENU', 'closeSettingsScreen restores 
 
 console.log('✓ Settings screen navigation, master volume controls, and persistence verified');
 
+// --- [TEST 7] ANCIENT DRAGON (STAGE 21) DEFEAT FULL HP & ARMOR REGENERATION ---
+console.log('\n--- [TEST 7] ANCIENT DRAGON DEFEAT FULL REGENERATION ---');
+global.currentStage = 21;
+player.hp = 35;
+player.maxHp = 300;
+player.shield = 10;
+player.maxShield = 150;
+
+const testDragonBoss = {
+    species: 'dragon',
+    type: 'boss',
+    x: 440,
+    y: 170,
+    w: 72,
+    h: 72,
+    hp: 0,
+    maxHp: 2200,
+    color: '#dc2626'
+};
+
+mobs = [testDragonBoss];
+updateCombat();
+
+assert.strictEqual(player.hp, player.maxHp, 'Player HP must regenerate to 100% maxHp upon defeating dragon boss');
+assert.strictEqual(player.shield, player.maxShield, 'Player shield must regenerate to 100% maxShield upon defeating dragon boss');
+assert.strictEqual(mobs.length, 0, 'Dragon boss should be removed from mobs array');
+console.log('✓ Stage 21 Ancient Dragon boss defeat restores 100% HP and 100% Shield');
+
 console.log('\n====================================================');
 console.log('🎉 ALL NEW FEATURE TESTS PASSED PERFECTLY!');
 console.log('====================================================');
