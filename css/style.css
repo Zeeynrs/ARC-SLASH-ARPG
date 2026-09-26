@@ -2,6 +2,16 @@
     box-sizing: border-box;
     margin: 0;
     padding: 0;
+    -webkit-tap-highlight-color: transparent !important;
+}
+
+*:focus {
+    outline: none;
+}
+
+*:focus:not(:focus-visible) {
+    outline: none;
+    box-shadow: none;
 }
 
 html, body {
@@ -9,6 +19,8 @@ html, body {
     min-height: 100vh;
     min-height: 100dvh;
     overflow-x: hidden;
+    -webkit-tap-highlight-color: transparent !important;
+    -webkit-touch-callout: none !important;
 }
 
 body {
@@ -22,6 +34,8 @@ body {
     color: #f8fafc;
     user-select: none;
     -webkit-user-select: none;
+    -webkit-touch-callout: none !important;
+    -webkit-tap-highlight-color: transparent !important;
     touch-action: manipulation;
     padding: 10px;
     padding-bottom: env(safe-area-inset-bottom, 12px);
@@ -58,13 +72,27 @@ canvas {
     background-color: #090c12;
     cursor: pointer;
     touch-action: none;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none !important;
+    -webkit-tap-highlight-color: transparent !important;
+    outline: none;
+}
+
+button, input, select, a {
+    -webkit-tap-highlight-color: transparent !important;
+    -webkit-touch-callout: none !important;
+    outline: none;
 }
 
 /* --- MOBILE GAMEPAD & TOUCH CONTROLS (RETRO ARCADE DUAL-MODE DECK) --- */
-.mobile-controls {
+.mobile-controls,
+.mobile-controls * {
     touch-action: none;
     user-select: none;
     -webkit-user-select: none;
+    -webkit-touch-callout: none !important;
+    -webkit-tap-highlight-color: transparent !important;
 }
 
 /* 1. RETRO ARCADE CROSS D-PAD (MINIMALIST TRANSLUCENT) */
