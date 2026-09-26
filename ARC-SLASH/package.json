@@ -1,0 +1,9 @@
+{
+  "name": "arc-slash",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node ARC-SLASH-ARPG/server.js",
+    "test": "npm test --prefix ARC-SLASH-ARPG"
+  }
+}
