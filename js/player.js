@@ -73,6 +73,15 @@ const player = {
     invulnerableTimer: 0,
     baseDamage: 24,
 
+    // Immunity Frames & Dodge/Dash System
+    iFrames: 0,
+    maxIFrames: 0,
+    isDashing: false,
+    dashTimer: 0,
+    dashCooldown: 0,
+    dashDx: 0,
+    dashDy: 0,
+
     // Attack Mechanism
     isAttacking: false,
     attackTime: 0,
@@ -166,3 +175,62 @@ function equipItem(itemId) {
     applyEquipmentStats();
     return true;
 }
+
+// --- PLAYER EVASIVE DODGE / DASH WITH IMMUNITY FRAMES ---
+function startPlayerDodge() {
+    if (player.dashCooldown > 0 || player.isDashing || player.hp <= 0) return false;
+    if (typeof gameState !== 'undefined' && gameState !== 'PLAYING' && gameState !== 'EVENT_ROOM') return false;
+
+    // Movement direction from keys or keybinding action manager
+    let dx = 0, dy = 0;
+    if (typeof isActionActive === 'function') {
+        if (isActionActive('moveUp')) dy -= 1;
+        if (isActionActive('moveDown')) dy += 1;
+        if (isActionActive('moveLeft')) dx -= 1;
+        if (isActionActive('moveRight')) dx += 1;
+    } else if (typeof keys !== 'undefined') {
+        if (keys['w'] || keys['arrowup']) dy -= 1;
+        if (keys['s'] || keys['arrowdown']) dy += 1;
+        if (keys['a'] || keys['arrowleft']) dx -= 1;
+        if (keys['d'] || keys['arrowright']) dx += 1;
+    }
+
+    if (dx === 0 && dy === 0) {
+        const facingAngle = (typeof getFacingAngle === 'function') ? getFacingAngle(player.facing || 'right') : 0;
+        dx = Math.cos(facingAngle);
+        dy = Math.sin(facingAngle);
+    } else {
+        const mag = Math.hypot(dx, dy) || 1;
+        dx /= mag;
+        dy /= mag;
+    }
+
+    player.isDashing = true;
+    player.dashTimer = 10; // 10 ticks rapid dash
+    player.dashCooldown = 42; // ~0.7s cooldown
+    player.dashDx = dx;
+    player.dashDy = dy;
+
+    // Grants 20 Immunity Frames (covers entire dash + brief recovery window)
+    player.iFrames = 20;
+    player.maxIFrames = 20;
+    player.invulnerableTimer = 20;
+
+    if (typeof playSound === 'function') playSound('slash');
+
+    if (typeof particles !== 'undefined') {
+        for (let i = 0; i < 7; i++) {
+            particles.push({
+                x: player.x + player.w / 2 + (Math.random() - 0.5) * 8,
+                y: player.y + player.h / 2 + (Math.random() - 0.5) * 8,
+                vx: -dx * (Math.random() * 2.5 + 1.2),
+                vy: -dy * (Math.random() * 2.5 + 1.2),
+                size: Math.random() * 3 + 2,
+                color: '#38bdf8',
+                life: 14
+            });
+        }
+    }
+    return true;
+}
+

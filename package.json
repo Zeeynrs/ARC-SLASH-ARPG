@@ -6,7 +6,8 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "test": "node tests/test_game_systems.js && node tests/test_boss_equipment_balance.js && node tests/test_main_menu_and_achievements.js && node tests/test_mobile_controls.cjs"
+    "serve": "node server.js",
+    "test": "node tests/test_game_systems.js && node tests/test_boss_equipment_balance.js && node tests/test_main_menu_and_achievements.js && node tests/test_mobile_controls.cjs && node tests/test_new_features.js"
   },
   "keywords": [
     "arpg",

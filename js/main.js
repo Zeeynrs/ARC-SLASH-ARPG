@@ -295,29 +295,36 @@ function update() {
         }
     });
 
-    // Player movement
-    let moveDx = 0;
-    let moveDy = 0;
-    if (keys['w'] || keys['arrowup']) { moveDy -= 1; player.facing = 'up'; }
-    if (keys['s'] || keys['arrowdown']) { moveDy += 1; player.facing = 'down'; }
-    if (keys['a'] || keys['arrowleft']) { moveDx -= 1; player.facing = 'left'; }
-    if (keys['d'] || keys['arrowright']) { moveDx += 1; player.facing = 'right'; }
+    // Player movement (respects key rebindings and active dash state)
+    if (!player.isDashing) {
+        let moveDx = 0;
+        let moveDy = 0;
+        const upActive = (typeof isActionActive === 'function') ? (isActionActive('moveUp') || keys['w'] || keys['arrowup']) : (keys['w'] || keys['arrowup']);
+        const downActive = (typeof isActionActive === 'function') ? (isActionActive('moveDown') || keys['s'] || keys['arrowdown']) : (keys['s'] || keys['arrowdown']);
+        const leftActive = (typeof isActionActive === 'function') ? (isActionActive('moveLeft') || keys['a'] || keys['arrowleft']) : (keys['a'] || keys['arrowleft']);
+        const rightActive = (typeof isActionActive === 'function') ? (isActionActive('moveRight') || keys['d'] || keys['arrowright']) : (keys['d'] || keys['arrowright']);
 
-    if (moveDx !== 0 && moveDy !== 0) {
-        moveDx *= 0.7071;
-        moveDy *= 0.7071;
-    }
+        if (upActive) { moveDy -= 1; player.facing = 'up'; }
+        if (downActive) { moveDy += 1; player.facing = 'down'; }
+        if (leftActive) { moveDx -= 1; player.facing = 'left'; }
+        if (rightActive) { moveDx += 1; player.facing = 'right'; }
 
-    // No speed penalty when attacking - keeps movement fluid and responsive
-    const stepSpeed = player.speed;
-    const nextX = player.x + moveDx * stepSpeed;
-    const nextY = player.y + moveDy * stepSpeed;
+        if (moveDx !== 0 && moveDy !== 0) {
+            moveDx *= 0.7071;
+            moveDy *= 0.7071;
+        }
 
-    if (!checkWallCollision(nextX, player.y, player.w, player.h)) {
-        player.x = nextX;
-    }
-    if (!checkWallCollision(player.x, nextY, player.w, player.h)) {
-        player.y = nextY;
+        // No speed penalty when attacking - keeps movement fluid and responsive
+        const stepSpeed = player.speed;
+        const nextX = player.x + moveDx * stepSpeed;
+        const nextY = player.y + moveDy * stepSpeed;
+
+        if (!checkWallCollision(nextX, player.y, player.w, player.h)) {
+            player.x = nextX;
+        }
+        if (!checkWallCollision(player.x, nextY, player.w, player.h)) {
+            player.y = nextY;
+        }
     }
 
     // Combat update
@@ -672,6 +679,8 @@ function draw() {
         else drawMenuOverlay();
     } else if (gameState === 'MENU' || gameState === 'CHAR_SELECT') {
         drawMenuOverlay();
+    } else if (gameState === 'KEYBINDS') {
+        if (typeof drawKeybindsOverlay === 'function') drawKeybindsOverlay();
     } else if (gameState === 'ACHIEVEMENTS') {
         if (typeof drawAchievementsOverlay === 'function') drawAchievementsOverlay(ctx, canvas);
     } else if (gameState === 'HOW_TO_PLAY') {
@@ -689,13 +698,56 @@ function draw() {
     mouseClicked = false;
 }
 
-// --- 60 FPS ACCURATE FIXED TIMESTEP GAME LOOP ---
-// Guarantees gameplay runs at identical fast 60 Hz physics speed on all devices (mobile 30/60/90/120Hz)
-const FIXED_STEP_MS = 1000 / 60; // 16.6667 ms per physics tick
+// --- CONFIGURABLE FIXED TIMESTEP & TICK RATE ENGINE ---
+let targetTickRate = 60;
+try {
+    const savedRate = parseInt(localStorage.getItem('arc_slash_tick_rate'), 10);
+    if ([30, 60, 90, 120].includes(savedRate)) targetTickRate = savedRate;
+} catch (e) {}
+
+let FIXED_STEP_MS = 1000 / targetTickRate;
 let lastGameLoopTime = (typeof performance !== 'undefined') ? performance.now() : Date.now();
 let physicsAccumulator = 0;
-// Increased capacity prevents mobile FPS dips/stutters from discarding simulation ticks (which previously caused slow-mo)
-const MAX_ACCUMULATOR_MS = FIXED_STEP_MS * 8; 
+let MAX_ACCUMULATOR_MS = FIXED_STEP_MS * 8;
+
+let currentTPS = targetTickRate;
+let currentFPS = 60;
+let tickCountThisSec = 0;
+let frameCountThisSec = 0;
+let lastRateCheckTime = (typeof performance !== 'undefined') ? performance.now() : Date.now();
+
+function setTargetTickRate(rate) {
+    if (![30, 60, 90, 120].includes(rate)) rate = 60;
+    targetTickRate = rate;
+    FIXED_STEP_MS = 1000 / targetTickRate;
+    MAX_ACCUMULATOR_MS = FIXED_STEP_MS * 8;
+    try {
+        localStorage.setItem('arc_slash_tick_rate', rate.toString());
+    } catch (e) {}
+    if (typeof floatingTexts !== 'undefined' && typeof player !== 'undefined' && player.x) {
+        floatingTexts.push({
+            x: player.x + player.w / 2,
+            y: player.y - 16,
+            text: `⚡ TICK RATE: ${rate} TPS`,
+            color: '#38bdf8',
+            life: 45
+        });
+    }
+}
+
+function cycleTickRate() {
+    const rates = [60, 90, 120, 30];
+    const idx = rates.indexOf(targetTickRate);
+    const nextRate = rates[(idx + 1) % rates.length];
+    setTargetTickRate(nextRate);
+    if (typeof playSound === 'function') playSound('buy');
+}
+
+if (typeof window !== 'undefined') {
+    window.setTargetTickRate = setTargetTickRate;
+    window.cycleTickRate = cycleTickRate;
+    window.getTickRateStats = () => ({ tps: currentTPS, fps: currentFPS, targetTPS: targetTickRate });
+}
 
 function isOrientationBlocked() {
     return false;
@@ -715,13 +767,14 @@ function gameLoop(timestamp) {
         physicsAccumulator = MAX_ACCUMULATOR_MS;
     }
 
-    // Run physics updates at exact 60 Hz rate if not blocked by orientation overlay
+    // Run physics updates at target tick rate if not blocked
     const blocked = isOrientationBlocked();
     let subSteps = 0;
-    const maxSubSteps = 6;
+    const maxSubSteps = 8;
     while (physicsAccumulator >= FIXED_STEP_MS && subSteps < maxSubSteps) {
         if (!blocked) {
             update();
+            tickCountThisSec++;
         }
         physicsAccumulator -= FIXED_STEP_MS;
         subSteps++;
@@ -729,6 +782,16 @@ function gameLoop(timestamp) {
 
     if (!blocked) {
         draw();
+        frameCountThisSec++;
+    }
+
+    // Calculate real-time TPS & FPS
+    if (timestamp - lastRateCheckTime >= 1000) {
+        currentTPS = tickCountThisSec;
+        currentFPS = frameCountThisSec;
+        tickCountThisSec = 0;
+        frameCountThisSec = 0;
+        lastRateCheckTime = timestamp;
     }
 
     requestAnimationFrame(gameLoop);

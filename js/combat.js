@@ -203,6 +203,22 @@ function damageMob(mob, dmg) {
         return 0;
     }
 
+    // Alter Ego Parry Riposte Counter: reflect damage if hit during parry
+    if (mob.isParrying) {
+        playSound('shield');
+        playSound('slash');
+        screenShake = 12;
+        floatingTexts.push({
+            x: mob.x + mob.w / 2, y: mob.y - 20,
+            text: 'PARRY RIPOSTE! ⚡', color: '#f43f5e', life: 40
+        });
+        const currentStageVal = (typeof currentStage !== 'undefined') ? currentStage : 22;
+        damagePlayer(Math.round(48 + currentStageVal * 2.2), '⚡', true);
+        mob.isParrying = false;
+        mob.parryTimer = 0;
+        return 0;
+    }
+
     // Knight Alter Ego Frontal Shield Block (-30% damage)
     if (mob.species === 'alter_ego' && mob.alterEgoRole === 'knight' && mob.isShieldGuarding) {
         const px = player.x + player.w / 2;
@@ -517,7 +533,7 @@ function startBossUltimate(mob, phaseName) {
 }
 
 function damagePlayer(rawAmount, icon = '💥', isBossAttack = false) {
-    if (player.invulnerableTimer > 0) return;
+    if (player.invulnerableTimer > 0 || (player.isDashing && player.iFrames > 0)) return;
 
     // Defense Calculation:
     // Regular attacks: flat player defense subtraction (min 2)
@@ -526,7 +542,10 @@ function damagePlayer(rawAmount, icon = '💥', isBossAttack = false) {
     const effectiveDef = isBossAttack ? Math.round(playerDef * 0.35) : playerDef;
     let finalDmg = Math.max(isBossAttack ? 15 : 2, rawAmount - effectiveDef);
 
-    player.invulnerableTimer = isBossAttack ? 40 : 32;
+    // Hit Immunity Frames: 42 ticks for boss hit, 32 ticks for normal mob hit
+    player.iFrames = isBossAttack ? 42 : 32;
+    player.maxIFrames = player.iFrames;
+    player.invulnerableTimer = player.iFrames;
     player.shieldRechargeTimer = isBossAttack ? 360 : 240; // 6s delay on boss hit
     screenShake = isBossAttack ? Math.max(screenShake, 14) : Math.max(screenShake, 8);
 
@@ -616,9 +635,60 @@ function updateCombat() {
     
     if (player.attackCooldown > 0) player.attackCooldown--;
     if (player.invulnerableTimer > 0) player.invulnerableTimer--;
+    if (player.iFrames > 0) player.iFrames--;
+    if (player.dashCooldown > 0) player.dashCooldown--;
 
-    // Start Basic Attack (hanya bisa dimulai ketika cooldown pemulihan selesai)
-    if ((keys['j'] || keys[' ']) && player.attackCooldown === 0 && !player.isAttacking) {
+    // Update Player Dash / Dodge movement
+    if (player.isDashing) {
+        player.dashTimer--;
+        const dashSpeed = player.speed * 2.5;
+        const dashNextX = player.x + player.dashDx * dashSpeed;
+        const dashNextY = player.y + player.dashDy * dashSpeed;
+        if (!checkWallCollision(dashNextX, player.y, player.w, player.h)) player.x = dashNextX;
+        if (!checkWallCollision(player.x, dashNextY, player.w, player.h)) player.y = dashNextY;
+
+        if (Math.random() < 0.7) {
+            particles.push({
+                x: player.x + player.w / 2,
+                y: player.y + player.h / 2,
+                vx: -player.dashDx * 1.5,
+                vy: -player.dashDy * 1.5,
+                size: 3,
+                color: '#38bdf8',
+                life: 10
+            });
+        }
+        if (player.dashTimer <= 0) {
+            player.isDashing = false;
+        }
+    }
+
+    // Update Toxic Slime Puddles
+    if (typeof slimePuddles !== 'undefined') {
+        for (let pIdx = slimePuddles.length - 1; pIdx >= 0; pIdx--) {
+            const puddle = slimePuddles[pIdx];
+            puddle.life--;
+            const distToPuddle = Math.hypot(px - puddle.x, py - puddle.y);
+            if (distToPuddle < puddle.radius && (!player.iFrames || player.iFrames <= 0)) {
+                if (!puddle.tickCooldown || puddle.tickCooldown <= 0) {
+                    puddle.tickCooldown = 28;
+                    damagePlayer(puddle.dmg || 5, '☣️', false);
+                } else {
+                    puddle.tickCooldown--;
+                }
+            }
+            if (puddle.life <= 0) {
+                slimePuddles.splice(pIdx, 1);
+            }
+        }
+    }
+
+    // Start Basic Attack (support isActionActive('attack'))
+    const isAttackingKey = (typeof isActionActive === 'function')
+        ? (isActionActive('attack') || keys['j'] || keys[' '])
+        : (keys['j'] || keys[' ']);
+
+    if (isAttackingKey && player.attackCooldown === 0 && !player.isAttacking && !player.isDashing) {
         player.isAttacking = true;
         player.attackTime = 0;
         player.hitMobsThisSwing.clear();
@@ -1062,6 +1132,11 @@ function updateCombat() {
             }
             mobs.splice(i, 1);
             continue;
+        }
+
+        // Anti-stuck resolution: de-penetrate mob if overlapping geometry
+        if (typeof resolveMobStuck === 'function') {
+            resolveMobStuck(mob);
         }
 
         mob.hopTimer = (mob.hopTimer || Math.random() * Math.PI * 2) + 0.14 * (mob.speed || 1);
@@ -1530,36 +1605,255 @@ function updateCombat() {
                 if (!checkWallCollision(mob.x, stepMobY, mob.w, mob.h)) mob.y = stepMobY;
             }
         } else {
-            // Normal movement: mendekati pemain
+            // Normal movement: mendekati pemain dengan smart wall/corner sliding
             if (dist < 270 && dist > 12) {
                 const stepMobX = mob.x + ((px - mx) / dist) * mob.speed;
                 const stepMobY = mob.y + ((py - my) / dist) * mob.speed;
 
-                if (!checkWallCollision(stepMobX, mob.y, mob.w, mob.h)) mob.x = stepMobX;
-                if (!checkWallCollision(mob.x, stepMobY, mob.w, mob.h)) mob.y = stepMobY;
+                let movedX = false;
+                let movedY = false;
+                if (!checkWallCollision(stepMobX, mob.y, mob.w, mob.h)) { mob.x = stepMobX; movedX = true; }
+                if (!checkWallCollision(mob.x, stepMobY, mob.w, mob.h)) { mob.y = stepMobY; movedY = true; }
+
+                // Fallback smart sliding around obstacles and corners
+                if (!movedX && !movedY) {
+                    const slideX1 = mob.x + Math.sign(px - mx) * mob.speed * 0.75;
+                    const slideY1 = mob.y - Math.sign(py - my) * mob.speed * 0.75;
+                    const slideX2 = mob.x - Math.sign(px - mx) * mob.speed * 0.75;
+                    const slideY2 = mob.y + Math.sign(py - my) * mob.speed * 0.75;
+                    if (!checkWallCollision(slideX1, slideY1, mob.w, mob.h)) {
+                        mob.x = slideX1; mob.y = slideY1;
+                    } else if (!checkWallCollision(slideX2, slideY2, mob.w, mob.h)) {
+                        mob.x = slideX2; mob.y = slideY2;
+                    }
+                }
             }
         }
 
-        // Skeleton Bow Shooting AI
+        // --- 1. SLIME ATTACK PATTERNS (LEAP SLAM & TOXIC PUDDLES) ---
+        if (mob.species === 'slime') {
+            if (mob.leapCooldown > 0) mob.leapCooldown--;
+            if (mob.leapCooldown <= 0 && dist > 55 && dist < 220) {
+                mob.leapCooldown = 120 + Math.floor(Math.random() * 50);
+                mob.leapTimer = 24;
+                mob.leapTargetX = px;
+                mob.leapTargetY = py;
+
+                addTelegraphCircle({
+                    x: px, y: py,
+                    radius: (mob.type === 'boss' ? 52 : 30),
+                    duration: 24,
+                    dmg: Math.round(20 + currentStage * 1.6),
+                    color: '#10b981',
+                    fillColor: 'rgba(16, 185, 129, 0.28)',
+                    icon: '🟢',
+                    effectType: 'slime_slam',
+                    isBoss: mob.type === 'boss'
+                });
+            }
+            if (mob.leapTimer > 0) {
+                mob.leapTimer--;
+                if (mob.leapTimer === 0 && mob.leapTargetX !== undefined) {
+                    const leapSafe = (typeof findSafeSpawn === 'function')
+                        ? findSafeSpawn(mob.leapTargetX - mob.w / 2, mob.leapTargetY - mob.h / 2, mob.w, mob.h, 4)
+                        : { x: mob.leapTargetX - mob.w / 2, y: mob.leapTargetY - mob.h / 2 };
+                    mob.x = leapSafe.x;
+                    mob.y = leapSafe.y;
+                    playSound('hit');
+                    if (typeof slimePuddles !== 'undefined') {
+                        slimePuddles.push({
+                            x: mob.x + mob.w / 2,
+                            y: mob.y + mob.h / 2,
+                            radius: (mob.type === 'boss' ? 36 : 22),
+                            life: 180,
+                            dmg: Math.round(4 + currentStage * 0.4),
+                            tickCooldown: 0
+                        });
+                    }
+                }
+            }
+
+            // Slime King (Stage 10 Boss) Royal Tremor Slam
+            if (mob.type === 'boss' && currentStage === 10) {
+                if (mob.royalTremorCooldown > 0) mob.royalTremorCooldown--;
+                if (mob.royalTremorCooldown <= 0) {
+                    mob.royalTremorCooldown = 110;
+                    playSound('explode');
+                    screenShake = 12;
+                    floatingTexts.push({ x: mx, y: my - 24, text: 'ROYAL SLIME SLAM! 👑', color: '#10b981', life: 45 });
+                    // 8-Way radial projectile burst
+                    const radialSpd = 3.6;
+                    for (let p = 0; p < 8; p++) {
+                        const rA = (Math.PI * 2 / 8) * p;
+                        enemyProjectiles.push({
+                            x: mx, y: my,
+                            vx: Math.cos(rA) * radialSpd,
+                            vy: Math.sin(rA) * radialSpd,
+                            angle: rA,
+                            type: 'slime_ball',
+                            dmg: Math.round(26 + currentStage * 1.5),
+                            isBoss: true,
+                            life: 100
+                        });
+                    }
+                }
+            }
+        }
+
+        // --- 2. ZOMBIE ATTACK PATTERNS (BLOODLUST FRENZY & WARLORD WHIRLWIND) ---
+        if (mob.species === 'zombie' || mob.species === 'sculk_zombie') {
+            if (!mob.isEnraged && mob.hp < mob.maxHp * 0.5) {
+                mob.isEnraged = true;
+                mob.speed *= 1.35;
+                floatingTexts.push({ x: mx, y: my - 16, text: 'FRENZY! 🩸', color: '#ef4444', life: 40 });
+            }
+
+            if (mob.type === 'boss' && currentStage === 15) {
+                if (mob.whirlwindCooldown > 0) mob.whirlwindCooldown--;
+                if (mob.whirlwindCooldown <= 0 && dist < 170) {
+                    mob.whirlwindTimer = 45;
+                    mob.whirlwindCooldown = 140;
+                    playSound('slash');
+                    floatingTexts.push({ x: mx, y: my - 24, text: 'WHIRLWIND CLEAVE! ⚔️', color: '#f59e0b', life: 45 });
+                }
+                if (mob.whirlwindTimer > 0) {
+                    mob.whirlwindTimer--;
+                    for (let p = 0; p < 2; p++) {
+                        const sAngle = Math.random() * Math.PI * 2;
+                        particles.push({
+                            x: mx + Math.cos(sAngle) * 26,
+                            y: my + Math.sin(sAngle) * 26,
+                            vx: Math.cos(sAngle) * 3,
+                            vy: Math.sin(sAngle) * 3,
+                            size: 3.5,
+                            color: '#dc2626',
+                            life: 12
+                        });
+                    }
+                    if (dist < 46) {
+                        damagePlayer(Math.round(44 + currentStage * 2.2), '⚔️', true);
+                    }
+                }
+            }
+        }
+
+        // --- 3. SKELETON BOW SHOOTING & VOLLEY AI ---
         if (mob.species === 'skeleton') {
             mob.shootTimer = (mob.shootTimer || Math.floor(Math.random() * 40)) + 1;
-            const shootInterval = mob.type === 'boss' ? 65 : 95;
-            if (mob.shootTimer >= shootInterval && dist < 280) {
+            mob.shotCount = mob.shotCount || 0;
+            const shootInterval = mob.type === 'boss' ? 55 : 85;
+            if (mob.shootTimer >= shootInterval && dist < 300) {
                 mob.shootTimer = 0;
+                mob.shotCount++;
                 const angle = Math.atan2(py - my, px - mx);
-                const arrowSpeed = 4.4;
-                const scaledArrowDmg = Math.round((mob.type === 'boss' ? 20 : 11) + (currentStage - 1) * (mob.type === 'boss' ? 1.35 : 1.5));
-                enemyProjectiles.push({
-                    x: mx, y: my,
-                    vx: Math.cos(angle) * arrowSpeed,
-                    vy: Math.sin(angle) * arrowSpeed,
-                    angle: angle,
-                    type: 'arrow',
-                    dmg: scaledArrowDmg,
-                    isBoss: mob.type === 'boss',
-                    life: 110
-                });
-                playSound('slash');
+                const arrowSpeed = 4.6;
+                const scaledArrowDmg = Math.round((mob.type === 'boss' ? 22 : 12) + (currentStage - 1) * (mob.type === 'boss' ? 1.4 : 1.5));
+
+                // Every 3rd shot: 3-way fan volley
+                if (mob.shotCount % 3 === 0) {
+                    [-0.24, 0, 0.24].forEach(spread => {
+                        enemyProjectiles.push({
+                            x: mx, y: my,
+                            vx: Math.cos(angle + spread) * arrowSpeed,
+                            vy: Math.sin(angle + spread) * arrowSpeed,
+                            angle: angle + spread,
+                            type: 'arrow',
+                            dmg: scaledArrowDmg,
+                            isBoss: mob.type === 'boss',
+                            life: 110
+                        });
+                    });
+                    playSound('slash');
+                } else {
+                    enemyProjectiles.push({
+                        x: mx, y: my,
+                        vx: Math.cos(angle) * arrowSpeed,
+                        vy: Math.sin(angle) * arrowSpeed,
+                        angle: angle,
+                        type: 'arrow',
+                        dmg: scaledArrowDmg,
+                        isBoss: mob.type === 'boss',
+                        life: 110
+                    });
+                    playSound('slash');
+                }
+            }
+
+            // Skeleton King (Stage 20 Boss) Necrotic Ring of Bones
+            if (mob.type === 'boss' && currentStage === 20) {
+                if (mob.necroticRingCooldown > 0) mob.necroticRingCooldown--;
+                if (mob.necroticRingCooldown <= 0) {
+                    mob.necroticRingCooldown = 135;
+                    playSound('skill');
+                    screenShake = 8;
+                    floatingTexts.push({ x: mx, y: my - 24, text: 'NECROTIC BONE RING! 💀', color: '#c084fc', life: 45 });
+                    const numProjectiles = 10;
+                    for (let p = 0; p < numProjectiles; p++) {
+                        const rAngle = (Math.PI * 2 / numProjectiles) * p;
+                        enemyProjectiles.push({
+                            x: mx, y: my,
+                            vx: Math.cos(rAngle) * 3.2,
+                            vy: Math.sin(rAngle) * 3.2,
+                            angle: rAngle,
+                            type: 'arrow',
+                            dmg: Math.round(28 + currentStage * 1.5),
+                            isBoss: true,
+                            life: 110
+                        });
+                    }
+                }
+            }
+        }
+
+        // --- 4. SCULK CRAWLER POUNCE DASH ---
+        if (mob.species === 'sculk_crawler') {
+            if (mob.pounceCooldown > 0) mob.pounceCooldown--;
+            if (mob.pounceCooldown <= 0 && dist > 40 && dist < 140) {
+                mob.pounceCooldown = 90 + Math.floor(Math.random() * 40);
+                const pAngle = Math.atan2(py - my, px - mx);
+                const pDist = Math.min(dist, 80);
+                const pounceX = mob.x + Math.cos(pAngle) * pDist;
+                const pounceY = mob.y + Math.sin(pAngle) * pDist;
+                if (!checkWallCollision(pounceX, pounceY, mob.w, mob.h)) {
+                    mob.x = pounceX;
+                    mob.y = pounceY;
+                    playSound('slash');
+                    for (let p = 0; p < 8; p++) {
+                        particles.push({
+                            x: mob.x + mob.w / 2, y: mob.y + mob.h / 2,
+                            vx: (Math.random() - 0.5) * 3, vy: (Math.random() - 0.5) * 3,
+                            size: 3, color: '#06b6d4', life: 12
+                        });
+                    }
+                    if (Math.hypot(px - (mob.x + mob.w / 2), py - (mob.y + mob.h / 2)) < 28) {
+                        damagePlayer(Math.round(24 + currentStage * 1.4), '⚡', false);
+                    }
+                }
+            }
+        }
+
+        // --- 5. ALTER EGO PARRY STANCE ---
+        if (mob.species === 'alter_ego') {
+            if (mob.parryCooldown > 0) mob.parryCooldown--;
+            if (mob.parryCooldown <= 0 && !mob.isInvulnerable && dist < 120 && Math.random() < 0.35) {
+                mob.isParrying = true;
+                mob.parryTimer = 35;
+                mob.parryCooldown = 150;
+                floatingTexts.push({ x: mx, y: my - 24, text: 'PARRY STANCE! 🛡️', color: '#38bdf8', life: 35 });
+            }
+            if (mob.parryTimer > 0) {
+                mob.parryTimer--;
+                if (Math.random() < 0.6) {
+                    particles.push({
+                        x: mx + (Math.random() - 0.5) * 24,
+                        y: my + (Math.random() - 0.5) * 24,
+                        vx: 0, vy: -1,
+                        size: 3, color: '#38bdf8', life: 10
+                    });
+                }
+                if (mob.parryTimer <= 0) {
+                    mob.isParrying = false;
+                }
             }
         }
 

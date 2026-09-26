@@ -2,6 +2,11 @@
 let mobs = [];
 let walls = [];
 let torches = [];
+let slimePuddles = [];
+
+function clearSlimePuddles() {
+    slimePuddles = [];
+}
 
 function loadStage(stageNum) {
     currentStage = stageNum;
@@ -9,6 +14,7 @@ function loadStage(stageNum) {
     walls = [];
     torches = [];
     clearParticles();
+    clearSlimePuddles();
     if (typeof clearTelegraphZones === 'function') clearTelegraphZones();
     if (typeof resetEventRoomState === 'function') resetEventRoomState();
 
@@ -60,19 +66,47 @@ function loadStage(stageNum) {
             const baseHp = isBoss ? Math.round((300 + stageNum * 65) * 0.9) : 75 + stageNum * 20;
             const scaledHp = Math.round(baseHp * hpScale);
 
+            const mobW = isBoss ? 56 : (chosenSpecies === 'dragon' ? 52 : (chosenSpecies === 'zombie' ? 24 : (chosenSpecies === 'skeleton' ? 22 : 20)));
+            const mobH = isBoss ? 56 : (chosenSpecies === 'dragon' ? 52 : (chosenSpecies === 'zombie' ? 28 : (chosenSpecies === 'skeleton' ? 26 : 20)));
+            const rawX = 260 + Math.random() * 260;
+            const rawY = 80 + Math.random() * 220;
+            const safePos = (typeof findSafeSpawn === 'function') ? findSafeSpawn(rawX, rawY, mobW, mobH, 8) : { x: rawX, y: rawY };
+
             mobs.push({
                 id: i + 1,
-                x: 280 + Math.random() * 240,
-                y: 80 + Math.random() * 220,
-                w: isBoss ? 56 : (chosenSpecies === 'dragon' ? 52 : (chosenSpecies === 'zombie' ? 24 : (chosenSpecies === 'skeleton' ? 22 : 20))),
-                h: isBoss ? 56 : (chosenSpecies === 'dragon' ? 52 : (chosenSpecies === 'zombie' ? 28 : (chosenSpecies === 'skeleton' ? 26 : 20))),
+                x: safePos.x,
+                y: safePos.y,
+                w: mobW,
+                h: mobH,
                 hp: scaledHp,
                 maxHp: scaledHp,
                 speed: isBoss ? 0.85 * speedScale : (chosenSpecies === 'skeleton' ? 1.2 * speedScale : (chosenSpecies === 'zombie' ? 0.82 * speedScale : (0.9 + Math.random() * 0.4) * speedScale)),
                 color: chosenColor,
                 type: isBoss ? 'boss' : 'normal',
                 species: chosenSpecies,
-                level: isBoss ? `Lv.${stageNum} BOSS 👑` : `Lv.${stageNum}`
+                level: isBoss ? `Lv.${stageNum} BOSS 👑` : `Lv.${stageNum}`,
+                phase60Triggered: false,
+                phase30Triggered: false,
+                isInvulnerable: false,
+                isFlying: (chosenSpecies === 'dragon' || chosenSpecies === 'sculk_phantom'),
+                flyZ: (chosenSpecies === 'dragon' ? 16 : 8),
+                tailWhipCooldown: 0,
+                ultimateTimer: 0,
+                ultimateMaxTimer: 0,
+                ultimateType: null,
+                leapTimer: 0,
+                leapCooldown: Math.floor(Math.random() * 60) + 70,
+                isEnraged: false,
+                whirlwindTimer: 0,
+                whirlwindCooldown: 100,
+                pounceCooldown: Math.floor(Math.random() * 50) + 40,
+                burstCooldown: Math.floor(Math.random() * 40) + 40,
+                shotCount: 0,
+                isParrying: false,
+                parryTimer: 0,
+                parryCooldown: 120,
+                necroticRingCooldown: 110,
+                royalTremorCooldown: 90
             });
         }
     } else {
@@ -127,12 +161,17 @@ function loadStage(stageNum) {
             }
 
             const scaledHp = Math.round(m.hp * hpScale);
+            const mobW = m.w || (species === 'warden' ? 58 : (species === 'dragon' ? 64 : (species === 'sculk_crawler' ? 24 : (species === 'sculk_phantom' ? 32 : (species === 'zombie' || species === 'sculk_zombie' ? 24 : (species === 'skeleton' || species === 'sculk_spitter' ? 22 : 20))))));
+            const mobH = m.h || (species === 'warden' ? 64 : (species === 'dragon' ? 64 : (species === 'sculk_crawler' ? 18 : (species === 'sculk_phantom' ? 22 : (species === 'zombie' || species === 'sculk_zombie' ? 28 : (species === 'skeleton' || species === 'sculk_spitter' ? 26 : 20))))));
+
+            const safePos = (typeof findSafeSpawn === 'function') ? findSafeSpawn(m.x, m.y, mobW, mobH, 6) : { x: m.x, y: m.y };
 
             mobs.push({
                 id: idx + 1,
-                x: m.x, y: m.y,
-                w: m.w || (species === 'warden' ? 58 : (species === 'dragon' ? 64 : (species === 'sculk_crawler' ? 24 : (species === 'sculk_phantom' ? 32 : (species === 'zombie' || species === 'sculk_zombie' ? 24 : (species === 'skeleton' || species === 'sculk_spitter' ? 22 : 20)))))),
-                h: m.h || (species === 'warden' ? 64 : (species === 'dragon' ? 64 : (species === 'sculk_crawler' ? 18 : (species === 'sculk_phantom' ? 22 : (species === 'zombie' || species === 'sculk_zombie' ? 28 : (species === 'skeleton' || species === 'sculk_spitter' ? 26 : 20)))))),
+                x: safePos.x,
+                y: safePos.y,
+                w: mobW,
+                h: mobH,
                 hp: scaledHp,
                 maxHp: scaledHp,
                 speed: m.speed * speedScale,
@@ -148,7 +187,20 @@ function loadStage(stageNum) {
                 tailWhipCooldown: 0,
                 ultimateTimer: 0,
                 ultimateMaxTimer: 0,
-                ultimateType: null
+                ultimateType: null,
+                leapTimer: 0,
+                leapCooldown: Math.floor(Math.random() * 60) + 70,
+                isEnraged: false,
+                whirlwindTimer: 0,
+                whirlwindCooldown: 100,
+                pounceCooldown: Math.floor(Math.random() * 50) + 40,
+                burstCooldown: Math.floor(Math.random() * 40) + 40,
+                shotCount: 0,
+                isParrying: false,
+                parryTimer: 0,
+                parryCooldown: 120,
+                necroticRingCooldown: 110,
+                royalTremorCooldown: 90
             });
         });
     }
@@ -171,6 +223,48 @@ function checkWallCollision(x, y, w, h) {
         if (x < wall.x + wall.w && x + w > wall.x &&
             y < wall.y + wall.h && y + h > wall.y) {
             return true;
+        }
+    }
+    return false;
+}
+
+// Find closest guaranteed collision-free coordinate with padding clearance
+function findSafeSpawn(startX, startY, w, h, padding = 6) {
+    if (!checkWallCollision(startX - padding, startY - padding, w + padding * 2, h + padding * 2)) {
+        return { x: startX, y: startY };
+    }
+    // Spiral search outwards to find nearest open position
+    for (let r = 8; r <= 240; r += 8) {
+        const steps = Math.max(8, Math.floor(2 * Math.PI * r / 12));
+        for (let s = 0; s < steps; s++) {
+            const angle = (s / steps) * Math.PI * 2;
+            const candX = Math.round(startX + Math.cos(angle) * r);
+            const candY = Math.round(startY + Math.sin(angle) * r);
+            if (!checkWallCollision(candX - padding, candY - padding, w + padding * 2, h + padding * 2)) {
+                return { x: candX, y: candY };
+            }
+        }
+    }
+    return { x: startX, y: startY };
+}
+
+// Automatic de-penetration / unstuck logic if a mob ever clips into wall geometry
+function resolveMobStuck(mob) {
+    if (!checkWallCollision(mob.x, mob.y, mob.w, mob.h)) return false;
+
+    const testDirs = [
+        { dx: 0, dy: -1 }, { dx: 0, dy: 1 }, { dx: -1, dy: 0 }, { dx: 1, dy: 0 },
+        { dx: -1, dy: -1 }, { dx: 1, dy: -1 }, { dx: -1, dy: 1 }, { dx: 1, dy: 1 }
+    ];
+    for (let step = 2; step <= 64; step += 3) {
+        for (const dir of testDirs) {
+            const nx = mob.x + dir.dx * step;
+            const ny = mob.y + dir.dy * step;
+            if (!checkWallCollision(nx, ny, mob.w, mob.h)) {
+                mob.x = nx;
+                mob.y = ny;
+                return true;
+            }
         }
     }
     return false;
@@ -239,10 +333,11 @@ function createSlimeExplosion(x, y, color, isBoss, species) {
 function createWardenBoss(stageNum, spawnX = 440, spawnY = 165) {
     const wardenHp = 19800;
     const wardenShield = 900;
+    const safePos = (typeof findSafeSpawn === 'function') ? findSafeSpawn(spawnX, spawnY, 58, 64, 8) : { x: spawnX, y: spawnY };
     return {
         id: 998,
-        x: spawnX,
-        y: spawnY,
+        x: safePos.x,
+        y: safePos.y,
         w: 58,
         h: 64,
         facing: 'left',
@@ -265,7 +360,9 @@ function createWardenBoss(stageNum, spawnX = 440, spawnY = 165) {
         roarTimer: 0,
         ultimateTimer: 0,
         ultimateMaxTimer: 0,
-        ultimateType: null
+        ultimateType: null,
+        eruptionTimer: 0,
+        eruptionCooldown: 85
     };
 }
 
@@ -273,6 +370,7 @@ function createWardenBoss(stageNum, spawnX = 440, spawnY = 165) {
 function createAlterEgoBoss(stageNum, spawnX = 450, spawnY = 175, isApex = false, forcedRole = null) {
     const playerRole = (player && player.characterRole) ? player.characterRole : 'knight';
     const isStage50 = (stageNum >= 50 || isApex);
+    const safePos = (typeof findSafeSpawn === 'function') ? findSafeSpawn(spawnX, spawnY, 24, 28, 8) : { x: spawnX, y: spawnY };
 
     // Stage 50 (Apex Mirror): Alter ego mencerminkan karakter pemain sendiri (True Mirror).
     // Stage 22 (dan non-Stage 50): Alter ego dipilih acak di antara 2 class lainnya (bukan mirror pemain).
@@ -335,8 +433,8 @@ function createAlterEgoBoss(stageNum, spawnX = 450, spawnY = 175, isApex = false
 
     return {
         id: 999,
-        x: spawnX,
-        y: spawnY,
+        x: safePos.x,
+        y: safePos.y,
         w: 24,
         h: 28,
         facing: 'left',

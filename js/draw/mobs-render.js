@@ -1153,6 +1153,41 @@ function drawAllMobs(ctx) {
         const rx = (mob.w / 2) * scaleX;
         const ry = (mob.h / 2) * scaleY;
 
+        // Enhanced Art Style: Boss Aura & Special Status Vfx
+        const isEnhanced = (typeof currentArtStyle !== 'undefined' && currentArtStyle === 'enhanced');
+        if (mob.type === 'boss' && isEnhanced) {
+            ctx.save();
+            const auraPulse = Math.sin(Date.now() * 0.005 + mob.id) * 0.15 + 0.28;
+            let auraColor = 'rgba(245, 158, 11, ';
+            if (mob.species === 'warden' || mob.species === 'alter_ego') auraColor = 'rgba(6, 182, 212, ';
+            ctx.fillStyle = `${auraColor}${auraPulse})`;
+            ctx.beginPath();
+            ctx.ellipse(cx, groundY - 2, mob.w * 0.72, 8, 0, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.restore();
+        }
+
+        if (mob.isParrying) {
+            // Alter Ego Parry Barrier
+            ctx.save();
+            const parryPulse = Math.sin(Date.now() * 0.02) * 0.2 + 0.6;
+            ctx.strokeStyle = `rgba(168, 85, 247, ${parryPulse})`;
+            ctx.lineWidth = 2.5;
+            ctx.beginPath();
+            ctx.arc(cx, cy, mob.w * 0.75, 0, Math.PI * 2);
+            ctx.stroke();
+            ctx.restore();
+        }
+
+        if (mob.isEnraged) {
+            // Zombie Bloodlust Aura
+            ctx.save();
+            ctx.strokeStyle = 'rgba(239, 68, 68, 0.75)';
+            ctx.lineWidth = 1.5;
+            ctx.strokeRect(mob.x - 2, mob.y - 2, mob.w + 4, mob.h + 4);
+            ctx.restore();
+        }
+
         if (mob.species === 'alter_ego') {
             drawAlterEgoMob(ctx, mob, cx, cy, groundY);
         } else if (mob.species === 'warden') {

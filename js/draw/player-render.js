@@ -3,6 +3,32 @@
 function drawPlayerModel(ctx, px, py) {
     ctx.save();
     
+    // Contact Shadow (Enhanced Art Style: richer grounded ambient occlusion)
+    const isEnhanced = (typeof currentArtStyle !== 'undefined' && currentArtStyle === 'enhanced');
+    if (isEnhanced) {
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.42)';
+        ctx.beginPath();
+        ctx.ellipse(player.x + player.w / 2, player.y + player.h - 1, player.w * 0.58, 4.5, 0, 0, Math.PI * 2);
+        ctx.fill();
+    } else {
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.25)';
+        ctx.beginPath();
+        ctx.ellipse(player.x + player.w / 2, player.y + player.h - 1, player.w * 0.45, 3, 0, 0, Math.PI * 2);
+        ctx.fill();
+    }
+
+    // Immunity Frame & Dash Ghost Trails / Shield Aura
+    if (player.iFrames > 0 || player.isDashing) {
+        const pulse = Math.sin(Date.now() * 0.015) * 0.2 + 0.35;
+        ctx.fillStyle = `rgba(34, 211, 238, ${pulse * 0.45})`;
+        ctx.beginPath();
+        ctx.arc(player.x + player.w / 2, player.y + player.h / 2, player.w * 0.75, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.strokeStyle = `rgba(103, 232, 249, ${pulse})`;
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+    }
+
     const role = (player && player.characterRole) ? player.characterRole : 'knight';
     const capeSprite = getEquippedSprite(player.equipped, 'cape');
     const armorSprite = getEquippedSprite(player.equipped, 'armor');

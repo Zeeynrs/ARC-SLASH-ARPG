@@ -26,7 +26,7 @@ const STAGE_CONFIGS = [
             { x: 300, y: 100, hp: 65, speed: 1.0, color: '#3498db', type: 'normal' },
             { x: 480, y: 110, hp: 65, speed: 0.95, color: '#3498db', type: 'normal' },
             { x: 380, y: 240, hp: 80, speed: 1.1, color: '#2ecc71', type: 'toxic' },
-            { x: 510, y: 290, hp: 80, speed: 1.1, color: '#2ecc71', type: 'toxic' },
+            { x: 510, y: 310, hp: 80, speed: 1.1, color: '#2ecc71', type: 'toxic' },
             { x: 240, y: 310, hp: 65, speed: 0.9, color: '#3498db', type: 'normal' }
         ],
         loots: [{ x: 200, y: 90, type: 'health' }, { x: 420, y: 200, type: 'shield' }],
@@ -64,7 +64,7 @@ const STAGE_CONFIGS = [
             { x: 240, y: 90, hp: 80, speed: 1.05, color: '#2ecc71', type: 'toxic' },
             { x: 380, y: 90, hp: 80, speed: 1.05, color: '#2ecc71', type: 'toxic' },
             { x: 480, y: 180, hp: 75, speed: 1.2, color: '#3498db', type: 'speed' },
-            { x: 320, y: 220, hp: 75, speed: 1.2, color: '#3498db', type: 'speed' },
+            { x: 350, y: 220, hp: 75, speed: 1.2, color: '#3498db', type: 'speed' },
             { x: 460, y: 300, hp: 80, speed: 1.05, color: '#2ecc71', type: 'toxic' },
             { x: 220, y: 320, hp: 75, speed: 1.2, color: '#3498db', type: 'speed' }
         ],
@@ -138,7 +138,7 @@ const STAGE_CONFIGS = [
             { x: 260, y: 90, hp: 115, speed: 1.05, color: '#9b59b6', type: 'normal' },
             { x: 360, y: 90, hp: 115, speed: 1.05, color: '#9b59b6', type: 'normal' },
             { x: 460, y: 90, hp: 115, speed: 1.05, color: '#9b59b6', type: 'normal' },
-            { x: 260, y: 290, hp: 115, speed: 1.05, color: '#2ecc71', type: 'toxic' },
+            { x: 275, y: 310, hp: 115, speed: 1.05, color: '#2ecc71', type: 'toxic' },
             { x: 360, y: 290, hp: 115, speed: 1.3, color: '#3498db', type: 'speed' },
             { x: 460, y: 290, hp: 115, speed: 1.3, color: '#3498db', type: 'speed' },
             { x: 520, y: 180, hp: 120, speed: 1.3, color: '#3498db', type: 'speed' },
@@ -271,9 +271,9 @@ const STAGE_CONFIGS = [
         mobs: [
             { x: 450, y: 190, hp: 405, speed: 0.78, species: 'zombie', type: 'boss', w: 38, h: 42 },
             { x: 300, y: 100, hp: 125, speed: 1.2, species: 'skeleton' },
-            { x: 380, y: 120, hp: 125, speed: 1.2, species: 'skeleton' },
+            { x: 350, y: 120, hp: 125, speed: 1.2, species: 'skeleton' },
             { x: 300, y: 280, hp: 130, speed: 0.85, species: 'zombie' },
-            { x: 380, y: 300, hp: 130, speed: 0.85, species: 'zombie' }
+            { x: 350, y: 300, hp: 130, speed: 0.85, species: 'zombie' }
         ],
         loots: [{ x: 180, y: 120, type: 'health' }, { x: 260, y: 200, type: 'shield' }, { x: 180, y: 280, type: 'health' }],
         torches: [{ x: 100, y: 64 }, { x: 320, y: 64 }, { x: 540, y: 64 }, { x: 18, y: 160 }, { x: 18, y: 280 }, { x: 622, y: 160 }, { x: 622, y: 280 }],
@@ -288,7 +288,7 @@ const STAGE_CONFIGS = [
         mobs: [
             { x: 240, y: 90, hp: 135, speed: 1.25, species: 'skeleton' },
             { x: 340, y: 90, hp: 135, speed: 1.25, species: 'skeleton' },
-            { x: 440, y: 90, hp: 135, speed: 1.25, species: 'skeleton' },
+            { x: 480, y: 90, hp: 135, speed: 1.25, species: 'skeleton' },
             { x: 240, y: 290, hp: 135, speed: 1.25, species: 'skeleton' },
             { x: 340, y: 290, hp: 135, speed: 1.25, species: 'skeleton' },
             { x: 480, y: 190, hp: 140, speed: 1.1, color: '#9b59b6', species: 'slime' }
@@ -323,7 +323,7 @@ const STAGE_CONFIGS = [
     {
         name: 'LICH ANTECHAMBER', subName: 'Stage 18',
         mobs: [
-            { x: 440, y: 190, hp: 288, speed: 1.15, species: 'skeleton', type: 'boss', w: 34, h: 36 },
+            { x: 485, y: 190, hp: 288, speed: 1.15, species: 'skeleton', type: 'boss', w: 34, h: 36 },
             { x: 260, y: 90, hp: 155, speed: 0.88, species: 'zombie' },
             { x: 340, y: 90, hp: 155, speed: 0.88, species: 'zombie' },
             { x: 260, y: 290, hp: 145, speed: 1.3, color: '#3498db', species: 'slime' },
@@ -341,10 +341,10 @@ const STAGE_CONFIGS = [
         name: 'GATE OF DECAY', subName: 'Stage 19',
         mobs: [
             { x: 260, y: 90, hp: 160, speed: 0.9, species: 'zombie' },
-            { x: 340, y: 90, hp: 150, speed: 1.3, species: 'skeleton' },
+            { x: 320, y: 90, hp: 150, speed: 1.3, species: 'skeleton' },
             { x: 440, y: 90, hp: 160, speed: 0.9, species: 'zombie' },
             { x: 260, y: 290, hp: 150, speed: 1.3, species: 'skeleton' },
-            { x: 340, y: 290, hp: 160, speed: 0.9, species: 'zombie' },
+            { x: 320, y: 290, hp: 160, speed: 0.9, species: 'zombie' },
             { x: 440, y: 290, hp: 150, speed: 1.3, species: 'skeleton' },
             { x: 500, y: 190, hp: 160, speed: 1.15, color: '#9b59b6', species: 'slime' }
         ],
@@ -436,7 +436,7 @@ const STAGE_CONFIGS = [
             { x: 300, y: 110, hp: 190, speed: 1.15, species: 'sculk_crawler' },
             { x: 420, y: 130, hp: 220, speed: 0.95, species: 'sculk_zombie' },
             { x: 320, y: 270, hp: 190, speed: 1.15, species: 'sculk_crawler' },
-            { x: 480, y: 250, hp: 220, speed: 0.95, species: 'sculk_zombie' }
+            { x: 496, y: 250, hp: 220, speed: 0.95, species: 'sculk_zombie' }
         ],
         loots: [{ x: 220, y: 110, type: 'health' }, { x: 380, y: 200, type: 'shield' }],
         torches: [{ x: 90, y: 64 }, { x: 270, y: 64 }, { x: 450, y: 64 }, { x: 18, y: 200 }, { x: 622, y: 200 }, { x: 200, y: 374 }, { x: 460, y: 374 }],
@@ -448,9 +448,9 @@ const STAGE_CONFIGS = [
         name: "SCULK VEIN LABYRINTH", subName: 'Stage 24 (RESONATING VEINS)',
         mobs: [
             { x: 260, y: 90, hp: 210, speed: 1.2, species: 'sculk_crawler' },
-            { x: 400, y: 100, hp: 200, speed: 1.15, species: 'sculk_spitter' },
+            { x: 389, y: 111, hp: 200, speed: 1.15, species: 'sculk_spitter' },
             { x: 320, y: 220, hp: 240, speed: 0.95, species: 'sculk_zombie' },
-            { x: 460, y: 270, hp: 210, speed: 1.2, species: 'sculk_crawler' },
+            { x: 472, y: 300, hp: 210, speed: 1.2, species: 'sculk_crawler' },
             { x: 220, y: 290, hp: 240, speed: 0.95, species: 'sculk_zombie' }
         ],
         loots: [{ x: 190, y: 90, type: 'health' }, { x: 410, y: 190, type: 'shield' }],
@@ -478,7 +478,7 @@ const STAGE_CONFIGS = [
             { x: 290, y: 110, hp: 230, speed: 1.22, species: 'sculk_crawler' },
             { x: 380, y: 120, hp: 250, speed: 1.0, species: 'sculk_zombie' },
             { x: 460, y: 220, hp: 220, speed: 1.18, species: 'sculk_spitter' },
-            { x: 320, y: 280, hp: 230, speed: 1.22, species: 'sculk_crawler' },
+            { x: 352, y: 280, hp: 230, speed: 1.22, species: 'sculk_crawler' },
             { x: 210, y: 290, hp: 250, speed: 1.0, species: 'sculk_zombie' }
         ],
         loots: [{ x: 200, y: 120, type: 'health' }, { x: 440, y: 260, type: 'shield' }],
@@ -505,10 +505,10 @@ const STAGE_CONFIGS = [
     {
         name: "DEEP DARK CATACOMBS", subName: 'Stage 28 (ANCIENT GRAVES)',
         mobs: [
-            { x: 260, y: 100, hp: 250, speed: 1.25, species: 'sculk_crawler' },
+            { x: 244, y: 100, hp: 250, speed: 1.25, species: 'sculk_crawler' },
             { x: 400, y: 110, hp: 280, speed: 1.05, species: 'sculk_zombie' },
             { x: 490, y: 200, hp: 250, speed: 1.15, species: 'sculk_phantom' },
-            { x: 340, y: 280, hp: 280, speed: 1.05, species: 'sculk_zombie' },
+            { x: 352, y: 301, hp: 280, speed: 1.05, species: 'sculk_zombie' },
             { x: 220, y: 270, hp: 250, speed: 1.25, species: 'sculk_crawler' }
         ],
         loots: [{ x: 180, y: 110, type: 'health' }, { x: 390, y: 200, type: 'shield' }],
@@ -522,7 +522,7 @@ const STAGE_CONFIGS = [
         mobs: [
             { x: 270, y: 90, hp: 260, speed: 1.28, species: 'sculk_crawler' },
             { x: 420, y: 110, hp: 260, speed: 1.22, species: 'sculk_spitter' },
-            { x: 480, y: 220, hp: 270, speed: 1.2, species: 'sculk_phantom' },
+            { x: 496, y: 220, hp: 270, speed: 1.2, species: 'sculk_phantom' },
             { x: 320, y: 280, hp: 300, speed: 1.05, species: 'sculk_zombie' },
             { x: 210, y: 250, hp: 260, speed: 1.28, species: 'sculk_crawler' }
         ],
@@ -550,7 +550,7 @@ const STAGE_CONFIGS = [
         name: "ANCIENT CITY PROMENADE", subName: 'Stage 31 (RUINED DEEPSLATE HALL)',
         mobs: [
             { x: 280, y: 100, hp: 280, speed: 1.3, species: 'sculk_crawler' },
-            { x: 410, y: 110, hp: 290, speed: 1.22, species: 'sculk_phantom' },
+            { x: 386, y: 110, hp: 290, speed: 1.22, species: 'sculk_phantom' },
             { x: 480, y: 230, hp: 320, speed: 1.05, species: 'sculk_zombie' },
             { x: 330, y: 270, hp: 280, speed: 1.25, species: 'sculk_spitter' },
             { x: 210, y: 280, hp: 280, speed: 1.3, species: 'sculk_crawler' }
@@ -579,7 +579,7 @@ const STAGE_CONFIGS = [
     {
         name: "RUINED BARRACKS", subName: 'Stage 33 (SILENT ARSENAL)',
         mobs: [
-            { x: 260, y: 100, hp: 310, speed: 1.32, species: 'sculk_crawler' },
+            { x: 251, y: 147, hp: 310, speed: 1.32, species: 'sculk_crawler' },
             { x: 390, y: 100, hp: 310, speed: 1.25, species: 'sculk_spitter' },
             { x: 480, y: 190, hp: 350, speed: 1.08, species: 'sculk_zombie' },
             { x: 330, y: 270, hp: 310, speed: 1.25, species: 'sculk_phantom' },
@@ -595,7 +595,7 @@ const STAGE_CONFIGS = [
         name: "HALL OF SOUL LANTERNS", subName: 'Stage 34 (WARDEN APPROACHING)',
         mobs: [
             { x: 270, y: 90, hp: 320, speed: 1.32, species: 'sculk_crawler' },
-            { x: 410, y: 100, hp: 330, speed: 1.28, species: 'sculk_phantom' },
+            { x: 399, y: 111, hp: 330, speed: 1.28, species: 'sculk_phantom' },
             { x: 480, y: 220, hp: 360, speed: 1.1, species: 'sculk_zombie' },
             { x: 340, y: 280, hp: 320, speed: 1.26, species: 'sculk_spitter' },
             { x: 200, y: 260, hp: 320, speed: 1.32, species: 'sculk_crawler' }
@@ -636,7 +636,7 @@ const STAGE_CONFIGS = [
         name: "THE ABYSSAL CHASM", subName: 'Stage 36 (DESCENT BEYOND WARDEN)',
         mobs: [
             { x: 280, y: 100, hp: 340, speed: 1.34, species: 'sculk_crawler' },
-            { x: 410, y: 110, hp: 360, speed: 1.3, species: 'sculk_phantom' },
+            { x: 394, y: 110, hp: 360, speed: 1.3, species: 'sculk_phantom' },
             { x: 480, y: 230, hp: 390, speed: 1.12, species: 'sculk_zombie' },
             { x: 330, y: 280, hp: 340, speed: 1.28, species: 'sculk_spitter' },
             { x: 210, y: 270, hp: 340, speed: 1.34, species: 'sculk_crawler' }
@@ -652,7 +652,7 @@ const STAGE_CONFIGS = [
         mobs: [
             { x: 270, y: 90, hp: 360, speed: 1.35, species: 'sculk_crawler' },
             { x: 420, y: 100, hp: 370, speed: 1.3, species: 'sculk_phantom' },
-            { x: 490, y: 210, hp: 410, speed: 1.12, species: 'sculk_zombie' },
+            { x: 506, y: 210, hp: 410, speed: 1.12, species: 'sculk_zombie' },
             { x: 340, y: 280, hp: 350, speed: 1.3, species: 'sculk_spitter' },
             { x: 210, y: 260, hp: 360, speed: 1.35, species: 'sculk_crawler' }
         ],
@@ -665,7 +665,7 @@ const STAGE_CONFIGS = [
     {
         name: "WHISPERING VAULTS", subName: 'Stage 38 (ECHOES OF THE FALLEN)',
         mobs: [
-            { x: 260, y: 100, hp: 370, speed: 1.36, species: 'sculk_crawler' },
+            { x: 248, y: 130, hp: 370, speed: 1.36, species: 'sculk_crawler' },
             { x: 400, y: 100, hp: 370, speed: 1.3, species: 'sculk_spitter' },
             { x: 480, y: 190, hp: 430, speed: 1.14, species: 'sculk_zombie' },
             { x: 330, y: 270, hp: 380, speed: 1.32, species: 'sculk_phantom' },
@@ -710,7 +710,7 @@ const STAGE_CONFIGS = [
         name: "THE RESONATING DEPTHS", subName: 'Stage 41 (HARMONIC PULSES)',
         mobs: [
             { x: 280, y: 100, hp: 420, speed: 1.4, species: 'sculk_crawler' },
-            { x: 410, y: 100, hp: 420, speed: 1.35, species: 'sculk_phantom' },
+            { x: 386, y: 100, hp: 420, speed: 1.35, species: 'sculk_phantom' },
             { x: 490, y: 220, hp: 470, speed: 1.16, species: 'sculk_zombie' },
             { x: 340, y: 280, hp: 410, speed: 1.32, species: 'sculk_spitter' },
             { x: 210, y: 270, hp: 420, speed: 1.4, species: 'sculk_crawler' }
@@ -739,10 +739,10 @@ const STAGE_CONFIGS = [
     {
         name: "SHADOW SCULK NEXUS", subName: 'Stage 43 (CONVERGENCE)',
         mobs: [
-            { x: 260, y: 100, hp: 460, speed: 1.42, species: 'sculk_crawler' },
+            { x: 244, y: 100, hp: 460, speed: 1.42, species: 'sculk_crawler' },
             { x: 400, y: 100, hp: 460, speed: 1.36, species: 'sculk_spitter' },
             { x: 480, y: 190, hp: 520, speed: 1.2, species: 'sculk_zombie' },
-            { x: 330, y: 270, hp: 460, speed: 1.36, species: 'sculk_phantom' },
+            { x: 342, y: 291, hp: 460, speed: 1.36, species: 'sculk_phantom' },
             { x: 210, y: 280, hp: 460, speed: 1.42, species: 'sculk_crawler' }
         ],
         loots: [{ x: 180, y: 110, type: 'health' }, { x: 390, y: 190, type: 'shield' }],
@@ -755,7 +755,7 @@ const STAGE_CONFIGS = [
         name: "VOID CRADLE", subName: 'Stage 44 (BIRTHPLACE OF SHADOWS)',
         mobs: [
             { x: 270, y: 90, hp: 480, speed: 1.42, species: 'sculk_crawler' },
-            { x: 420, y: 100, hp: 480, speed: 1.38, species: 'sculk_phantom' },
+            { x: 395, y: 100, hp: 480, speed: 1.38, species: 'sculk_phantom' },
             { x: 490, y: 220, hp: 550, speed: 1.22, species: 'sculk_zombie' },
             { x: 340, y: 280, hp: 470, speed: 1.35, species: 'sculk_spitter' },
             { x: 200, y: 260, hp: 480, speed: 1.42, species: 'sculk_crawler' }
@@ -784,7 +784,7 @@ const STAGE_CONFIGS = [
         name: "HALL OF FALSE REFLECTIONS", subName: 'Stage 46 (MIRROR ILLUSIONS)',
         mobs: [
             { x: 280, y: 100, hp: 520, speed: 1.45, species: 'sculk_crawler' },
-            { x: 410, y: 100, hp: 520, speed: 1.4, species: 'sculk_phantom' },
+            { x: 380, y: 100, hp: 520, speed: 1.4, species: 'sculk_phantom' },
             { x: 490, y: 210, hp: 580, speed: 1.25, species: 'sculk_zombie' },
             { x: 340, y: 280, hp: 510, speed: 1.38, species: 'sculk_spitter' },
             { x: 210, y: 270, hp: 520, speed: 1.45, species: 'sculk_crawler' }
@@ -813,10 +813,10 @@ const STAGE_CONFIGS = [
     {
         name: "SILENT ABYSS", subName: 'Stage 48 (THE DEEPEST SILENCE)',
         mobs: [
-            { x: 260, y: 100, hp: 560, speed: 1.48, species: 'sculk_crawler' },
+            { x: 235, y: 100, hp: 560, speed: 1.48, species: 'sculk_crawler' },
             { x: 400, y: 100, hp: 560, speed: 1.42, species: 'sculk_spitter' },
             { x: 480, y: 190, hp: 640, speed: 1.28, species: 'sculk_zombie' },
-            { x: 330, y: 270, hp: 560, speed: 1.42, species: 'sculk_phantom' },
+            { x: 345, y: 295, hp: 560, speed: 1.42, species: 'sculk_phantom' },
             { x: 210, y: 280, hp: 560, speed: 1.48, species: 'sculk_crawler' }
         ],
         loots: [{ x: 180, y: 110, type: 'health' }, { x: 390, y: 190, type: 'shield' }, { x: 490, y: 270, type: 'health' }],
@@ -829,7 +829,7 @@ const STAGE_CONFIGS = [
         name: "GATEWAY TO THE VOID CORE", subName: 'Stage 49 (THRESHOLD OF THE MIRROR)',
         mobs: [
             { x: 270, y: 90, hp: 580, speed: 1.5, species: 'sculk_crawler' },
-            { x: 420, y: 100, hp: 580, speed: 1.45, species: 'sculk_phantom' },
+            { x: 395, y: 100, hp: 580, speed: 1.45, species: 'sculk_phantom' },
             { x: 490, y: 220, hp: 680, speed: 1.3, species: 'sculk_zombie' },
             { x: 340, y: 280, hp: 570, speed: 1.4, species: 'sculk_spitter' },
             { x: 200, y: 260, hp: 580, speed: 1.5, species: 'sculk_crawler' }
