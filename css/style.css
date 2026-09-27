@@ -676,9 +676,29 @@ button, input, select, a {
     margin: 0 12px;
 }
 
-/* Mobile & touch viewports: hide keyboard hints */
+.game-footer {
+    margin-top: 8px;
+    text-align: center;
+    font-size: 11px;
+    color: #64748b;
+    font-family: 'Outfit', sans-serif;
+    line-height: 1.4;
+}
+
+.game-footer a {
+    color: #38bdf8;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.game-footer a:hover {
+    text-decoration: underline;
+}
+
+/* Mobile & touch viewports: hide keyboard hints and desktop footer */
 @media (max-width: 960px), (pointer: coarse) {
-    .controls-hint {
+    .controls-hint,
+    .game-footer {
         display: none !important;
     }
 }

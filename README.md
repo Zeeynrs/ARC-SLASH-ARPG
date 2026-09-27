@@ -84,6 +84,7 @@ ARC-SLASH-ARPG/
 │   ├── test_game_systems.js
 │   ├── test_main_menu_and_achievements.js
 │   └── test_mobile_controls.cjs
+├── CREDITS.md              # Atribusi, kredit inspirasi Minecraft & penafian hak cipta
 ├── DESIGN.md                # Dokumentasi panduan gaya visual & palet warna
 ├── index.html               # File utama game (Entry point)
 ├── LICENSE                  # Lisensi Open Source (GPL-3.0)
@@ -115,10 +116,32 @@ Karena game ini dibuat tanpa framework atau build step yang rumit, kamu bisa lan
    node tests/test_boss_equipment_balance.js
    node tests/test_main_menu_and_achievements.js
    node tests/test_mobile_controls.cjs
+   node tests/test_new_features.js
    ```
 
+---
 
+## ⚖️ Penafian Hak Cipta & Kredit (Disclaimer & Credits)
+
+> [!IMPORTANT]
+> **NOT AN OFFICIAL MINECRAFT PRODUCT. NOT APPROVED BY OR ASSOCIATED WITH MOJANG OR MICROSOFT.**
+> *(Bukan produk resmi Minecraft. Tidak disetujui oleh atau berafiliasi dengan Mojang Studios atau Microsoft).*
+
+Game ini merupakan proyek *fan tribute* dan karya edukasi open-source non-komersial yang dikembangkan secara independen menggunakan HTML5 Canvas dan JavaScript murni:
+
+- **Inspirasi & Referensi Minecraft**:
+  - **Deep Dark Biome** (Stage 23–35) terinspirasi dari estetika atmosfer gelap dan sculk biome dari game *Minecraft*.
+  - **The Warden** (Stage 35 Boss) & entitas sculk (*Sculk Crawler*, *Sculk Zombie*, *Sculk Phantom*, *Sculk Spitter*) terinspirasi dari konsep monster titan dan sculk di *Minecraft*.
+- **Merek Dagang & Hak Cipta**:
+  - *Minecraft*, *The Warden*, *Deep Dark*, dan *Sculk* adalah merek dagang atau merek dagang terdaftar milik **Mojang AB** dan **Microsoft Corporation**.
+- **Aset & Orisinalitas Kode**:
+  - Seluruh visual pixel art, grafis, dan animasi digambar murni secara prosedural melalui kode Canvas 2D (`js/draw/mobs-render.js` & `js/draw/dungeon.js`) tanpa menggunakan atau mengekstrak file tekstur, model 3D, maupun audio berhak cipta milik Minecraft.
+  - Efek suara 16-bit dihasilkan secara prosedural via Web Audio API browser (`js/audio.js`).
+- Untuk rincian atribusi dan lisensi aset lengkap, silakan baca [CREDITS.md](CREDITS.md).
+
+---
 
 ## 📜 Lisensi
 
 Proyek ini dilisensikan di bawah [GNU General Public License v3.0](LICENSE).
+
