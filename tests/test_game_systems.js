@@ -200,7 +200,18 @@ mageBoss.hp = mageBoss.maxHp * 0.58;
 updateCombat();
 assert.strictEqual(mageBoss.phase60Triggered, true, 'Mage phase 60 ultimate triggers');
 assert.strictEqual(mageBoss.isInvulnerable, true, 'Mage gains invulnerability during ultimate');
-console.log('✓ Alter Ego timed ultimate execution verified');
+assert.strictEqual(telegraphZones[0].dmg, 100, 'Stage 22 Alter Ego ultimate meteor deals nerfed damage (100 vs 125)');
+console.log('✓ Alter Ego timed ultimate execution and Stage 22 damage nerf verified');
+
+// Verify Stage 50 Apex Mirror keeps full ultimate damage (125)
+loadStage(50);
+const apexMage = createAlterEgoBoss(50, 450, 175, true);
+apexMage.alterEgoRole = 'mage';
+telegraphZones.length = 0;
+startBossUltimate(apexMage, 'phase60');
+assert.strictEqual(telegraphZones[0].dmg, 125, 'Stage 50 Apex Mirror ultimate meteor retains full damage (125)');
+console.log('✓ Stage 50 Apex Mirror ultimate full damage verified');
+loadStage(22);
 
 // Knight Frontal Shield Block
 let guardKnight = createAlterEgoBoss(22, 300, 180);

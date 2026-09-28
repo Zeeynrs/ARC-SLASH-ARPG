@@ -213,7 +213,9 @@ function damageMob(mob, dmg) {
             text: 'PARRY RIPOSTE! ⚡', color: '#f43f5e', life: 40
         });
         const currentStageVal = (typeof currentStage !== 'undefined') ? currentStage : 22;
-        damagePlayer(Math.round(48 + currentStageVal * 2.2), '⚡', true);
+        const isApex = mob.isApexMirror || currentStageVal >= 50;
+        const riposteDmg = isApex ? Math.round(48 + currentStageVal * 2.2) : Math.round(38 + currentStageVal * 1.8);
+        damagePlayer(riposteDmg, '⚡', true);
         mob.isParrying = false;
         mob.parryTimer = 0;
         return 0;
@@ -292,6 +294,8 @@ function startBossUltimate(mob, phaseName) {
     if (mob.species === 'alter_ego') {
         const role = mob.alterEgoRole || 'knight';
 
+        const isApex = mob.isApexMirror || (typeof currentStage !== 'undefined' && currentStage >= 50);
+
         if (role === 'mage') {
             mob.isInvulnerable = true;
             mob.ultimateType = 'mage_meteor';
@@ -349,13 +353,13 @@ function startBossUltimate(mob, phaseName) {
             addTelegraphCircle({
                 x: px + (Math.random() - 0.5) * 20,
                 y: py + (Math.random() - 0.5) * 20,
-                radius: 38, duration: 85, dmg: 125,
+                radius: 38, duration: 85, dmg: isApex ? 125 : 100,
                 color: '#ec4899', fillColor: 'rgba(236, 72, 153, 0.28)', icon: '☄️', effectType: 'meteor', isBoss: true
             });
             addTelegraphCircle({
                 x: 100 + Math.random() * 440,
                 y: 85 + Math.random() * 220,
-                radius: 42, duration: 90, dmg: 125,
+                radius: 42, duration: 90, dmg: isApex ? 125 : 100,
                 color: '#a855f7', fillColor: 'rgba(168, 85, 247, 0.28)', icon: '☄️', effectType: 'meteor', isBoss: true
             });
 
@@ -395,7 +399,7 @@ function startBossUltimate(mob, phaseName) {
                 addTelegraphCircle({
                     x: Math.max(40, Math.min(600, px + Math.cos(offA) * offD)),
                     y: Math.max(80, Math.min(330, py + Math.sin(offA) * offD)),
-                    radius: 40, duration: 85, dmg: 130,
+                    radius: 40, duration: 85, dmg: isApex ? 130 : 104,
                     color: '#ef4444', fillColor: 'rgba(239, 68, 68, 0.3)', icon: '🔥', effectType: 'magma', isBoss: true
                 });
             }
@@ -433,14 +437,14 @@ function startBossUltimate(mob, phaseName) {
             addTelegraphLine({
                 x1: px - Math.cos(angle1) * d, y1: py - Math.sin(angle1) * d,
                 x2: px + Math.cos(angle1) * d, y2: py + Math.sin(angle1) * d,
-                width: 26, duration: 75, dmg: 116,
+                width: 26, duration: 75, dmg: isApex ? 116 : 94,
                 color: '#dc2626', icon: '🗡️', effectType: 'slash', isBoss: true
             });
             const angle2 = angle1 + Math.PI / 2 + (Math.random() - 0.5) * 0.4;
             addTelegraphLine({
                 x1: px - Math.cos(angle2) * d, y1: py - Math.sin(angle2) * d,
                 x2: px + Math.cos(angle2) * d, y2: py + Math.sin(angle2) * d,
-                width: 26, duration: 75, dmg: 116,
+                width: 26, duration: 75, dmg: isApex ? 116 : 94,
                 color: '#a855f7', icon: '🗡️', effectType: 'slash', isBoss: true
             });
 
@@ -1205,6 +1209,8 @@ function updateCombat() {
         if (mob.isInvulnerable) {
             if (mob.ultimateTimer > 0) mob.ultimateTimer--;
 
+            const isApex = mob.isApexMirror || (typeof currentStage !== 'undefined' && currentStage >= 50);
+
             // 1. MAGE ULTIMATE: Cataclysmic Cosmic Meteor Shower
             if (mob.ultimateType === 'mage_meteor') {
                 if (Math.random() < 0.75) {
@@ -1227,7 +1233,7 @@ function updateCombat() {
                         y: py + (Math.random() - 0.5) * 25,
                         radius: 38,
                         duration: 85,
-                        dmg: 125,
+                        dmg: isApex ? 125 : 100,
                         color: '#ec4899',
                         fillColor: 'rgba(236, 72, 153, 0.28)',
                         icon: '☄️',
@@ -1240,7 +1246,7 @@ function updateCombat() {
                         y: 85 + Math.random() * 220,
                         radius: 42,
                         duration: 90,
-                        dmg: 125,
+                        dmg: isApex ? 125 : 100,
                         color: '#a855f7',
                         fillColor: 'rgba(168, 85, 247, 0.28)',
                         icon: '☄️',
@@ -1286,7 +1292,7 @@ function updateCombat() {
                             y: Math.max(80, Math.min(330, py + Math.sin(offA) * offD)),
                             radius: 40,
                             duration: 85,
-                            dmg: 130,
+                            dmg: isApex ? 130 : 104,
                             color: '#ef4444',
                             fillColor: 'rgba(239, 68, 68, 0.3)',
                             icon: '🔥',
@@ -1302,7 +1308,7 @@ function updateCombat() {
                         y: 190,
                         radius: 125,
                         duration: 95,
-                        dmg: 165,
+                        dmg: isApex ? 165 : 132,
                         color: '#f59e0b',
                         fillColor: 'rgba(245, 158, 11, 0.28)',
                         icon: '💥',
@@ -1355,7 +1361,7 @@ function updateCombat() {
                         y2: py + Math.sin(angle1) * d,
                         width: 26,
                         duration: 75,
-                        dmg: 116,
+                        dmg: isApex ? 116 : 94,
                         color: '#dc2626',
                         icon: '🗡️',
                         effectType: 'slash',
@@ -1372,7 +1378,7 @@ function updateCombat() {
                         y2: randY + Math.sin(angle2) * d,
                         width: 26,
                         duration: 75,
-                        dmg: 116,
+                        dmg: isApex ? 116 : 94,
                         color: '#a855f7',
                         icon: '🗡️',
                         effectType: 'slash',
@@ -1390,7 +1396,7 @@ function updateCombat() {
                     }
                     mob.isInvisible = false;
                     playSound('slash');
-                    damagePlayer(132, '🗡️', true);
+                    damagePlayer(isApex ? 132 : 105, '🗡️', true);
                     screenShake = 11;
                     floatingTexts.push({
                         x: mob.x + mob.w / 2, y: mob.y - 20,
@@ -1986,6 +1992,7 @@ function updateCombat() {
             }
 
             const aRole = mob.alterEgoRole || 'knight';
+            const isApex = mob.isApexMirror || (typeof currentStage !== 'undefined' && currentStage >= 50);
 
             // --- 1. ALTER EGO: KNIGHT (SMART TACTICAL AI) ---
             if (aRole === 'knight') {
@@ -2002,7 +2009,7 @@ function updateCombat() {
                     mob.attackDuration = 22;
                     playSound('slash');
 
-                    damagePlayer(125, '⚔️', true);
+                    damagePlayer(isApex ? 125 : 100, '⚔️', true);
                     const kAngle = Math.atan2(py - my, px - mx);
                     const kx = player.x + Math.cos(kAngle) * 22;
                     const ky = player.y + Math.sin(kAngle) * 22;
@@ -2033,7 +2040,7 @@ function updateCombat() {
                     addTelegraphLine({
                         x1: mob.x + mob.w / 2, y1: mob.y + mob.h / 2,
                         x2: targetX + mob.w / 2, y2: targetY + mob.h / 2,
-                        width: 32, duration: 45, dmg: 126, isBoss: true,
+                        width: 32, duration: 45, dmg: isApex ? 126 : 100, isBoss: true,
                         color: '#f59e0b', icon: '🛡️', effectType: 'flame_line',
                         onDetonate: () => {
                             if (!checkWallCollision(targetX, mob.y, mob.w, mob.h)) mob.x = targetX;
@@ -2051,7 +2058,7 @@ function updateCombat() {
                     floatingTexts.push({ x: mx, y: my - 24, text: 'DRAGON WHIRLWIND! 🌀🔥', color: '#ef4444', life: 55 });
 
                     addTelegraphCircle({
-                        x: mx, y: my, radius: 95, duration: 60, dmg: 145, isBoss: true,
+                        x: mx, y: my, radius: 95, duration: 60, dmg: isApex ? 145 : 115, isBoss: true,
                         color: '#ef4444', fillColor: 'rgba(239, 68, 68, 0.32)', icon: '🌀', effectType: 'magma'
                     });
                 }
@@ -2080,7 +2087,7 @@ function updateCombat() {
 
                     // Drop a stardust trap mine at old spot (slower timer, high damage)
                     addTelegraphCircle({
-                        x: mx, y: my, radius: 30, duration: 130, dmg: 116, isBoss: true,
+                        x: mx, y: my, radius: 30, duration: 130, dmg: isApex ? 116 : 92, isBoss: true,
                         color: '#c084fc', fillColor: 'rgba(192, 132, 252, 0.3)', icon: '✨', effectType: 'stardust_mine'
                     });
                     mob.x = oppX;
@@ -2106,7 +2113,7 @@ function updateCombat() {
                             vy: Math.sin(angle + spread) * boltSpeed,
                             angle: angle + spread,
                             type: 'cosmic_bolt',
-                            dmg: 120,
+                            dmg: isApex ? 120 : 96,
                             isBoss: true,
                             life: 110,
                             isHoming: true
@@ -2121,7 +2128,7 @@ function updateCombat() {
                     floatingTexts.push({ x: mx, y: my - 24, text: 'COSMIC AURA! 🌌', color: '#ec4899', life: 50 });
 
                     addTelegraphCircle({
-                        x: mx, y: my, radius: 68, duration: 50, dmg: 125, isBoss: true,
+                        x: mx, y: my, radius: 68, duration: 50, dmg: isApex ? 125 : 98, isBoss: true,
                         color: '#ec4899', fillColor: 'rgba(236, 72, 153, 0.3)', icon: '🌌', effectType: 'meteor'
                     });
                 }
@@ -2130,7 +2137,7 @@ function updateCombat() {
                 if (mob.aiTimer >= 260) {
                     mob.aiTimer = 0;
                     addTelegraphCircle({
-                        x: mx, y: my, radius: 30, duration: 140, dmg: 116, isBoss: true,
+                        x: mx, y: my, radius: 30, duration: 140, dmg: isApex ? 116 : 92, isBoss: true,
                         color: '#c084fc', fillColor: 'rgba(192, 132, 252, 0.3)', icon: '✨', effectType: 'stardust_mine'
                     });
                 }
@@ -2149,9 +2156,9 @@ function updateCombat() {
                     mob.attackDuration = 18;
                     playSound('slash');
 
-                    damagePlayer(86, '🗡️', true);
+                    damagePlayer(isApex ? 86 : 68, '🗡️', true);
                     setTimeout(() => {
-                        if (player.hp > 0 && gameState === 'PLAYING') damagePlayer(92, '🗡️', true);
+                        if (player.hp > 0 && gameState === 'PLAYING') damagePlayer(isApex ? 92 : 74, '🗡️', true);
                     }, 140);
                     screenShake = 8;
                 }
@@ -2197,7 +2204,7 @@ function updateCombat() {
                             vy: Math.sin(baseAngle + off) * daggerSpeed,
                             angle: baseAngle + off,
                             type: 'phantom_dagger',
-                            dmg: 106,
+                            dmg: isApex ? 106 : 85,
                             isBoss: true,
                             life: 95
                         });
