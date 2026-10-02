@@ -1,4 +1,4 @@
-# DESIGN SYSTEM: Arc Slash ARPG
+# DESIGN SYSTEM: Parallel Dungeons ARPG
 
 ## 1. Identity & Mood
 - **Theme**: Retro 16-Bit Dark Fantasy Dungeon Crawler

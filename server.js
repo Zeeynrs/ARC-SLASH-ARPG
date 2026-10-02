@@ -38,8 +38,10 @@ const server = http.createServer((req, res) => {
 
   let pathname = decodeURIComponent(parsedUrl.pathname);
 
-  // Strip leading /ARC-SLASH-ARPG prefix if accessed via subfolder route
-  if (pathname.startsWith('/ARC-SLASH-ARPG')) {
+  // Strip leading /parallel-dungeons or /ARC-SLASH-ARPG prefix if accessed via subfolder route
+  if (pathname.toLowerCase().startsWith('/parallel-dungeons')) {
+    pathname = pathname.substring('/parallel-dungeons'.length) || '/';
+  } else if (pathname.startsWith('/ARC-SLASH-ARPG')) {
     pathname = pathname.substring('/ARC-SLASH-ARPG'.length) || '/';
   }
 

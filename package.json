@@ -1,8 +1,8 @@
 {
-  "name": "arc-slash-arpg",
+  "name": "parallel-dungeons",
   "version": "1.0.0",
   "type": "module",
-  "description": "Retro 16-bit Action RPG Web Game",
+  "description": "Parallel Dungeons - Retro 16-bit Action RPG Web Game",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",

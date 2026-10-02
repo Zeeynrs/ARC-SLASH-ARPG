@@ -1,4 +1,4 @@
-// --- ARC SLASH ARPG: ACHIEVEMENTS & PERSISTENT PROGRESSION SYSTEM ---
+// --- PARALLEL DUNGEONS: ACHIEVEMENTS & PERSISTENT PROGRESSION SYSTEM ---
 // Handles 18 distinct achievement goals, stats tracking, persistence (localStorage),
 // in-game toast banner notifications, and dedicated achievement UI modal.
 

@@ -417,16 +417,16 @@ function drawMainMenuOverlay() {
 
     // Game Title Shadow & Text
     ctx.fillStyle = '#78350f';
-    ctx.font = '22px "Press Start 2P", monospace';
-    ctx.fillText('ARC SLASH ARPG', canvas.width / 2 + 2, 46 + 2);
+    ctx.font = '20px "Press Start 2P", monospace';
+    ctx.fillText('PARALLEL DUNGEONS', canvas.width / 2 + 2, 46 + 2);
 
     ctx.fillStyle = '#f59e0b';
-    ctx.fillText('ARC SLASH ARPG', canvas.width / 2, 46);
+    ctx.fillText('PARALLEL DUNGEONS', canvas.width / 2, 46);
 
     // Subtitle
     ctx.fillStyle = '#38bdf8';
     ctx.font = '8.5px "Press Start 2P", monospace';
-    ctx.fillText('SLIME DUNGEON LABYRINTH', canvas.width / 2, 66);
+    ctx.fillText('16-BIT DARK FANTASY ARPG', canvas.width / 2, 66);
 
     ctx.fillStyle = '#64748b';
     ctx.font = '6.5px "Press Start 2P", monospace';
@@ -527,8 +527,8 @@ function drawMenuOverlay() {
     // Title
     ctx.textAlign = 'center';
     ctx.fillStyle = '#f59e0b';
-    ctx.font = '16px "Press Start 2P", monospace';
-    ctx.fillText('ARC SLASH ARPG', canvas.width / 2, 34);
+    ctx.font = '15px "Press Start 2P", monospace';
+    ctx.fillText('PARALLEL DUNGEONS', canvas.width / 2, 34);
 
     ctx.fillStyle = '#94a3b8';
     ctx.font = '7.5px "Press Start 2P", monospace';
@@ -1324,7 +1324,7 @@ function drawVictoryOverlay() {
 
     ctx.fillStyle = '#64748b';
     ctx.font = '7px "Press Start 2P", monospace';
-    ctx.fillText('Thank you for playing Arc Slash ARPG!', canvas.width / 2, 360);
+    ctx.fillText('Thank you for playing Parallel Dungeons!', canvas.width / 2, 360);
     ctx.textAlign = 'left';
 }
 

@@ -1,6 +1,6 @@
-# ⚔️ ARC SLASH — Retro ARPG Web Game
+# ⚔️ PARALLEL DUNGEONS — Retro ARPG Web Game
 
-> **Arc Slash** adalah game Web-based Action RPG (ARPG) retro 16-bit bertema *Dark Fantasy Dungeon Crawler* yang dibuat menggunakan **Vanilla HTML5 Canvas & JavaScript murni** (tanpa external library/bundler). Game ini ringan, responsif, dan siap langsung dimainkan di desktop maupun smartphone!
+> **Parallel Dungeons** adalah game Web-based Action RPG (ARPG) retro 16-bit bertema *Dark Fantasy Dungeon Crawler* yang dibuat menggunakan **Vanilla HTML5 Canvas & JavaScript murni** (tanpa external library/bundler). Game ini ringan, responsif, dan siap langsung dimainkan di desktop maupun smartphone!
 
 🎮 **Live Demo GitHub Pages**: [https://arch-slash-arpg.netlify.app/)
 
@@ -55,7 +55,7 @@
 ## 📁 Struktur Direktori
 
 ```text
-ARC-SLASH-ARPG/
+PARALLEL-DUNGEONS/
 ├── css/
 │   └── style.css            # Desain UI retro, tata letak mobile deck & canvas
 ├── js/

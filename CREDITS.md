@@ -8,7 +8,7 @@
 
 ## 🎮 Minecraft Reference & Fan Tribute Disclaimer
 
-**Arc Slash ARPG** is a free, non-commercial, open-source educational game created using pure Vanilla HTML5 Canvas and JavaScript.
+**Parallel Dungeons** is a free, non-commercial, open-source educational game created using pure Vanilla HTML5 Canvas and JavaScript.
 
 Certain biome themes, enemy concepts, and boss mechanics in this project are inspired by and created as a tribute to **Minecraft** by **Mojang Studios / Microsoft Corporation**:
 
@@ -41,7 +41,7 @@ Certain biome themes, enemy concepts, and boss mechanics in this project are ins
 
 ## 👨‍💻 Project & Code Authorship
 
-- **Game Engine & Design**: Arc Slash ARPG Development Team / Community Contributors.
+- **Game Engine & Design**: Parallel Dungeons Development Team / Community Contributors.
 - **License**: Distributed under the [GNU General Public License v3.0](LICENSE).
 
 ---
